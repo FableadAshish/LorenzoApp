@@ -10,8 +10,12 @@ import {Text, TouchableOpacity, View} from 'react-native';
 
 import {NavigationContainer} from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 function App() {
   const Stack = createStackNavigator();
+  const Tab = createBottomTabNavigator();
+  const Drawer = createDrawerNavigator();
 
   const HomeScreen = ({navigation}) => {
     return (
@@ -30,18 +34,10 @@ function App() {
   };
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Profile"
-          component={ProfileScreen}
-          options={{headerShown: false}}
-        />
-      </Stack.Navigator>
+     <Drawer.Navigator>
+      <Drawer.Screen name="Home" component={HomeScreen} />
+      <Drawer.Screen name="Settings" component={ProfileScreen} />
+    </Drawer.Navigator>
     </NavigationContainer>
   );
 }
