@@ -16,4 +16,10 @@ export default {
   HomeIcon: require('../../src/assets/Images/BottomTab/HomeIcon.png'),
   ProfileIcon: require('../../src/assets/Images/BottomTab/ProfileIcon.png'),
   SearchIcon: require('../../src/assets/Images/BottomTab/SearchIcon.png'),
+
+  // Auth
+  LogIn: require('../../src/assets/Images/Auth/Login.png'),
+  Registration: require('../../src/assets/Images/Auth/Login.png'),
+  lock: require('../../src/assets/Images/Auth/Lock.png'),
+  Message: require('../../src/assets/Images/Auth/Message.png'),
 }

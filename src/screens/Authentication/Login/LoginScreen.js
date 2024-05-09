@@ -1,5 +1,4 @@
 import React from 'react';
-import AuthComp from '../../../components/AuthComp/AuthComp';
 import {
   SafeAreaView,
   StyleSheet,
@@ -11,7 +10,6 @@ import {
 import {COLORS, COMMOM, IMAGES} from '../../../constants';
 import InputField from '../../../components/InputField';
 import Button from '../../../components/Button';
-import {Header} from '../../../components/Header';
 import {ROUTES} from '../../../constants/routes';
 import {useNavigation} from '@react-navigation/native';
 
@@ -28,7 +26,10 @@ const LoginScreen = () => {
     <>
       <SafeAreaView style={{backgroundColor: 'white'}} />
       <View style={styles.container}>
-        <Header />
+        {/* <Header /> */}
+        <View style={styles.imageContainer}>
+          <Image source={IMAGES.LogIn} style={styles.logInImage} />
+        </View>
         <View style={styles.headerContainer}>
           <Text style={styles.titleHeader}>Sign in now</Text>
           <Text style={styles.titleSubHeader}>
@@ -36,12 +37,20 @@ const LoginScreen = () => {
           </Text>
         </View>
         <View style={styles.fieldsContainer}>
-          <InputField placeholderText="Enter Email" />
-          <InputField placeholderText="Enter Password" />
+          <InputField
+            placeholderText="Enter Email"
+            title={'EMAIL ID'}
+            placeholderImage={IMAGES.Message}
+          />
+          <InputField
+            placeholderText="Enter Password"
+            title={'PASSWORD'}
+            placeholderImage={IMAGES.lock}
+          />
         </View>
         <Text style={styles.forgotPassword}>Forgot Password?</Text>
         <View style={styles.buttonContainer}>
-          <Button title={'Sign In'} performAction={() => LogIn()}/>
+          <Button title={'Sign In'} performAction={() => LogIn()} />
         </View>
         <View style={styles.noAccountContainer}>
           <Text style={styles.noAccountTitle}>Don’t have an account?</Text>
@@ -68,6 +77,16 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     paddingHorizontal: COMMOM.paddingHorizantal,
   },
+  logInImage: {
+    height: 250,
+    width: 250,
+    textAlign: 'center',
+  },
+  imageContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+  },
   fieldsContainer: {
     marginTop: 20,
   },
@@ -75,6 +94,8 @@ const styles = StyleSheet.create({
     fontSize: 30,
     textAlign: 'center',
     color: COLORS.black,
+    fontWeight: '600',
+    marginTop: 30,
   },
   titleSubHeader: {
     fontSize: 16,
@@ -90,7 +111,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   buttonContainer: {
-    marginTop: 20,
+    marginTop: 10,
   },
   noAccountContainer: {
     flexDirection: 'row',

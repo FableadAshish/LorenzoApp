@@ -21,12 +21,15 @@ const SignUpScreen = () => {
   };
   const SignUp = () => {
     navigation.navigate(ROUTES.LOGIN);
-  }
+  };
   return (
     <>
       <SafeAreaView style={{backgroundColor: 'white'}} />
       <View style={styles.container}>
-        <Header />
+        {/* <Header /> */}
+        <View style={styles.imageContainer}>
+          <Image source={IMAGES.LogIn} style={styles.logInImage} />
+        </View>
         <View style={styles.headerContainer}>
           <Text style={styles.titleHeader}>Sign Up now</Text>
           <Text style={styles.titleSubHeader}>
@@ -66,6 +69,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.white,
     paddingHorizontal: COMMOM.paddingHorizantal,
+  },
+  logInImage: {
+    height: 250,
+    width: 250,
+    textAlign: 'center',
+  },
+  imageContainer:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
   },
   fieldsContainer: {
     marginTop: 20,
