@@ -1,12 +1,9 @@
 import React from 'react';
 import {Text, TouchableOpacity, View, StyleSheet, Image} from 'react-native';
-// import {styles} from './Styles/HeaderStyle';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
-import commons from '../../constants/commons';
 
 export const Header = ({iconName, openDrawer, title, rightIcon}) => {
-  console.log("rightIcon", rightIcon)
   return (
     <View style={styles.container}>
       <View style={styles.leftContainer}>
@@ -31,17 +28,11 @@ export const Header = ({iconName, openDrawer, title, rightIcon}) => {
         )}
       </View>
       <View style={styles.center}>
-        <Text>{title}</Text>
+        <Text style={styles.titleText}>{title}</Text>
       </View>
 
       <View style={styles.rightContainer}>
-        {
-          rightIcon === headerRightImage ?
-          <Image style={{height: 50, width: 50, borderRadius:50}} />
-          :
-          <Icon name={rightIcon} size={30} color="black" />
-
-        }
+        <Icon name={rightIcon} size={30} color="black" />
       </View>
     </View>
   );
@@ -62,24 +53,28 @@ const styles = StyleSheet.create({
   leftContainer: {
     // flex: 1,
     position: 'absolute',
-
   },
   center: {
     flex: 1,
     alignItems: 'center',
     // marginLeft: 15,
-    justifyContent:'center',
+    justifyContent: 'center',
   },
   rightContainer: {
     // flex:0
     alignItems: 'flex-end',
-
   },
-  centerStyle:{
+  centerStyle: {
     // color:'red',
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
-    paddingLeft:-10
-  }
-})
+    paddingLeft: -10,
+  },
+  titleText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    // paddingLeft:-10
+  },
+});
