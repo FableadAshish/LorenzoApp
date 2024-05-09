@@ -5,5 +5,7 @@ export default {
   white: '#fff',
   black: 'black',
   lightOrange: '#FF7029',
-  lightBlueText: '#0D6EFD'
-}
+  lightBlueText: '#0D6EFD',
+  placeholderColor: '#F7F7F9',
+  red: 'red',
+};
