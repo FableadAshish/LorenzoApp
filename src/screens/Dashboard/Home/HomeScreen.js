@@ -1,23 +1,25 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   FlatList,
   Image,
   SafeAreaView,
+  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import { COLORS, COMMOM, IMAGES } from '../../../constants';
+import {COLORS, COMMOM, FONTS, IMAGES} from '../../../constants';
 import Icon from 'react-native-vector-icons/Ionicons';
 import SearchContainer from '../../../components/SearchContainer/SearchContainer';
-import { ROUTES } from '../../../constants/routes';
+import {ROUTES} from '../../../constants/routes';
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = ({navigation}) => {
   const locationData = [
     {
       id: 1,
+
       name: 'Niladri Reserviour',
       location: 'Surat, Gujrat',
       locationImage: IMAGES.Trek1,
@@ -53,8 +55,15 @@ const HomeScreen = ({ navigation }) => {
       price: 200,
     },
   ];
+  const [searchQuery, setSearchQuery] = useState(locationData);
 
-  const renderList = ({ item }) => {
+  const searchData = text => {
+    const filteredList = locationData.filter(item =>
+      item.name.toLowerCase().includes(text.toLowerCase()),
+    );
+    setSearchQuery(filteredList);
+  };
+  const renderList = ({item}) => {
     return (
       <View style={styles.locationContainer}>
         <Image source={item.locationImage} style={styles.locationImage} />
@@ -83,8 +92,7 @@ const HomeScreen = ({ navigation }) => {
     // console.log(locationData);
   };
   return (
-    <>
-      <SafeAreaView style={{ backgroundColor: 'white' }} />
+    <ScrollView style={{backgroundColor: 'white'}}>
       <View style={styles.container}>
         <View style={styles.headerContainer}>
           <View style={styles.leftContainer}>
@@ -119,29 +127,45 @@ const HomeScreen = ({ navigation }) => {
           </View>
         </View>
 
-        <SearchContainer placeholderTitle={'Search here..'} />
+        <SearchContainer
+          placeholderTitle={'Search here..'}
+          onChangeText={text => searchData(text)}
+        />
 
         <View style={styles.listContainer}>
-          <View style={styles.labelContainer}>
-            <Text style={styles.labelText}>Best Destination</Text>
-            <TouchableOpacity
-              onPress={() => RouteToPropertyListing(locationData)}>
-              <Text style={styles.viewAllText}>View all</Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={{ marginLeft: -30 }}>
-            <FlatList
-              data={locationData}
-              keyExtractor={item => item.id.toString()}
-              renderItem={renderList}
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-            />
-          </View>
+          {searchQuery.length === 0 ? (
+            <View style={styles.locationNotFoundContainer}>
+              <Image source={IMAGES.NoSearch} style={styles.noSearchImage} />
+              <Text style={styles.locationNotFoundText}>
+                No Such Property is Listed
+              </Text>
+              <Text style={styles.locationNotFoundSubText}>
+                Please add relevant value
+              </Text>
+            </View>
+          ) : (
+            <>
+              <View style={styles.labelContainer}>
+                <Text style={styles.labelText}>Best Destination</Text>
+                <TouchableOpacity
+                  onPress={() => RouteToPropertyListing(locationData)}>
+                  <Text style={styles.viewAllText}>View all</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={{marginLeft: -30}}>
+                <FlatList
+                  data={searchQuery}
+                  keyExtractor={item => item.id.toString()}
+                  renderItem={renderList}
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                />
+              </View>
+            </>
+          )}
         </View>
       </View>
-    </>
+    </ScrollView>
   );
 };
 
@@ -282,6 +306,28 @@ const styles = StyleSheet.create({
   locationLocation: {
     fontSize: 15,
     color: COLORS.lightTextColor,
+  },
+  locationNotFoundContainer: {
+    // width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+    // marginTop: -100,
+  },
+  locationNotFoundText: {
+    fontFamily: FONTS.poppinsRegular,
+    fontSize: 22,
+    color: COLORS.mediumTextColor,
+  },
+  locationNotFoundSubText: {
+    fontFamily: FONTS.poppinsRegular,
+    fontSize: 18,
+    color: COLORS.lightTextColor,
+  },
+  noSearchImage: {
+    height: 200,
+    width: 200,
+    resizeMode: 'contain',
   },
 });
 
