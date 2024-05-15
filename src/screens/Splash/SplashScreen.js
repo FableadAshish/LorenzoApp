@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {ROUTES} from '../../constants/routes';
-import { COLORS } from '../../constants';
+import { COLORS, FONTS } from '../../constants';
 
 const SplashScreen = () => {
   const navigation = useNavigation();
@@ -28,7 +28,8 @@ const styles = StyleSheet.create({
   appName: {
     fontSize: 30,
     color: COLORS.black,
-    fontWeight: 'bold',
+    fontWeight: '500',
+    fontFamily: FONTS.lightText,
   },
 });
 
