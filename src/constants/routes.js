@@ -6,5 +6,6 @@ export const ROUTES = {
   HOME: 'Home',
   PROFILE: 'Profile',
   CHAT: 'Chat',
-  PROPERTY_LISTING: 'Property'
-}
+  PROPERTY_LISTING: 'Property',
+  EDIT_PROFILE: 'EditProfile',
+};

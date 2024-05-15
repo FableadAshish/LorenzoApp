@@ -1,6 +1,6 @@
 import React from 'react';
 import {TextInput, StyleSheet, View, Text, Image} from 'react-native';
-import {COLORS, IMAGES} from '../../constants';
+import {COLORS, FONTS, IMAGES} from '../../constants';
 
 const InputField = ({placeholderText, title, placeholderImage}) => {
   return (
@@ -11,9 +11,16 @@ const InputField = ({placeholderText, title, placeholderImage}) => {
           resizeMode="contain"
           source={placeholderImage}
           style={styles.iconStyle}
+          tintColor={COLORS.placeholderIconColor}
         />
+        {/* <TextInput
+          placeholder={placeholderText}
+          placeholderTextColor={COLORS.lightTextColor}
+          style={styles.inputFieldText}
+        /> */}
         <TextInput
           placeholder={placeholderText}
+          style={styles.inputFieldText}
           placeholderTextColor={COLORS.lightTextColor}
         />
       </View>
@@ -23,12 +30,12 @@ const InputField = ({placeholderText, title, placeholderImage}) => {
 
 const styles = StyleSheet.create({
   input: {
-    height: 60,
+    height: 50,
     borderColor: COLORS.lightTextColor,
-    borderRadius: 10,
+    borderRadius: 50,
     color: 'black',
-    marginTop: 5,
-    backgroundColor: COLORS.placeholderColor,
+    // marginTop: 5,
+    backgroundColor: COLORS.placeholderBackgroundColor,
     justifyContent: 'flex-start',
     paddingLeft: 20,
     flexDirection: 'row',
@@ -39,14 +46,20 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   title: {
-    fontSize: 15,
+    fontSize: 18,
     letterSpacing: 0.4,
-    fontWeight: '400',
+    // fontWeight: '400',
     color: COLORS.black,
+    fontFamily: FONTS.poppinsRegular,
   },
   iconStyle: {
     height: 20,
     width: 20,
+  },
+  inputFieldText: {
+    fontSize: 17,
+    fontFamily: FONTS.poppinsRegular,
+    width: '100%',
   },
 });
 export default InputField;

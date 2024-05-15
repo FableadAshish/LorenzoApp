@@ -1,7 +1,8 @@
 import React from 'react';
 import {Text, TouchableOpacity, View, StyleSheet, Image} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { COMMOM } from '../../constants';
 
 export const Header = ({iconName, openDrawer, title, rightIcon}) => {
   return (
@@ -53,6 +54,7 @@ const styles = StyleSheet.create({
   leftContainer: {
     // flex: 1,
     position: 'absolute',
+    paddingHorizontal: COMMOM.paddingHorizantal
   },
   center: {
     flex: 1,

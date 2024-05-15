@@ -8,4 +8,8 @@ export default {
   lightBlueText: '#0D6EFD',
   placeholderColor: '#F7F7F9',
   red: 'red',
+  placeholderBackgroundColor: '#E1E5F4',
+  placeholderIconColor: '#030047',
+  buttonAuthCommon: '#FFCC3E',
+  buttonAuthCommonText: '#030047',
 };

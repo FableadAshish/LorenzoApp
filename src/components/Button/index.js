@@ -2,14 +2,14 @@ import React from 'react';
 import {Text, TouchableOpacity, View, StyleSheet} from 'react-native';
 import {COLORS} from '../../constants';
 
-const Button = ({title, performAction, style, innerStyle}) => {
+const Button = ({title, performAction, style, innerStyle, styleText}) => {
   return (
     <View style={[styles.container, style]}>
       <TouchableOpacity
         style={[styles.buttonContainer, innerStyle]}
         activeOpacity={0.8}
         onPress={performAction}>
-        <Text style={styles.buttonText}>{title}</Text>
+        <Text style={[styles.buttonText, styleText]}>{title}</Text>
       </TouchableOpacity>
     </View>
   );
