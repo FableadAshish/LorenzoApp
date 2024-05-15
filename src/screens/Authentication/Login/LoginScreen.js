@@ -6,8 +6,10 @@ import {
   TouchableOpacity,
   View,
   Image,
+  ImageBackground,
+  ScrollView,
 } from 'react-native';
-import {COLORS, COMMOM, IMAGES} from '../../../constants';
+import {COLORS, COMMOM, FONTS, IMAGES} from '../../../constants';
 import InputField from '../../../components/InputField';
 import Button from '../../../components/Button';
 import {ROUTES} from '../../../constants/routes';
@@ -24,47 +26,67 @@ const LoginScreen = () => {
   };
   return (
     <>
-      <SafeAreaView style={{backgroundColor: 'white'}} />
       <View style={styles.container}>
-        {/* <Header /> */}
-        <View style={styles.imageContainer}>
-          <Image source={IMAGES.LogIn} style={styles.logInImage} />
-        </View>
-        <View style={styles.headerContainer}>
-          <Text style={styles.titleHeader}>Sign in now</Text>
-          <Text style={styles.titleSubHeader}>
-            Please sign in to continue our app
-          </Text>
-        </View>
-        <View style={styles.fieldsContainer}>
-          <InputField
-            placeholderText="Enter Email"
-            title={'EMAIL ID'}
-            placeholderImage={IMAGES.Message}
-          />
-          <InputField
-            placeholderText="Enter Password"
-            title={'PASSWORD'}
-            placeholderImage={IMAGES.lock}
-          />
-        </View>
-        <Text style={styles.forgotPassword}>Forgot Password?</Text>
-        <View style={styles.buttonContainer}>
-          <Button title={'Sign In'} performAction={() => LogIn()} />
-        </View>
-        <View style={styles.noAccountContainer}>
-          <Text style={styles.noAccountTitle}>Don’t have an account?</Text>
-          <TouchableOpacity onPress={() => navigateToSignUp()}>
-            <Text style={styles.toSignUp}>Sign up</Text>
+        <View style={{paddingHorizontal: COMMOM.paddingHorizantal}}>
+          <View style={styles.imageContainer}>
+            <ImageBackground
+              source={IMAGES.BackImage}
+              resizeMode="contain"
+              style={styles.vectorImage}>
+              <Image source={IMAGES.LogIn} style={styles.logInImage} />
+            </ImageBackground>
+          </View>
+          <View style={styles.headerContainer}>
+            <Text style={styles.titleHeader}>Sign in now</Text>
+            <Text style={styles.titleSubHeader}>
+              Please sign in to continue our app
+            </Text>
+          </View>
+          <View style={styles.fieldsContainer}>
+            <InputField
+              placeholderText="Enter Email"
+              title={'Email Address'}
+              placeholderImage={IMAGES.Message}
+            />
+            <InputField
+              placeholderText="Enter Password"
+              title={'Password'}
+              placeholderImage={IMAGES.lock}
+            />
+          </View>
+          <TouchableOpacity
+            activeOpacity={0.9}
+            onPress={() => navigation.navigate(ROUTES.FORGOT_PASSWORD)}>
+            <Text style={styles.forgotPassword}>Forgot Password?</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.socialMediaContainer}>
-          <Text style={styles.socialMediaContainerTitle}>Or connect</Text>
-          <View style={styles.socialIcons}>
-            <Image source={IMAGES.Instagram} style={styles.socialIconsStyle} />
-            <Image source={IMAGES.Twitter} style={styles.socialIconsStyle} />
-            <Image source={IMAGES.Facebook} style={styles.socialIconsStyle} />
+        <View style={styles.backImageContainer}>
+          <View style={styles.authImageContainer}>
+            <Image
+              resizeMode="contain"
+              source={IMAGES.authImage}
+              style={styles.authImage}
+            />
           </View>
+          <ImageBackground
+            source={IMAGES.AuthRectangle}
+            style={styles.backImage}
+            resizeMode="stretch">
+            <View style={styles.buttonContainer}>
+              <Button
+                title={'Sign In'}
+                performAction={() => LogIn()}
+                innerStyle={styles.buttonStyles}
+                styleText={styles.buttonText}
+              />
+            </View>
+            <View style={styles.noAccountContainer}>
+              <Text style={styles.noAccountTitle}>Don’t have an account?</Text>
+              <TouchableOpacity onPress={() => navigateToSignUp()}>
+                <Text style={styles.toSignUp}>Sign up</Text>
+              </TouchableOpacity>
+            </View>
+          </ImageBackground>
         </View>
       </View>
     </>
@@ -75,12 +97,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.white,
-    paddingHorizontal: COMMOM.paddingHorizantal,
+    justifyContent: 'space-between',
   },
   logInImage: {
-    height: 250,
-    width: 250,
-    textAlign: 'center',
+    height: 165,
+    width: 165,
   },
   imageContainer: {
     alignItems: 'center',
@@ -88,20 +109,21 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   fieldsContainer: {
-    marginTop: 20,
+    marginTop: 10,
   },
   titleHeader: {
     fontSize: 30,
     textAlign: 'center',
     color: COLORS.black,
-    fontWeight: '600',
-    marginTop: 30,
+    // fontWeight: '600',
+    // marginTop: 20,
   },
   titleSubHeader: {
     fontSize: 16,
     textAlign: 'center',
     color: COLORS.lightTextColor,
-    marginTop: 15,
+    // marginTop: 10,
+    fontFamily: FONTS.poppinsRegular,
   },
   forgotPassword: {
     textAlign: 'right',
@@ -111,7 +133,8 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   buttonContainer: {
-    marginTop: 10,
+    // marginTop: -50,
+    width: '90%',
   },
   noAccountContainer: {
     flexDirection: 'row',
@@ -121,41 +144,49 @@ const styles = StyleSheet.create({
     gap: 5,
   },
   noAccountTitle: {
-    fontSize: 15,
-    letterSpacing: 0.4,
-    fontWeight: '400',
-    color: COLORS.black,
+    color: COLORS.white,
+    fontSize: 16,
+    fontFamily: FONTS.lightText,
     // marginRight: 10
   },
   toSignUp: {
     fontSize: 18,
     letterSpacing: 0.4,
     fontWeight: '400',
-    color: COLORS.lightPrimaryColor,
+    color: COLORS.buttonAuthCommon,
+    textDecorationLine: 'underline',
     // marginLeft: 10
   },
-  socialMediaContainer: {
+  buttonStyles: {
+    backgroundColor: COLORS.buttonAuthCommon,
+    borderRadius: 50,
+    height: 50,
+  },
+  buttonText: {
+    color: COLORS.buttonAuthCommonText,
+    fontSize: 22,
+    fontFamily: FONTS.poppinsRegular,
+  },
+  backImage: {
+    width: '100%',
+    height: 200,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 100,
   },
-  socialMediaContainerTitle: {
-    fontSize: 20,
-    letterSpacing: 0.4,
-    fontWeight: '400',
-    color: COLORS.black,
-    textAlign: 'center',
-    marginTop: 20,
-    // marginRight: 10
-  },
-  socialIcons: {
-    flexDirection: 'row',
+  vectorImage: {
+    height: 200,
+    width: 180,
     alignItems: 'center',
-    justifyContent: 'space-between',
-    width: 200,
-    marginTop: 50,
+    justifyContent: 'center',
   },
-  socialIconsStyle: {
+  backImageContainer: {
+    backgroundColor: 'white',
+    marginTop: 10,
+  },
+  authImageContainer: {
+    alignItems: 'center',
+  },
+  authImage: {
     height: 50,
     width: 50,
   },

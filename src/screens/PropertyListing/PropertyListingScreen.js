@@ -1,14 +1,13 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
-  SafeAreaView,
-  StatusBar,
   Text,
   View,
   StyleSheet,
   FlatList,
   Image,
+  ScrollView,
 } from 'react-native';
-import {COLORS, COMMOM, IMAGES} from '../../constants';
+import {COLORS, COMMOM, FONTS, IMAGES} from '../../constants';
 import {useRoute, useNavigation} from '@react-navigation/native';
 import SearchContainer from '../../components/SearchContainer/SearchContainer';
 import {Header} from '../../components/Header';
@@ -19,14 +18,7 @@ const PropertyListingScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
   const {locationListing} = route.params;
-  // console.log('Got it:-',
-  // id": 1,
-  // "location": "Surat, Gujrat",
-  // "locationImage": 3,
-  // "name": "Niladri Reserviour",
-  // "ratings": 4.5});{"
-
-  // console.log('Got it', locationListing)
+  const [searchingList, setSearchingList] = useState(locationListing);
 
   const renderLocationList = ({item}) => {
     return (
@@ -62,10 +54,15 @@ const PropertyListingScreen = () => {
       </View>
     );
   };
+  const searchData = text => {
+    const filteredList = locationListing.filter(item =>
+      item.name.toLowerCase().includes(text.toLowerCase()),
+    );
+    setSearchingList(filteredList);
+  };
+
   return (
     <>
-      <SafeAreaView style={styles.scrollView} />
-      <StatusBar backgroundColor={COLORS.white} />
       <View style={styles.container}>
         <Header
           iconName={'chevron-small-left'}
@@ -75,15 +72,27 @@ const PropertyListingScreen = () => {
         <SearchContainer
           placeholderTitle={'Search Properties ...'}
           style={styles.searchContainer}
+          onChangeText={text => searchData(text)}
         />
-        <View style={styles.listContainer}>
+        {searchingList.length === 0 ? (
+          <View style={styles.locationNotFoundContainer}>
+            <Image source={IMAGES.NoSearch} style={styles.noSearchImage} />
+            <Text style={styles.locationNotFoundText}>
+              No Such Property is Listed
+            </Text>
+            <Text style={styles.locationNotFoundSubText}>
+              Please add relevant data
+            </Text>
+          </View>
+        ) : (
           <FlatList
-            data={locationListing}
+            data={searchingList}
             renderItem={renderLocationList}
             keyExtractor={item => item.id.toString()}
             scrollEnabled={true}
+            showsVerticalScrollIndicator={false}
           />
-        </View>
+        )}
       </View>
     </>
   );
@@ -114,20 +123,36 @@ const styles = StyleSheet.create({
     color: COLORS.lightTextColor,
   },
   listItemContainer: {
-    marginTop: 20,
+    // marginTop: 20,
+    marginBottom: 10,
   },
   listItemChildContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 10,
+    // gap: 30,
+    borderColor: COLORS.placeholderBackgroundColor,
+    borderWidth: 1,
+    borderRadius: 10,
+    // shadowColor: COLORS.lightTextColor,
+    // elevation: 1,
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
+    // shadowOpacity: 0.25,
+    // shadowRadius: 3.84,
+    // elevation: 4,
   },
   imageContainer: {
     width: '30%',
+    // padding: 2
   },
   dataContainer: {
-    width: '65%',
-    alignItems: 'flex-start',
+    width: '60%',
+    // alignItems: 'flex-start',
     justifyContent: 'space-between',
+    padding: 5,
   },
   propertyImage: {
     height: 150,
@@ -171,6 +196,28 @@ const styles = StyleSheet.create({
   ratings: {
     color: COLORS.lightTextColor,
     fontSize: 15,
+  },
+  locationNotFoundContainer: {
+    // width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+    marginTop: -100,
+  },
+  locationNotFoundText: {
+    fontFamily: FONTS.poppinsRegular,
+    fontSize: 22,
+    color: COLORS.mediumTextColor,
+  },
+  locationNotFoundSubText: {
+    fontFamily: FONTS.poppinsRegular,
+    fontSize: 18,
+    color: COLORS.lightTextColor,
+  },
+  noSearchImage: {
+    height: 200,
+    width: 200,
+    resizeMode: 'contain',
   },
 });
 
