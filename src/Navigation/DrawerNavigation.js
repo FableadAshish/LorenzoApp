@@ -125,9 +125,7 @@ const CustomDrawerContent = props => {
                         alignItems: 'center',
                         width: '90%',
                         gap: 10,
-                        // backgroundColor: COLORS.placeholderColor, // Add this line to set the default background color
                         paddingVertical: 8, // Add some padding for better visibility
-                        // paddingHorizontal: 15,
                         borderRadius: 8,
                       }}>
                       <View
