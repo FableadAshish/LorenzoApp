@@ -62,6 +62,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.white,
+    paddingHorizontal: COMMOM.paddingHorizantal,
+
   },
   profilePicture: {
     height: 120,
@@ -96,7 +98,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 30,
-    paddingHorizontal: COMMOM.paddingHorizantal,
   },
   rightArrow: {
     height: 16,

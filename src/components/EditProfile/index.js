@@ -19,6 +19,8 @@ const EditProfileComp = ({title, titleText, editValue}) => {
   const getValue = editValue => {
     setModalVisible(true);
   };
+
+  const forgetPassword = () => {};
   return (
     <>
       {/* <StatusBar backgroundColor={'rgba(0, 0, 0, 0.5)'} /> */}
@@ -74,24 +76,31 @@ const EditProfileComp = ({title, titleText, editValue}) => {
                   inputField={
                     <>
                       <InputField
-                        title={'Password'}
-                        placeholderText={'Enter New Email'}
-                        placeholderImage={IMAGES.Message}
+                        title={'Old Password'}
+                        placeholderText={'Enter current password'}
+                        placeholderImage={IMAGES.lock}
+                        secureTextEntry={true}
                       />
                       <InputField
                         title={'New Password'}
-                        placeholderText={'Enter New Email'}
-                        placeholderImage={IMAGES.Message}
+                        placeholderText={'Enter new password'}
+                        placeholderImage={IMAGES.lock}
+                        secureTextEntry={true}
                       />
                       <InputField
                         title={'Confirm New Password'}
-                        placeholderText={'Enter New Email'}
-                        placeholderImage={IMAGES.Message}
+                        placeholderText={'Confirm new password'}
+                        placeholderImage={IMAGES.lock}
+                        secureTextEntry={true}
                       />
                     </>
                   }
                   button={
-                    <Button title={'Save'} innerStyle={styles.buttonStyle} />
+                    <Button
+                      title={'Save'}
+                      innerStyle={styles.buttonStyle}
+                      performAction={() => forgetPassword()}
+                    />
                   }
                   forgetPassword={'Forgot Password'}
                 />
@@ -127,7 +136,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 30,
-    paddingHorizontal: COMMOM.paddingHorizantal,
+    // paddingHorizontal: COMMOM.paddingHorizantal,
   },
   editImage: {
     height: 24,

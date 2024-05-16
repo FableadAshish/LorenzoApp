@@ -2,26 +2,32 @@ import React from 'react';
 import {TextInput, StyleSheet, View, Text, Image} from 'react-native';
 import {COLORS, FONTS, IMAGES} from '../../constants';
 
-const InputField = ({placeholderText, title, placeholderImage}) => {
+const InputField = ({
+  placeholderText,
+  title,
+  placeholderImage,
+  getText,
+  value,
+  secureTextEntry,
+  style,
+}) => {
   return (
     <View style={styles.fieldContainer}>
       <Text style={styles.title}>{title}</Text>
-      <View style={styles.input}>
+      <View style={[styles.input, style]}>
         <Image
           resizeMode="contain"
           source={placeholderImage}
           style={styles.iconStyle}
           tintColor={COLORS.placeholderIconColor}
         />
-        {/* <TextInput
-          placeholder={placeholderText}
-          placeholderTextColor={COLORS.lightTextColor}
-          style={styles.inputFieldText}
-        /> */}
         <TextInput
           placeholder={placeholderText}
           style={styles.inputFieldText}
           placeholderTextColor={COLORS.lightTextColor}
+          onChangeText={getText}
+          value={value}
+          secureTextEntry={secureTextEntry}
         />
       </View>
     </View>

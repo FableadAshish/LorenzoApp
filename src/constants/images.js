@@ -27,6 +27,8 @@ export default {
   BackImage: require('../../src/assets/Images/Auth/BackImage.png'),
   AuthRectangle: require('../../src/assets/Images/Auth/AuthRectangle.png'),
   authImage: require('../../src/assets/Images/Auth/authImage.png'),
+  ForgotPassword: require('../../src/assets/Images/Auth/ForgotPassword.png'),
+  AtTheRate: require('../../src/assets/Images/Auth/AtTheRate.png'),
 
   // Profile
   logout: require('../../src/assets/Images/Profile/logout.png'),

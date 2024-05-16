@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,7 +6,6 @@ import {
   View,
   Image,
   ImageBackground,
-  Platform,
   ScrollView,
 } from 'react-native';
 import {COLORS, COMMOM, FONTS, IMAGES} from '../../../constants';
@@ -17,12 +16,48 @@ import {ROUTES} from '../../../constants/routes';
 
 const SignUpScreen = () => {
   const navigation = useNavigation();
+  // const [userData, setUserData] = useState();
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirm_password, setConfirmPassword] = useState('');
+  const [nameErrorMessage, setNameErrorMessage] = useState('');
+  const [emailErrorMessage, setEmailErrorMessage] = useState('');
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
+  const [confirm_passwordErrorMessage, setConfirm_passwordErrorMessage] = useState('');
   const navigateToLogIn = () => {
     navigation.navigate(ROUTES.LOGIN);
   };
+
+  const validation = (fullName, email, password, confirm_password) => {
+    if (/^\d+$/g.test(fullName)) {
+      setNameErrorMessage('Full Name cannot include numbers');
+      return;
+    }
+    if (
+      !/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+        email,
+      )
+    ) {
+      setEmailErrorMessage('Please enter a valid Email address');
+      return;
+    }
+    if (password.length < 6) {
+      setPasswordErrorMessage('Password must be at least 6 characters');
+      return;
+    }
+
+    if (password !== confirm_password) {
+      setConfirm_passwordErrorMessage('Passwords do not match');
+      return;
+    }
+  };
   const LogIn = () => {
+    // validation(fullName, email, password, confirm_password);
+    // console.log(fullName, email, password, confirm_password);
     navigation.navigate(ROUTES.LOGIN);
   };
+
   return (
     <>
       <View style={styles.container}>
@@ -36,21 +71,31 @@ const SignUpScreen = () => {
               title={'Full Name'}
               placeholderText={'Enter Full Name'}
               placeholderImage={IMAGES.ProfileIcon}
+              getText={text => setFullName(text)}
+              value={fullName}
             />
             <InputField
               title={'Email'}
               placeholderText={'Enter Email'}
               placeholderImage={IMAGES.Message}
+              getText={text => setEmail(text)}
+              value={email}
             />
             <InputField
               title={'Password'}
               placeholderText={'Enter Password'}
               placeholderImage={IMAGES.lock}
+              getText={text => setPassword(text)}
+              value={password}
+              secureTextEntry={true}
             />
             <InputField
               title={'Confirm Password'}
               placeholderText={'Confirm Password'}
               placeholderImage={IMAGES.lock}
+              getText={text => setConfirmPassword(text)}
+              value={confirm_password}
+              secureTextEntry={true}
             />
           </View>
         </ScrollView>

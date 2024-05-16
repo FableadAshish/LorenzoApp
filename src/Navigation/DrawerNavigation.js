@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
   },
   drawerButtonInnerStyle: {
     borderRadius: 50,
-    backgroundColor: '#6759FF',
+    backgroundColor: COLORS.lightPrimaryColor,
     height: 50,
   },
   imageContainer: {

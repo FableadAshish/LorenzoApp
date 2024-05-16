@@ -14,6 +14,10 @@ import {ROUTES} from '../../constants/routes';
 
 const EditModal = ({title, closeModal, inputField, button, forgetPassword}) => {
   const navigation = useNavigation();
+  const forgetPasswords = () => {
+    navigation.navigate(ROUTES.FORGOT_PASSWORD);
+    closeModal();
+  };
   return (
     <View style={{paddingHorizontal: 20}}>
       <View style={styles.container}>
@@ -29,8 +33,7 @@ const EditModal = ({title, closeModal, inputField, button, forgetPassword}) => {
         </View>
         <View style={styles.placeholderContainer}>{inputField}</View>
         {forgetPassword && (
-          <TouchableOpacity
-            onPress={() => navigation.navigate(ROUTES.FORGOT_PASSWORD)}>
+          <TouchableOpacity onPress={() => forgetPasswords()}>
             <Text style={styles.forgetPassword}>{forgetPassword}</Text>
           </TouchableOpacity>
         )}

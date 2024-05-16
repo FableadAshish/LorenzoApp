@@ -8,6 +8,9 @@ import LoginScreen from '../screens/Authentication/Login/LoginScreen';
 import SignUpScreen from '../screens/Authentication/SignUp/SignUpScreen';
 import ForgetPasswordScreen from '../screens/Authentication/ForgetPassword/ForgetPasswordScreen';
 import EditProfileScreen from '../screens/Dashboard/Profile/EditProfile';
+import OTPScreen from '../screens/Authentication/OTP/OTPScreen';
+import CreateNewPasswordScreen from '../screens/Authentication/CreateNewPassword/CreateNewPasswordScreen';
+import PropertyListingDetailsScreen from '../screens/PropertyListing/PropertyListingDetailsScreen';
 
 const AuthNavigator = () => {
   const Stack = createStackNavigator();
@@ -29,8 +32,15 @@ const AuthNavigator = () => {
         component={PropertyListingScreen}
       />
       <Stack.Screen name={ROUTES.EDIT_PROFILE} component={EditProfileScreen} />
-      {/* <Stack.Screen name={ROUTES.CHAT} component={ChatScreen} />
-      <Stack.Screen name={ROUTES.PROFILE} component={ProfileScreen} /> */}
+      <Stack.Screen name={ROUTES.OTP_SCREEN} component={OTPScreen} />
+      <Stack.Screen
+        name={ROUTES.CREATE_NEW_PASSWORD}
+        component={CreateNewPasswordScreen}
+      />
+      <Stack.Screen
+        name={ROUTES.PROPERTY_LISTING_DETAILS}
+        component={PropertyListingDetailsScreen}
+      />
     </Stack.Navigator>
   );
 };

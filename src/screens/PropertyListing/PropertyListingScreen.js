@@ -5,7 +5,7 @@ import {
   StyleSheet,
   FlatList,
   Image,
-  ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import {COLORS, COMMOM, FONTS, IMAGES} from '../../constants';
 import {useRoute, useNavigation} from '@react-navigation/native';
@@ -13,6 +13,7 @@ import SearchContainer from '../../components/SearchContainer/SearchContainer';
 import {Header} from '../../components/Header';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Foundation from 'react-native-vector-icons/Foundation';
+import {ROUTES} from '../../constants/routes';
 
 const PropertyListingScreen = () => {
   const route = useRoute();
@@ -21,9 +22,17 @@ const PropertyListingScreen = () => {
   const [searchingList, setSearchingList] = useState(locationListing);
 
   const renderLocationList = ({item}) => {
+    const propertyDetailsPage = () => {
+      navigation.navigate(ROUTES.PROPERTY_LISTING_DETAILS, {
+        propertyDetails: item,
+      });
+    };
     return (
       <View style={styles.listItemContainer}>
-        <View style={styles.listItemChildContainer}>
+        <TouchableOpacity
+          style={styles.listItemChildContainer}
+          activeOpacity={0.8}
+          onPress={() => propertyDetailsPage()}>
           <View style={styles.imageContainer}>
             <Image source={item.locationImage} style={styles.propertyImage} />
           </View>
@@ -50,7 +59,7 @@ const PropertyListingScreen = () => {
               </View>
             </View>
           </View>
-        </View>
+        </TouchableOpacity>
       </View>
     );
   };
@@ -123,34 +132,21 @@ const styles = StyleSheet.create({
     color: COLORS.lightTextColor,
   },
   listItemContainer: {
-    // marginTop: 20,
     marginBottom: 10,
   },
   listItemChildContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 10,
-    // gap: 30,
     borderColor: COLORS.placeholderBackgroundColor,
     borderWidth: 1,
     borderRadius: 10,
-    // shadowColor: COLORS.lightTextColor,
-    // elevation: 1,
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 2,
-    // },
-    // shadowOpacity: 0.25,
-    // shadowRadius: 3.84,
-    // elevation: 4,
   },
   imageContainer: {
     width: '30%',
-    // padding: 2
   },
   dataContainer: {
     width: '60%',
-    // alignItems: 'flex-start',
     justifyContent: 'space-between',
     padding: 5,
   },
@@ -172,7 +168,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    // gap: 5,
   },
   ratingContainer: {
     flexDirection: 'row',
@@ -182,7 +177,6 @@ const styles = StyleSheet.create({
   lowerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    // backgroundColor: 'red',
     width: '100%',
   },
   price: {
@@ -198,7 +192,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   locationNotFoundContainer: {
-    // width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
     height: '100%',

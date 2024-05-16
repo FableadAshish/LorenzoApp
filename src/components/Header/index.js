@@ -2,12 +2,20 @@ import React from 'react';
 import {Text, TouchableOpacity, View, StyleSheet, Image} from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { COMMOM } from '../../constants';
+import {COLORS, COMMOM} from '../../constants';
 
-export const Header = ({iconName, openDrawer, title, rightIcon}) => {
+export const Header = ({
+  iconName,
+  openDrawer,
+  title,
+  rightIcon,
+  style,
+  iconBackground,
+  rightIconBackground,
+}) => {
   return (
-    <View style={styles.container}>
-      <View style={styles.leftContainer}>
+    <View style={[styles.container, style]}>
+      <View style={[styles.leftContainer, iconBackground]}>
         {iconName === 'chevron-small-left' ? (
           <TouchableOpacity>
             <Entypo
@@ -32,7 +40,7 @@ export const Header = ({iconName, openDrawer, title, rightIcon}) => {
         <Text style={styles.titleText}>{title}</Text>
       </View>
 
-      <View style={styles.rightContainer}>
+      <View style={[styles.rightContainer, rightIconBackground]}>
         <Icon name={rightIcon} size={30} color="black" />
       </View>
     </View>
@@ -54,7 +62,7 @@ const styles = StyleSheet.create({
   leftContainer: {
     // flex: 1,
     position: 'absolute',
-    paddingHorizontal: COMMOM.paddingHorizantal
+    // paddingHorizontal: COMMOM.paddingHorizantal
   },
   center: {
     flex: 1,

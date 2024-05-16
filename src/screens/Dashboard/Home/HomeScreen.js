@@ -19,13 +19,16 @@ const HomeScreen = ({navigation}) => {
   const locationData = [
     {
       id: 1,
-
       name: 'Niladri Reserviour',
       location: 'Surat, Gujrat',
       locationImage: IMAGES.Trek1,
       ratings: 4.5,
       roomsAvailable: 2,
       price: 150,
+      locationDetails:
+        'enjoy the beauty of summer with various attractions available here, as well as various complete facilities, avaoilable at affordable prices, for all tourists from all accross the world',
+      videoUrl:
+        'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
     },
     {
       id: 2,
@@ -35,6 +38,10 @@ const HomeScreen = ({navigation}) => {
       ratings: 4.7,
       roomsAvailable: 5,
       price: 120,
+      locationDetails:
+        'Experience the tranquility of nature at this serene reservoir, offering stunning views and peaceful surroundings for a rejuvenating getaway.',
+      videoUrl:
+        'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
     },
     {
       id: 3,
@@ -44,6 +51,10 @@ const HomeScreen = ({navigation}) => {
       ratings: 4.9,
       roomsAvailable: 7,
       price: 100,
+      locationDetails:
+        'Discover the hidden gem of Surat, where crystal-clear waters and lush greenery create a picturesque setting for a memorable vacation.',
+      videoUrl:
+        'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
     },
     {
       id: 4,
@@ -53,19 +64,34 @@ const HomeScreen = ({navigation}) => {
       ratings: 4.1,
       roomsAvailable: 3,
       price: 200,
+      locationDetails:
+        'Immerse yourself in the rich cultural heritage and natural beauty of Darma, where this reservoir offers a unique blend of adventure and relaxation.',
+      videoUrl:
+        'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
     },
   ];
   const [searchQuery, setSearchQuery] = useState(locationData);
 
   const searchData = text => {
-    const filteredList = locationData.filter(item =>
-      item.name.toLowerCase().includes(text.toLowerCase()),
+    const filteredList = locationData.filter(
+      item =>
+        item.name.toLowerCase().includes(text.toLowerCase()) ||
+        item.roomsAvailable.toString().includes(text),
     );
     setSearchQuery(filteredList);
   };
+
+  const getDetails = item => {
+    navigation.navigate(ROUTES.PROPERTY_LISTING_DETAILS, {
+      propertyDetails: item,
+    });
+  };
   const renderList = ({item}) => {
     return (
-      <View style={styles.locationContainer}>
+      <TouchableOpacity
+        style={styles.locationContainer}
+        activeOpacity={0.8}
+        onPress={() => getDetails(item)}>
         <Image source={item.locationImage} style={styles.locationImage} />
         <View style={styles.locationInfo}>
           <View style={styles.upperLocationInfo}>
@@ -82,7 +108,7 @@ const HomeScreen = ({navigation}) => {
             <Text style={styles.locationLocation}>{item.location}</Text>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
   const RouteToPropertyListing = locationData => {

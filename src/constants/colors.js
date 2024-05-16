@@ -1,7 +1,7 @@
 export default {
   lightTextColor: '#7D848D',
   mediumTextColor: '#1B1E28',
-  lightPrimaryColor: '#0D6EFD',
+  lightPrimaryColor: '#6759FF',
   white: '#fff',
   black: 'black',
   lightOrange: '#FF7029',
@@ -12,4 +12,5 @@ export default {
   placeholderIconColor: '#030047',
   buttonAuthCommon: '#FFCC3E',
   buttonAuthCommonText: '#030047',
+  transparent: 'transparent',
 };
