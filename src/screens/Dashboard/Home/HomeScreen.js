@@ -26,9 +26,19 @@ const HomeScreen = ({navigation}) => {
       roomsAvailable: 2,
       price: 150,
       locationDetails:
-        'enjoy the beauty of summer with various attractions available here, as well as various complete facilities, avaoilable at affordable prices, for all tourists from all accross the world',
+        'Enjoy the beauty of summer with various attractions available here, as well as various complete facilities, avaoilable at affordable prices, for all tourists from all accross the world',
       videoUrl:
         'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+      propertyDetailsPoints: [
+        'Panoramic Views',
+        'Outdoor Activities',
+        'Family-friendly',
+        'Spacious Rooms',
+        'Modern Amenities',
+      ],
+      phoneNumber: '1234567900',
+      email: 'niladri.reserviour@example.com',
+      address: '123 Niladri Rd, Surat, Gujarat 395001',
     },
     {
       id: 2,
@@ -42,6 +52,16 @@ const HomeScreen = ({navigation}) => {
         'Experience the tranquility of nature at this serene reservoir, offering stunning views and peaceful surroundings for a rejuvenating getaway.',
       videoUrl:
         'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+      propertyDetailsPoints: [
+        'Vegeterian Family',
+        'Vegan',
+        'Sunny View',
+        '2 BedRoom',
+        'Lavisk Collection',
+      ],
+      phoneNumber: '9876543210',
+      email: 'darma.reserviour@example.com',
+      address: '456 Darma Blvd, Darma, Gujarat 395002',
     },
     {
       id: 3,
@@ -55,6 +75,16 @@ const HomeScreen = ({navigation}) => {
         'Discover the hidden gem of Surat, where crystal-clear waters and lush greenery create a picturesque setting for a memorable vacation.',
       videoUrl:
         'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+      propertyDetailsPoints: [
+        'Waterfront Location',
+        'Eco-friendly Practices',
+        'Spa and Wellness Center',
+        'Gourmet Dining',
+        'Luxury Accommodations',
+      ],
+      phoneNumber: '5555555555',
+      email: 'niladri2.reserviour@example.com',
+      address: '789 Niladri Ln, Surat, Gujarat 395003',
     },
     {
       id: 4,
@@ -65,9 +95,19 @@ const HomeScreen = ({navigation}) => {
       roomsAvailable: 3,
       price: 200,
       locationDetails:
-        'Immerse yourself in the rich cultural heritage and natural beauty of Darma, where this reservoir offers a unique blend of adventure and relaxation.',
+        'Immerse yourself in the rich cultural heritage and natural beauty of Darma, where this reservoir offers a unique blend of adventure and relaxation.Immerse yourself in the rich cultural heritage and natural beauty of Darma, where this reservoir offers a unique blend of adventure and relaxation',
       videoUrl:
         'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+      propertyDetailsPoints: [
+        'Panoramic Views',
+        'Outdoor Activities',
+        'Family-friendly',
+        'Spacious Rooms',
+        'Modern Amenities',
+      ],
+      phoneNumber: '1112223333',
+      email: 'darma2.reserviour@example.com',
+      address: '456 Darma Ave, Darma, Gujarat 395004',
     },
   ];
   const [searchQuery, setSearchQuery] = useState(locationData);
@@ -118,80 +158,88 @@ const HomeScreen = ({navigation}) => {
     // console.log(locationData);
   };
   return (
-    <ScrollView style={{backgroundColor: 'white'}}>
-      <View style={styles.container}>
-        <View style={styles.headerContainer}>
-          <View style={styles.leftContainer}>
-            <TouchableOpacity onPress={() => navigation.openDrawer()}>
-              <Icon name="menu" size={30} color="black" />
-            </TouchableOpacity>
-            <View>
-              <Text style={styles.centerNameStyle}>John Doe</Text>
-            </View>
-          </View>
-
-          <Image
-            source={{
-              uri: 'https://images.pexels.com/photos/1674752/pexels-photo-1674752.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-            }}
-            style={styles.homeProfileImage}
-          />
-        </View>
-
-        <View style={styles.welcomeHeader}>
-          <Text style={styles.upperText}>Explore the</Text>
-          <View style={styles.bottomTextContainer}>
-            <Text style={styles.beautifulText}>Beautiful </Text>
-            <View style={styles.worldTextContainer}>
-              <Text style={styles.worldText}>world!</Text>
-              <Image
-                source={IMAGES.WelcomeBottomImage}
-                style={styles.welcomeBottomImage}
-                resizeMode="contain"
-              />
-            </View>
-          </View>
-        </View>
-
-        <SearchContainer
-          placeholderTitle={'Search here..'}
-          onChangeText={text => searchData(text)}
-        />
-
-        <View style={styles.listContainer}>
-          {searchQuery.length === 0 ? (
-            <View style={styles.locationNotFoundContainer}>
-              <Image source={IMAGES.NoSearch} style={styles.noSearchImage} />
-              <Text style={styles.locationNotFoundText}>
-                No Such Property is Listed
-              </Text>
-              <Text style={styles.locationNotFoundSubText}>
-                Please add relevant value
-              </Text>
-            </View>
-          ) : (
-            <>
-              <View style={styles.labelContainer}>
-                <Text style={styles.labelText}>Best Destination</Text>
-                <TouchableOpacity
-                  onPress={() => RouteToPropertyListing(locationData)}>
-                  <Text style={styles.viewAllText}>View all</Text>
-                </TouchableOpacity>
+    <>
+      <ScrollView style={{backgroundColor: 'white'}}>
+        <View style={styles.container}>
+          <View style={styles.headerContainer}>
+            <View style={styles.leftContainer}>
+              <TouchableOpacity onPress={() => navigation.openDrawer()}>
+                <Icon name="menu" size={30} color="black" />
+              </TouchableOpacity>
+              <View>
+                <Text style={styles.centerNameStyle}>John Doe</Text>
               </View>
-              <View style={{marginLeft: -30}}>
-                <FlatList
-                  data={searchQuery}
-                  keyExtractor={item => item.id.toString()}
-                  renderItem={renderList}
-                  horizontal={true}
-                  showsHorizontalScrollIndicator={false}
+            </View>
+
+            <Image
+              source={{
+                uri: 'https://images.pexels.com/photos/1674752/pexels-photo-1674752.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+              }}
+              style={styles.homeProfileImage}
+            />
+          </View>
+
+          <View style={styles.welcomeHeader}>
+            <Text style={styles.upperText}>Explore the</Text>
+            <View style={styles.bottomTextContainer}>
+              <Text style={styles.beautifulText}>Beautiful </Text>
+              <View style={styles.worldTextContainer}>
+                <Text style={styles.worldText}>world!</Text>
+                <Image
+                  source={IMAGES.WelcomeBottomImage}
+                  style={styles.welcomeBottomImage}
+                  resizeMode="contain"
                 />
               </View>
-            </>
-          )}
+            </View>
+          </View>
+
+          <SearchContainer
+            placeholderTitle={'Search here..'}
+            onChangeText={text => searchData(text)}
+          />
+
+          <View style={styles.listContainer}>
+            {searchQuery.length === 0 ? (
+              <View style={styles.locationNotFoundContainer}>
+                <Image source={IMAGES.NoSearch} style={styles.noSearchImage} />
+                <Text style={styles.locationNotFoundText}>
+                  No Such Property is Listed
+                </Text>
+                <Text style={styles.locationNotFoundSubText}>
+                  Please add relevant value
+                </Text>
+              </View>
+            ) : (
+              <>
+                <View style={styles.labelContainer}>
+                  <Text style={styles.labelText}>Best Destination</Text>
+                  <TouchableOpacity
+                    onPress={() => RouteToPropertyListing(locationData)}>
+                    <Text style={styles.viewAllText}>View all</Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={{marginLeft: -30}}>
+                  <FlatList
+                    data={searchQuery}
+                    keyExtractor={item => item.id.toString()}
+                    renderItem={renderList}
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                  />
+                </View>
+              </>
+            )}
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+      <TouchableOpacity
+        onPress={() => navigation.navigate(ROUTES.CHAT)}
+        style={styles.contactButtonContainer}
+        activeOpacity={0.8}>
+        <Image source={IMAGES.chatBot} style={styles.chatBotImage} />
+      </TouchableOpacity>
+    </>
   );
 };
 
@@ -299,7 +347,6 @@ const styles = StyleSheet.create({
   },
   locationInfo: {
     marginTop: 20,
-    // backgroundColor: 'red',
     paddingHorizontal: 8,
   },
   upperLocationInfo: {
@@ -334,11 +381,9 @@ const styles = StyleSheet.create({
     color: COLORS.lightTextColor,
   },
   locationNotFoundContainer: {
-    // width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
     height: '100%',
-    // marginTop: -100,
   },
   locationNotFoundText: {
     fontFamily: FONTS.poppinsRegular,
@@ -354,6 +399,32 @@ const styles = StyleSheet.create({
     height: 200,
     width: 200,
     resizeMode: 'contain',
+  },
+  chatBotImage: {
+    height: 50,
+    width: 50,
+    borderRadius: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  contactButtonContainer: {
+    position: 'absolute',
+    bottom: 0,
+    right: 20,
+    backgroundColor: COLORS.transparent,
+    marginRight: 20,
+    marginBottom: 10,
+    borderRadius: 50,
+    shadowColor: COLORS.mediumTextColor,
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 10,
+    elevation: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

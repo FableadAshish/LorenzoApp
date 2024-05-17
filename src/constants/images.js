@@ -12,6 +12,17 @@ export default {
   leftArrow: require('../../src/assets/Images/App/leftArrow.svg'),
   NoSearch: require('../../src/assets/Images/App/NoSearch.png'),
   ProfilePicture: require('../../src/assets/Images/App/ProfilePicture.png'),
+  star: require('../../src/assets/Images/App/star.png'),
+  dollar: require('../../src/assets/Images/App/dollar.png'),
+  bed: require('../../src/assets/Images/App/bed.png'),
+  phone: require('../../src/assets/Images/App/phone.png'),
+  email: require('../../src/assets/Images/App/email.jpeg'),
+  chatBot: require('../../src/assets/Images/App/chatBot.png'),
+  plus: require('../../src/assets/Images/App/plus.png'),
+  paperPin: require('../../src/assets/Images/App/paperPin.png'),
+  send: require('../../src/assets/Images/App/send.png'),
+  VirtualTour: require('../../src/assets/Images/App/VirtualTour.png'),
+
   // Bottom Tab
   CalendarIcon: require('../../src/assets/Images/BottomTab/CalendarIcon.png'),
   ChatIcon: require('../../src/assets/Images/BottomTab/Chat.png'),
@@ -38,4 +49,7 @@ export default {
   shield: require('../../src/assets/Images/Profile/shield.png'),
   edit: require('../../src/assets/Images/Profile/edit.png'),
   close: require('../../src/assets/Images/Profile/close.png'),
+
+  // Video
+  Video1: require('../assets/Video/Video.mp4'),
 };

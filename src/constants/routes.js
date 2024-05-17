@@ -11,4 +11,5 @@ export const ROUTES = {
   OTP_SCREEN: 'OTPScreen',
   CREATE_NEW_PASSWORD: 'CreateNewPassword',
   PROPERTY_LISTING_DETAILS: 'PropertyListingDetails',
+  VIRTUAL_TOUR: 'VirtualTour',
 };

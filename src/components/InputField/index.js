@@ -40,8 +40,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.lightTextColor,
     borderRadius: 50,
     color: 'black',
-    // marginTop: 5,
-    backgroundColor: COLORS.placeholderBackgroundColor,
+    backgroundColor: COLORS.placeholderColor,
     justifyContent: 'flex-start',
     paddingLeft: 20,
     flexDirection: 'row',
@@ -54,7 +53,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     letterSpacing: 0.4,
-    // fontWeight: '400',
     color: COLORS.black,
     fontFamily: FONTS.poppinsRegular,
   },

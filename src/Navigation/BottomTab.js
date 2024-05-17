@@ -7,6 +7,7 @@ import ProfileScreen from '../screens/Dashboard/Profile/ProfileScreen';
 import {COLORS, IMAGES} from '../constants';
 import {Image} from 'react-native';
 import PropertyListingScreen from '../screens/PropertyListing/PropertyListingScreen';
+import {View, StyleSheet} from 'react-native';
 
 const BottomTab = () => {
   const Tab = createBottomTabNavigator();
@@ -17,12 +18,14 @@ const BottomTab = () => {
     if (route.name === ROUTES.HOME) {
       if (focused) {
         return (
-          <Image
-            source={IMAGES.HomeIcon}
-            style={{width: 28, height: 28}}
-            tintColor={COLORS.lightPrimaryColor}
-            resizeMode="contain"
-          />
+          <View style={styles.iconContainer}>
+            <Image
+              source={IMAGES.HomeIcon}
+              style={{width: 28, height: 28}}
+              tintColor={'#E6E3DF'}
+              resizeMode="contain"
+            />
+          </View>
         );
       } else {
         return (
@@ -36,12 +39,14 @@ const BottomTab = () => {
     } else if (route.name === ROUTES.CHAT) {
       if (focused) {
         return (
-          <Image
-            source={IMAGES.ChatIcon}
-            style={{width: 28, height: 28}}
-            tintColor={COLORS.lightPrimaryColor}
-            resizeMode="contain"
-          />
+          <View style={styles.iconContainer}>
+            <Image
+              source={IMAGES.ChatIcon}
+              style={{width: 28, height: 28}}
+              tintColor={'#E6E3DF'}
+              resizeMode="contain"
+            />
+          </View>
         );
       } else {
         return (
@@ -55,12 +60,14 @@ const BottomTab = () => {
     } else if (route.name === ROUTES.PROFILE) {
       if (focused) {
         return (
-          <Image
-            source={IMAGES.ProfileIcon}
-            style={{width: 28, height: 28}}
-            tintColor={COLORS.lightPrimaryColor}
-            resizeMode="contain"
-          />
+          <View style={styles.iconContainer}>
+            <Image
+              source={IMAGES.ProfileIcon}
+              style={{width: 28, height: 28}}
+              tintColor={'#E6E3DF'}
+              resizeMode="contain"
+            />
+          </View>
         );
       } else {
         return (
@@ -94,14 +101,18 @@ const BottomTab = () => {
       iconName = focused ? 'qr-code' : 'qr-code-outline';
       colors = focused ? COLORS.primaryTab : COLORS.primaryTabGray;
     }
-    // return <Image name={iconName} size={25} color={colors} />
   };
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
+        tabBarLabel: '',
         headerShown: false,
         tabBarIcon: ({color, focused}) => getTabBarIcon(route, color, focused),
-        tabBarLabelStyle: {fontSize: 15},
+        tabBarStyle: {
+          borderTopColor: COLORS.white,
+          paddingTop: 0 /*backgroundColor: '#E6E3DF'*/,
+        },
+        // tabBarLabelStyle: {fontSize: 15},
       })}>
       <Tab.Screen name={ROUTES.HOME} component={HomeScreen} />
       <Tab.Screen name={ROUTES.CHAT} component={ChatScreen} />
@@ -114,5 +125,17 @@ const BottomTab = () => {
     </Tab.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  iconContainer: {
+    marginTop: -20,
+    backgroundColor: 'black',
+    height: 50,
+    width: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+  },
+});
 
 export default BottomTab;

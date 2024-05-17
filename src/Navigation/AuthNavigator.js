@@ -11,6 +11,7 @@ import EditProfileScreen from '../screens/Dashboard/Profile/EditProfile';
 import OTPScreen from '../screens/Authentication/OTP/OTPScreen';
 import CreateNewPasswordScreen from '../screens/Authentication/CreateNewPassword/CreateNewPasswordScreen';
 import PropertyListingDetailsScreen from '../screens/PropertyListing/PropertyListingDetailsScreen';
+import VirtualTourScreen from '../screens/PropertyListing/VirtualTourScreen';
 
 const AuthNavigator = () => {
   const Stack = createStackNavigator();
@@ -41,6 +42,7 @@ const AuthNavigator = () => {
         name={ROUTES.PROPERTY_LISTING_DETAILS}
         component={PropertyListingDetailsScreen}
       />
+      <Stack.Screen name={ROUTES.VIRTUAL_TOUR} component={VirtualTourScreen}/>
     </Stack.Navigator>
   );
 };
