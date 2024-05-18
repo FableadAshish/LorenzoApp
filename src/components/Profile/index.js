@@ -10,6 +10,7 @@ const ProfileList = ({leftIcon, title, rightIcon, navigateTo}) => {
           source={leftIcon}
           style={styles.iconStyle}
           tintColor={COLORS.mediumTextColor}
+          resizeMode="contain"
         />
         <Text style={styles.textTitle}>{title}</Text>
       </View>
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 30
+    marginTop: 30,
   },
   iconStyle: {
     height: 22,
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.poppinsRegular,
     color: COLORS.mediumTextColor,
     marginLeft: 10,
-    fontWeight: '400'
+    fontWeight: '400',
   },
   nameAndIcon: {
     flexDirection: 'row',

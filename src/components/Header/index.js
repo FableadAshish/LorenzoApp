@@ -2,7 +2,7 @@ import React from 'react';
 import {Text, TouchableOpacity, View, StyleSheet, Image} from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {COLORS, COMMOM} from '../../constants';
+import {COLORS, COMMOM, IMAGES} from '../../constants';
 
 export const Header = ({
   iconName,
@@ -17,22 +17,12 @@ export const Header = ({
     <View style={[styles.container, style]}>
       <View style={[styles.leftContainer, iconBackground]}>
         {iconName === 'chevron-small-left' ? (
-          <TouchableOpacity>
-            <Entypo
-              name={iconName}
-              size={35}
-              color="black"
-              onPress={openDrawer}
-            />
+          <TouchableOpacity onPress={() => openDrawer()}>
+            <Image source={IMAGES.leftArrow} style={styles.leftNavigation} />
           </TouchableOpacity>
         ) : (
           <TouchableOpacity>
-            <Icon
-              name={iconName}
-              size={30}
-              color="black"
-              onPress={openDrawer}
-            />
+            <Image source={IMAGES.menu} style={styles.leftNavigation} />
           </TouchableOpacity>
         )}
       </View>
@@ -86,5 +76,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     // paddingLeft:-10
+  },
+  leftNavigation: {
+    height: 25,
+    width: 25,
+    tintColor: COLORS.black,
+    resizeMode: 'contain',
   },
 });

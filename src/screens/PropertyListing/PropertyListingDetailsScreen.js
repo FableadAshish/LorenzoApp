@@ -6,7 +6,7 @@ import {
   ImageBackground,
   Image,
   ScrollView,
-  SafeAreaView,
+  TouchableOpacity,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {COLORS, COMMOM, FONTS, IMAGES} from '../../constants';
@@ -23,7 +23,9 @@ const PropertyListingDetailsScreen = () => {
   console.log('propertyDetails', propertyDetails);
 
   const getTour = () => {
-    navigation.navigate(ROUTES.VIRTUAL_TOUR);
+    navigation.navigate(ROUTES.VIRTUAL_TOUR, {
+      get360View: propertyDetails.videoUrl,
+    });
   };
 
   return (
@@ -48,10 +50,12 @@ const PropertyListingDetailsScreen = () => {
         <View style={styles.locationDetailsContainer}>
           <View style={styles.locationTitleContainer}>
             <Text style={styles.propertyName}>{propertyDetails.name}</Text>
-            <Image
-              source={IMAGES.VirtualTour}
-              style={styles.virtualTourImage}
-            />
+            <TouchableOpacity onPress={() => getTour()}>
+              <Image
+                source={IMAGES.VirtualTour}
+                style={styles.virtualTourImage}
+              />
+            </TouchableOpacity>
           </View>
           <View style={styles.locationContainer}>
             <Image
@@ -146,11 +150,7 @@ const PropertyListingDetailsScreen = () => {
             </View>
           </View>
         </View>
-        <Button
-          title={'Book Now'}
-          style={styles.button}
-          performAction={() => getTour()}
-        />
+        <Button title={'Book Now'} style={styles.button} />
       </ScrollView>
     </>
   );

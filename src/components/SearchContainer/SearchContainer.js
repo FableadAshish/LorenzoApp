@@ -1,13 +1,13 @@
 import React from 'react';
-import {StyleSheet, TextInput, View} from 'react-native';
+import {Image, StyleSheet, TextInput, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {COLORS} from '../../constants';
+import {COLORS, IMAGES} from '../../constants';
 
 const SearchContainer = ({placeholderTitle, onChangeText, style}) => {
   return (
     <View style={[styles.searchContainer, style]}>
       <View style={styles.searchPlaceHolderContrainer}>
-        <Icon name={'search'} color={COLORS.black} size={20} />
+        <Image source={IMAGES.search} style={styles.searchIcon} />
         <TextInput
           placeholder={placeholderTitle}
           style={styles.placeholderText}
@@ -41,6 +41,12 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 1,
     borderColor: COLORS.lightTextColor,
+  },
+  searchIcon: {
+    height: 18,
+    width: 18,
+    resizeMode: 'contain',
+    tintColor: COLORS.black,
   },
 });
 export default SearchContainer;

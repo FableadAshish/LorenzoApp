@@ -2,114 +2,18 @@ import React, {useState} from 'react';
 import {
   FlatList,
   Image,
-  SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 import {COLORS, COMMOM, FONTS, IMAGES} from '../../../constants';
-import Icon from 'react-native-vector-icons/Ionicons';
 import SearchContainer from '../../../components/SearchContainer/SearchContainer';
 import {ROUTES} from '../../../constants/routes';
+import {locationData} from '../../../constants/data';
 
 const HomeScreen = ({navigation}) => {
-  const locationData = [
-    {
-      id: 1,
-      name: 'Niladri Reserviour',
-      location: 'Surat, Gujrat',
-      locationImage: IMAGES.Trek1,
-      ratings: 4.5,
-      roomsAvailable: 2,
-      price: 150,
-      locationDetails:
-        'Enjoy the beauty of summer with various attractions available here, as well as various complete facilities, avaoilable at affordable prices, for all tourists from all accross the world',
-      videoUrl:
-        'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-      propertyDetailsPoints: [
-        'Panoramic Views',
-        'Outdoor Activities',
-        'Family-friendly',
-        'Spacious Rooms',
-        'Modern Amenities',
-      ],
-      phoneNumber: '1234567900',
-      email: 'niladri.reserviour@example.com',
-      address: '123 Niladri Rd, Surat, Gujarat 395001',
-    },
-    {
-      id: 2,
-      name: 'Darma Reserviour',
-      location: 'Darma, Gujrat',
-      locationImage: IMAGES.Trek2,
-      ratings: 4.7,
-      roomsAvailable: 5,
-      price: 120,
-      locationDetails:
-        'Experience the tranquility of nature at this serene reservoir, offering stunning views and peaceful surroundings for a rejuvenating getaway.',
-      videoUrl:
-        'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-      propertyDetailsPoints: [
-        'Vegeterian Family',
-        'Vegan',
-        'Sunny View',
-        '2 BedRoom',
-        'Lavisk Collection',
-      ],
-      phoneNumber: '9876543210',
-      email: 'darma.reserviour@example.com',
-      address: '456 Darma Blvd, Darma, Gujarat 395002',
-    },
-    {
-      id: 3,
-      name: 'Niladri Reserviour',
-      location: 'Surat, Gujrat',
-      locationImage: IMAGES.Trek3,
-      ratings: 4.9,
-      roomsAvailable: 7,
-      price: 100,
-      locationDetails:
-        'Discover the hidden gem of Surat, where crystal-clear waters and lush greenery create a picturesque setting for a memorable vacation.',
-      videoUrl:
-        'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-      propertyDetailsPoints: [
-        'Waterfront Location',
-        'Eco-friendly Practices',
-        'Spa and Wellness Center',
-        'Gourmet Dining',
-        'Luxury Accommodations',
-      ],
-      phoneNumber: '5555555555',
-      email: 'niladri2.reserviour@example.com',
-      address: '789 Niladri Ln, Surat, Gujarat 395003',
-    },
-    {
-      id: 4,
-      name: 'Darma Reserviour',
-      location: 'Darma, Gujrat',
-      locationImage: IMAGES.Trek4,
-      ratings: 4.1,
-      roomsAvailable: 3,
-      price: 200,
-      locationDetails:
-        'Immerse yourself in the rich cultural heritage and natural beauty of Darma, where this reservoir offers a unique blend of adventure and relaxation.Immerse yourself in the rich cultural heritage and natural beauty of Darma, where this reservoir offers a unique blend of adventure and relaxation',
-      videoUrl:
-        'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-      propertyDetailsPoints: [
-        'Panoramic Views',
-        'Outdoor Activities',
-        'Family-friendly',
-        'Spacious Rooms',
-        'Modern Amenities',
-      ],
-      phoneNumber: '1112223333',
-      email: 'darma2.reserviour@example.com',
-      address: '456 Darma Ave, Darma, Gujarat 395004',
-    },
-  ];
   const [searchQuery, setSearchQuery] = useState(locationData);
 
   const searchData = text => {
@@ -139,7 +43,7 @@ const HomeScreen = ({navigation}) => {
               <Text style={styles.locationName}>{item.name}</Text>
             </View>
             <View style={styles.ratingsContainer}>
-              <Icon name="star" size={18} color={COLORS.lightOrange} />
+              <Image source={IMAGES.star} style={styles.starIcon} />
               <Text style={styles.locationRatings}>{item.ratings}</Text>
             </View>
           </View>
@@ -164,7 +68,7 @@ const HomeScreen = ({navigation}) => {
           <View style={styles.headerContainer}>
             <View style={styles.leftContainer}>
               <TouchableOpacity onPress={() => navigation.openDrawer()}>
-                <Icon name="menu" size={30} color="black" />
+                <Image source={IMAGES.menu} style={styles.menuIcon} />
               </TouchableOpacity>
               <View>
                 <Text style={styles.centerNameStyle}>John Doe</Text>
@@ -213,7 +117,7 @@ const HomeScreen = ({navigation}) => {
             ) : (
               <>
                 <View style={styles.labelContainer}>
-                  <Text style={styles.labelText}>Best Destination</Text>
+                  <Text style={styles.labelText}>Latest Properties</Text>
                   <TouchableOpacity
                     onPress={() => RouteToPropertyListing(locationData)}>
                     <Text style={styles.viewAllText}>View all</Text>
@@ -357,7 +261,8 @@ const styles = StyleSheet.create({
   },
   ratingsContainer: {
     flexDirection: 'row',
-    gap: 2,
+    gap: 5,
+    alignItems: 'center',
   },
   locationName: {
     fontSize: 20,
@@ -425,6 +330,18 @@ const styles = StyleSheet.create({
     elevation: 4,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  menuIcon: {
+    height: 30,
+    width: 30,
+    resizeMode: 'contain',
+    tintColor: COLORS.black,
+  },
+  starIcon: {
+    height: 15,
+    width: 15,
+    resizeMode: 'contain',
+    tintColor: COLORS.lightOrange,
   },
 });
 

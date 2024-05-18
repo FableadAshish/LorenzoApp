@@ -70,7 +70,7 @@ const SignUpScreen = () => {
             <InputField
               title={'Full Name'}
               placeholderText={'Enter Full Name'}
-              placeholderImage={IMAGES.ProfileIcon}
+              placeholderImage={IMAGES.userPlaceholder}
               getText={text => setFullName(text)}
               value={fullName}
             />

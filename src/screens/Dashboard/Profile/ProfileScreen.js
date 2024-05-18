@@ -1,13 +1,37 @@
-import React from 'react';
-import {Text, View, StyleSheet, Image} from 'react-native';
+import React, {useState} from 'react';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  Modal,
+  TouchableOpacity,
+} from 'react-native';
 import {COLORS, COMMOM, FONTS, IMAGES} from '../../../constants';
 import ProfileList from '../../../components/Profile';
-import { useNavigation } from '@react-navigation/native';
-import { ROUTES } from '../../../constants/routes';
-import EditModal from '../../../components/EditModal';
+import {useNavigation} from '@react-navigation/native';
+import {ROUTES} from '../../../constants/routes';
+import Button from '../../../components/Button';
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [logoutModal, setLogoutModal] = useState(false);
+
+  const logoutPermission = () => {
+    setLogoutModal(!logoutModal);
+  };
+
+  const logout = () => {
+    setModalVisible(!modalVisible);
+  };
+
+  const closeModal = () => {
+    navigation.navigate(ROUTES.SIGNUP);
+    setLogoutModal(!logoutModal);
+    setModalVisible(!modalVisible);
+  };
+
   return (
     <>
       <View style={styles.container}>
@@ -22,7 +46,7 @@ const ProfileScreen = () => {
           <Text style={styles.preferencesText}>General</Text>
           <View style={{marginTop: -30}}>
             <ProfileList
-              leftIcon={IMAGES.ProfileIcon}
+              leftIcon={IMAGES.userPlaceholder}
               title={'Edit Profile'}
               rightIcon={IMAGES.rightArrow}
               navigateTo={() => navigation.navigate(ROUTES.EDIT_PROFILE)}
@@ -51,10 +75,65 @@ const ProfileScreen = () => {
               leftIcon={IMAGES.logout}
               title={'Logout'}
               rightIcon={IMAGES.rightArrow}
+              navigateTo={() => logout()}
             />
           </View>
         </View>
       </View>
+      <Modal transparent={true} visible={modalVisible} animationType="slide">
+        <View style={styles.modalContaoiner}>
+          <View style={styles.logoutContainer}>
+            <View style={styles.titleContainer}>
+              <Text style={styles.titleText}>Logout</Text>
+              <TouchableOpacity onPress={() => setModalVisible(false)}>
+                <Image
+                  source={IMAGES.close}
+                  style={styles.closeImage}
+                  tintColor={COLORS.mediumTextColor}
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={{paddingHorizontal: 20}}>
+              <Text style={styles.titleDescriptionText}>
+                Your profile information will be saved to make things easier
+                when you return. See you again!
+              </Text>
+            </View>
+            <View style={styles.buttonContainer}>
+              <Button
+                innerStyle={styles.button}
+                title={'Logout'}
+                performAction={() => logoutPermission()}
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
+      <Modal transparent={true} visible={logoutModal} animationType="slide">
+        <View style={styles.logoutModalContainer}>
+          <View style={styles.logoutPermissionContainer}>
+            <Image source={IMAGES.logoutPopup} style={styles.logoutIcon}/>
+            <Text style={styles.logoutTitle}>
+              Are you sure, you want to logout.
+            </Text>
+
+            <View style={styles.cancelLogoutButton}>
+              <Button
+                innerStyle={styles.cancelButton}
+                title={'Cancel'}
+                performAction={() => setLogoutModal(false)}
+                styleText={styles.cancelText}
+              />
+              <Button
+                innerStyle={styles.logoutButton}
+                title={'Logout'}
+                performAction={() => closeModal()}
+                styleText={styles.logoutText}
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
     </>
   );
 };
@@ -67,7 +146,6 @@ const styles = StyleSheet.create({
   profilePicture: {
     height: 80,
     width: 80,
-    // borderRadius: 40,
     marginTop: 20,
     alignSelf: 'center',
   },
@@ -95,6 +173,100 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.poppinsRegular,
     marginTop: 20,
     marginBottom: 10,
+  },
+  modalContaoiner: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  logoutContainer: {
+    paddingBottom: 40,
+    backgroundColor: COLORS.white,
+    borderTopRightRadius: 40,
+    borderTopLeftRadius: 40,
+    justifyContent: 'center',
+  },
+  titleContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    marginTop: 40,
+    paddingHorizontal: 20,
+  },
+  closeImage: {
+    height: 30,
+    width: 30,
+  },
+  titleText: {
+    fontSize: 22,
+    color: COLORS.mediumTextColor,
+    fontFamily: FONTS.poppinsRegular,
+  },
+  titleDescriptionText: {
+    fontSize: 15,
+    color: COLORS.lightTextColor,
+    fontFamily: FONTS.poppinsRegular,
+    marginTop: 20,
+  },
+  buttonContainer: {
+    paddingHorizontal: COMMOM.paddingHorizantal,
+  },
+  button: {
+    backgroundColor: '#ED1F4F',
+  },
+  logoutModalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    paddingHorizontal: COMMOM.paddingHorizantal,
+  },
+  logoutPermissionContainer: {
+    width: '100%',
+    backgroundColor: COLORS.white,
+    height: 'auto',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+  },
+  logoutTitle: {
+    fontSize: 20,
+    color: COLORS.black,
+    fontFamily: FONTS.poppinsRegular,
+  },
+  cancelLogoutButton: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+    paddingBottom: 10,
+  },
+  cancelButton: {
+    backgroundColor: '#F5F5F5',
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    width: 150,
+  },
+  cancelText: {
+    color: COLORS.black,
+    fontFamily: FONTS.poppinsRegular,
+    fontSize: 18,
+  },
+  logoutButton: {
+    paddingHorizontal: 20,
+    backgroundColor: '#F15A24',
+    borderRadius: 5,
+    width: 150,
+  },
+  logoutText: {
+    color: COLORS.white,
+    fontFamily: FONTS.poppinsRegular,
+    fontSize: 18,
+  },
+  logoutIcon: {
+    height: 150,
+    width: 150,
   },
 });
 

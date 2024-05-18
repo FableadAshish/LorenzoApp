@@ -8,20 +8,13 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import {
-  DrawerContentScrollView,
-  DrawerItemList,
-} from '@react-navigation/drawer';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {ROUTES} from '../constants/routes';
-import Icon from 'react-native-vector-icons/Entypo';
 import BottomTab from './BottomTab';
 import ChatScreen from '../screens/Dashboard/Chat/ChatScreen';
 import {COLORS, COMMOM, IMAGES} from '../constants';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {
   useNavigation,
-  DrawerActions,
   getFocusedRouteNameFromRoute,
 } from '@react-navigation/native';
 import Button from '../components/Button';
@@ -37,14 +30,14 @@ const SideMenuList = [
   {
     id: 1,
     option: 'Chat',
-    icon: IMAGES.ChatIcon,
+    icon: IMAGES.chatPlain,
     route: ROUTES.CHAT,
     iconColor: '#f5bd7f',
   },
   {
     id: 2,
     option: 'Profile',
-    icon: IMAGES.ProfileIcon,
+    icon: IMAGES.userPlaceholder,
     route: ROUTES.CHAT,
     iconColor: '#A18FF4',
   },
@@ -58,14 +51,14 @@ const SideMenuList = [
   {
     id: 4,
     option: 'Location',
-    icon: IMAGES.ChatIcon,
+    icon: IMAGES.chatPlain,
     route: ROUTES.CHAT,
     iconColor: '#FA93C5',
   },
   {
     id: 5,
     option: 'User',
-    icon: IMAGES.ProfileIcon,
+    icon: IMAGES.userPlaceholder,
     route: ROUTES.CHAT,
     iconColor: '#5BCFEE',
   },
@@ -119,15 +112,7 @@ const CustomDrawerContent = props => {
                       },
                     ]}
                     onPress={() => navigation.navigate(item.route)}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        width: '90%',
-                        gap: 10,
-                        paddingVertical: 8, // Add some padding for better visibility
-                        borderRadius: 8,
-                      }}>
+                    <View style={styles.drawerList}>
                       <View
                         style={[
                           styles.imageContainer,
@@ -154,10 +139,14 @@ const CustomDrawerContent = props => {
                       </Text>
                     </View>
                     <View style={{marginLeft: -20}}>
-                      <Icon
+                      {/* <Icon
                         name="chevron-thin-right"
                         size={18}
                         color={!isActiveScreen ? COLORS.black : COLORS.white}
+                      /> */}
+                      <Image
+                        source={IMAGES.rightArrow}
+                        style={styles.rightIcon}
                       />
                     </View>
                   </TouchableOpacity>
@@ -203,16 +192,13 @@ const styles = StyleSheet.create({
     width: '90%',
     gap: 10,
     marginTop: 10,
-    // backgroundColor: COLORS.placeholderColor, // Add this line to set the default background color
-    paddingVertical: 5, // Add some padding for better visibility
-    // paddingHorizontal: 15,
+    paddingVertical: 5,
     borderRadius: 8,
-    height: 60
+    height: 60,
   },
   listImgStyle: {
     height: 22,
     width: 22,
-    // marginLeft: 10,
   },
   listTxtStyle: {
     fontSize: 16,
@@ -257,7 +243,6 @@ const styles = StyleSheet.create({
   drawerButton: {
     paddingHorizontal: COMMOM.paddingHorizantal,
     paddingBottom: COMMOM.paddingHorizantal,
-    // width: "60%"
   },
   drawerButtonInnerStyle: {
     borderRadius: 50,
@@ -271,6 +256,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginLeft: 10,
     borderRadius: 10,
+  },
+  rightIcon: {
+    height: 16,
+    width: 16,
+    tintColor: COLORS.black,
+    resizeMode: 'contain',
+  },
+  drawerList: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '90%',
+    gap: 10,
+    paddingVertical: 8,
+    borderRadius: 8,
   },
 });
 

@@ -48,7 +48,7 @@ const EditProfileComp = ({title, titleText, editValue}) => {
                   inputField={
                     <InputField
                       placeholderText={'Enter New Name'}
-                      placeholderImage={IMAGES.ProfileIcon}
+                      placeholderImage={IMAGES.userPlaceholder}
                     />
                   }
                   button={

@@ -14,7 +14,7 @@ const ChatScreen = () => {
     setMessages([
       {
         _id: 1,
-        text: 'Hello developer',
+        text: 'Hello, How can I help you',
         createdAt: new Date(),
         user: {
           _id: 2,
