@@ -26,8 +26,17 @@ export const Header = ({
           </TouchableOpacity>
         )}
       </View>
-      <View style={styles.center}>
-        <Text style={styles.titleText}>{title}</Text>
+      <View style={title === 'Lorenzo@Support' ? styles.chat : styles.center}>
+        {
+          title === 'Lorenzo@Support'? (
+            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent:'center'}}>
+            <Image source={IMAGES.LorenzoIcon} style={{height: 30, width: 30}}/>
+            <Text style={styles.titleChatText}>{title}</Text>
+            </View>
+          ) : (
+            <Text style={styles.titleText}>{title}</Text>
+          )
+        }
       </View>
 
       <View style={[styles.rightContainer, rightIconBackground]}>
@@ -60,6 +69,12 @@ const styles = StyleSheet.create({
     // marginLeft: 15,
     justifyContent: 'center',
   },
+  chat: {
+    // flex: 1,
+    alignItems: 'center',
+    marginLeft: 30,
+    justifyContent: 'center',
+  },
   rightContainer: {
     // flex:0
     alignItems: 'flex-end',
@@ -83,4 +98,10 @@ const styles = StyleSheet.create({
     tintColor: COLORS.black,
     resizeMode: 'contain',
   },
+  titleChatText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginLeft: 10
+  }
 });

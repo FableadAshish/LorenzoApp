@@ -14,14 +14,114 @@ const ChatScreen = () => {
     setMessages([
       {
         _id: 1,
-        text: 'Hello, How can I help you',
+        text: 'Hello, How can I help you today?',
         createdAt: new Date(),
         user: {
           _id: 2,
           name: 'React Native',
           avatar: IMAGES.ProfilePicture,
         },
+        sent: false, // incoming message
       },
+      {
+        _id: 2,
+        text: 'I’m having trouble with my React Native app. It keeps crashing and I can’t figure out why.',
+        createdAt: new Date(),
+        user: {
+          _id: 1,
+          name: 'You',
+          avatar: IMAGES.YourProfilePicture,
+        },
+        sent: true, // outgoing message
+      },
+      {
+        _id: 3,
+        text: 'Have you tried running the app in debug mode to see if you can catch any error messages?',
+        createdAt: new Date(),
+        user: {
+          _id: 2,
+          name: 'React Native',
+          avatar: IMAGES.ProfilePicture,
+        },
+        sent: false, // incoming message
+      },
+      {
+        _id: 4,
+        text: 'Yes, I have. But the error messages are not very helpful.',
+        createdAt: new Date(),
+        user: {
+          _id: 1,
+          name: 'You',
+          avatar: IMAGES.YourProfilePicture,
+        },
+        sent: true, // outgoing message
+      },
+      {
+        _id: 5,
+        text: 'Can you share the error messages with me? I might be able to help you interpret them.',
+        createdAt: new Date(),
+        user: {
+          _id: 2,
+          name: 'React Native',
+          avatar: IMAGES.ProfilePicture,
+        },
+        sent: false, // incoming message
+      },
+      {
+        _id: 6,
+        text: 'Sure, here they are:',
+        createdAt: new Date(),
+        user: {
+          _id: 1,
+          name: 'You',
+          avatar: IMAGES.YourProfilePicture,
+        },
+        sent: true, // outgoing message
+      },
+      {
+        _id: 7,
+        text: 'It looks like you have a problem with one of your dependencies. Can you try updating them to the latest version?',
+        createdAt: new Date(),
+        user: {
+          _id: 2,
+          name: 'React Native',
+          avatar: IMAGES.ProfilePicture,
+        },
+        sent: false, // incoming message
+      },
+      {
+        _id: 8,
+        text: 'I’ll give that a try. Thanks for your help!',
+        createdAt: new Date(),
+        user: {
+          _id: 1,
+          name: 'You',
+          avatar: IMAGES.YourProfilePicture,
+        },
+        sent: true, // outgoing message
+      },
+      {
+        _id: 9,
+        text: 'You’re welcome! Let me know if you have any other questions.',
+        createdAt: new Date(),
+        user: {
+          _id: 2,
+          name: 'React Native',
+          avatar: IMAGES.ProfilePicture,
+        },
+        sent: false, // incoming message
+      },
+      {
+        _id: 10,
+        text: 'I will. Thanks again!',
+        createdAt: new Date(),
+        user: {
+          _id: 1,
+          name: 'You',
+          avatar: IMAGES.YourProfilePicture,
+        },
+        sent: true, // outgoing message
+      }
     ]);
   }, []);
 
@@ -50,6 +150,7 @@ const ChatScreen = () => {
         <Header
           openDrawer={() => navigation.goBack()}
           iconName={'chevron-small-left'}
+          title={'Lorenzo@Support'}
         />
       </View>
       <View style={styles.container}>

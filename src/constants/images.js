@@ -31,6 +31,8 @@ export default {
   menu: require('../../src/assets/Images/App/menu.png'),
   heart: require('../../src/assets/Images/App/heart.png'),
   search: require('../../src/assets/Images/App/search.png'),
+  LorenzoIcon: require('../../src/assets/Images/App/LorenzoIcon.png'),
+  
   // Bottom Tab
   CalendarIcon: require('../../src/assets/Images/BottomTab/CalendarIcon.png'),
   ChatIcon: require('../../src/assets/Images/BottomTab/Chat.png'),
