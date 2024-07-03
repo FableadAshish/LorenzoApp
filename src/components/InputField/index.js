@@ -10,6 +10,7 @@ const InputField = ({
   value,
   secureTextEntry,
   style,
+  errorMessage,
 }) => {
   return (
     <View style={styles.fieldContainer}>
@@ -30,6 +31,7 @@ const InputField = ({
           secureTextEntry={secureTextEntry}
         />
       </View>
+      {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
     </View>
   );
 };
@@ -65,5 +67,11 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.poppinsRegular,
     width: '100%',
   },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginTop: 5,
+  },
+
 });
 export default InputField;

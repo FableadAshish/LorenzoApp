@@ -32,7 +32,7 @@ const ForgetPasswordScreen = () => {
         </Text>
         <View style={styles.textContainer}>
           <InputField
-            placeholderText={'Email ID / Mobile Number'}
+            placeholderText={'Enter registered email-Id'}
             placeholderImage={IMAGES.AtTheRate}
           />
         </View>

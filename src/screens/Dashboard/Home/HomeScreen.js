@@ -12,9 +12,12 @@ import {COLORS, COMMOM, FONTS, IMAGES} from '../../../constants';
 import SearchContainer from '../../../components/SearchContainer/SearchContainer';
 import {ROUTES} from '../../../constants/routes';
 import {locationData} from '../../../constants/data';
+import { useSelector } from 'react-redux';
 
 const HomeScreen = ({navigation}) => {
   const [searchQuery, setSearchQuery] = useState(locationData);
+  // const userProfile = useSelector(state => state.auth.loginData)
+  // console.log('userProfile', userProfile)
 
   const searchData = text => {
     const filteredList = locationData.filter(

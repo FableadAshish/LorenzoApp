@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   Text,
   View,
@@ -8,22 +8,22 @@ import {
   Modal,
   StatusBar,
 } from 'react-native';
-import {COLORS, COMMOM, IMAGES} from '../../constants';
+import { COLORS, IMAGES } from '../../constants';
 import EditModal from '../EditModal';
 import InputField from '../InputField';
 import Button from '../Button';
-import {Header} from '../Header';
 
-const EditProfileComp = ({title, titleText, editValue}) => {
+const EditProfileComp = ({ title, titleText, onChangeText }) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const getValue = editValue => {
-    setModalVisible(true);
+  const [inputValue, setInputValue] = useState(titleText);
+
+  const handleSave = () => {
+    onChangeText(inputValue);
+    setModalVisible(false);
   };
 
-  const forgetPassword = () => {};
   return (
     <>
-      {/* <StatusBar backgroundColor={'rgba(0, 0, 0, 0.5)'} /> */}
       <View style={styles.container}>
         <View>
           <Text style={styles.nameTextTitle}>{title}</Text>
@@ -31,7 +31,7 @@ const EditProfileComp = ({title, titleText, editValue}) => {
         </View>
         <TouchableOpacity
           activeOpacity={0.8}
-          onPress={() => getValue(editValue)}>
+          onPress={() => setModalVisible(true)}>
           <Image
             source={IMAGES.edit}
             style={styles.editImage}
@@ -41,38 +41,42 @@ const EditProfileComp = ({title, titleText, editValue}) => {
         <Modal transparent={true} visible={modalVisible} animationType="slide">
           <View style={styles.modalContainer}>
             <View style={styles.editContainer}>
-              {title === 'Name' ? (
+              {title === 'Name' && (
                 <EditModal
                   title={'Change Name'}
-                  closeModal={() => setModalVisible(!modalVisible)}
+                  closeModal={() => setModalVisible(false)}
                   inputField={
                     <InputField
                       placeholderText={'Enter New Name'}
                       placeholderImage={IMAGES.userPlaceholder}
+                      getText={(text) => setInputValue(text)}
                     />
                   }
                   button={
-                    <Button title={'Save'} innerStyle={styles.buttonStyle} />
+                    <Button title={'Save'} innerStyle={styles.buttonStyle} performAction={handleSave} />
                   }
                 />
-              ) : title === 'Email' ? (
+              )}
+              {title === 'Email' && (
                 <EditModal
                   title={'Change Email'}
-                  closeModal={() => setModalVisible(!modalVisible)}
+                  closeModal={() => setModalVisible(false)}
                   inputField={
                     <InputField
                       placeholderText={'Enter New Email'}
                       placeholderImage={IMAGES.Message}
+                      getText={(text) => setInputValue(text)}
                     />
                   }
                   button={
-                    <Button title={'Save'} innerStyle={styles.buttonStyle} />
+                    <Button title={'Save'} innerStyle={styles.buttonStyle} performAction={handleSave} />
                   }
                 />
-              ) : title === 'Password' ? (
+              )}
+              {/* {title === 'Password' && (
                 <EditModal
                   title={'Change Password'}
-                  closeModal={() => setModalVisible(!modalVisible)}
+                  closeModal={() => setModalVisible(false)}
                   inputField={
                     <>
                       <InputField
@@ -99,26 +103,26 @@ const EditProfileComp = ({title, titleText, editValue}) => {
                     <Button
                       title={'Save'}
                       innerStyle={styles.buttonStyle}
-                      performAction={() => forgetPassword()}
+                      performAction={handleSave}
                     />
                   }
                   forgetPassword={'Forgot Password'}
                 />
-              ) : (
+              )} */}
+              {title === 'Number' && (
                 <EditModal
                   title={'Change Phone Number'}
-                  closeModal={() => setModalVisible(!modalVisible)}
+                  closeModal={() => setModalVisible(false)}
                   inputField={
-                    <>
-                      <InputField
-                        title={'Phone Number'}
-                        placeholderText={'Enter New Number'}
-                        placeholderImage={IMAGES.shield}
-                      />
-                    </>
+                    <InputField
+                      title={'Phone Number'}
+                      placeholderText={'Enter New Number'}
+                      placeholderImage={IMAGES.shield}
+                      getText={(text) => setInputValue(text)}
+                    />
                   }
                   button={
-                    <Button title={'Save'} innerStyle={styles.buttonStyle} />
+                    <Button title={'Save'} innerStyle={styles.buttonStyle} performAction={handleSave} />
                   }
                 />
               )}
@@ -129,6 +133,8 @@ const EditProfileComp = ({title, titleText, editValue}) => {
     </>
   );
 };
+
+export default EditProfileComp;
 
 const styles = StyleSheet.create({
   container: {
@@ -174,5 +180,3 @@ const styles = StyleSheet.create({
     height: 55,
   },
 });
-
-export default EditProfileComp;

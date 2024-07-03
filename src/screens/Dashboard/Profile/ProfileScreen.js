@@ -12,12 +12,14 @@ import ProfileList from '../../../components/Profile';
 import {useNavigation} from '@react-navigation/native';
 import {ROUTES} from '../../../constants/routes';
 import Button from '../../../components/Button';
+import { useSelector } from 'react-redux';
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [logoutModal, setLogoutModal] = useState(false);
-
+  const userProfile = useSelector(state => state.auth.loginData)
+  console.log('userProfilessss', userProfile)
   const logoutPermission = () => {
     setLogoutModal(!logoutModal);
   };
@@ -38,8 +40,8 @@ const ProfileScreen = () => {
         <View style={styles.userDataContainer}>
           <Image source={IMAGES.ProfilePicture} style={styles.profilePicture} />
           <View style={styles.dataContainer}>
-            <Text style={styles.name}>John Doe</Text>
-            <Text style={styles.email}>johndoe@gmail.com</Text>
+            <Text style={styles.name}>{userProfile.username}</Text>
+            <Text style={styles.email}>{userProfile.email}</Text>
           </View>
         </View>
         <View style={styles.profileList}>
@@ -51,11 +53,11 @@ const ProfileScreen = () => {
               rightIcon={IMAGES.rightArrow}
               navigateTo={() => navigation.navigate(ROUTES.EDIT_PROFILE)}
             />
-            <ProfileList
+            {/* <ProfileList
               leftIcon={IMAGES.language}
               title={'Language'}
               rightIcon={IMAGES.rightArrow}
-            />
+            /> */}
           </View>
         </View>
         <View style={{marginTop: 20}}>

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,17 +6,19 @@ import {
   View,
   Image,
   ImageBackground,
-  ScrollView,
+  ActivityIndicator,
 } from 'react-native';
-import {COLORS, COMMOM, FONTS, IMAGES} from '../../../constants';
+import { COLORS, COMMOM, FONTS, IMAGES } from '../../../constants';
 import InputField from '../../../components/InputField';
 import Button from '../../../components/Button';
-import {useNavigation} from '@react-navigation/native';
-import {ROUTES} from '../../../constants/routes';
+import { useNavigation } from '@react-navigation/native';
+import { ROUTES } from '../../../constants/routes';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { BASE_URL, TOKEN } from '../../../config';
+import axios from 'axios';
 
 const SignUpScreen = () => {
   const navigation = useNavigation();
-  // const [userData, setUserData] = useState();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -25,82 +27,143 @@ const SignUpScreen = () => {
   const [emailErrorMessage, setEmailErrorMessage] = useState('');
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
   const [confirm_passwordErrorMessage, setConfirm_passwordErrorMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
   const navigateToLogIn = () => {
     navigation.navigate(ROUTES.LOGIN);
   };
 
+  const data = {
+    fullName,
+    email,
+    password,
+    confirm_password,
+  };
+
   const validation = (fullName, email, password, confirm_password) => {
+    let isValid = true;
+
     if (/^\d+$/g.test(fullName)) {
       setNameErrorMessage('Full Name cannot include numbers');
-      return;
+      isValid = false;
     }
+
+    if (fullName.length < 1) {
+      setNameErrorMessage('Name is required');
+      isValid = false;
+    }
+
     if (
       !/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
         email,
       )
     ) {
       setEmailErrorMessage('Please enter a valid Email address');
-      return;
+      isValid = false;
     }
+
     if (password.length < 6) {
       setPasswordErrorMessage('Password must be at least 6 characters');
-      return;
+      isValid = false;
     }
 
     if (password !== confirm_password) {
       setConfirm_passwordErrorMessage('Passwords do not match');
-      return;
+      isValid = false;
     }
+
+    return isValid;
   };
-  const LogIn = () => {
-    // validation(fullName, email, password, confirm_password);
-    // console.log(fullName, email, password, confirm_password);
-    navigation.navigate(ROUTES.LOGIN);
+
+  const registerUser = async (data) => {
+    const isValid = validation(data.fullName, data.email, data.password, data.confirm_password);
+    if (isValid) {
+      const registrationForm = new FormData();
+      registrationForm.append('username', data.fullName);
+      registrationForm.append('email', data.email);
+      registrationForm.append('password', data.password);
+
+      setLoading(true);
+      try {
+        const response = await axios.post(`${BASE_URL}/register`, registrationForm, {
+          headers: {
+            Authorization: TOKEN,
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        // console.log('response.data', response);
+        setLoading(false);
+        navigateToLogIn();
+        setConfirmPassword('')
+        setEmail('');
+        setFullName('');
+        setPassword('');
+        setConfirm_passwordErrorMessage('');
+        setError('');
+      } catch (err) {
+        console.log('error', err);
+        setLoading(false);
+        setError(err.response.data.message)
+        setNameErrorMessage('');
+        setEmailErrorMessage('');
+        setConfirm_passwordErrorMessage('');
+        setPasswordErrorMessage('');
+      }
+    }
   };
 
   return (
-    <>
+    <KeyboardAwareScrollView
+      style={{ flex: 1 }}
+      contentContainerStyle={{ flexGrow: 1 }}
+      keyboardShouldPersistTaps="handled"
+    >
       <View style={styles.container}>
-        <View style={{marginTop: 20}}>
+        <View style={{ marginTop: 20 }}>
           <Text style={styles.title}>Let's get Started</Text>
           <Text style={styles.subTitle}>Create an Account for Lorenzo App</Text>
         </View>
-        <ScrollView>
-          <View style={styles.fieldsContainer}>
-            <InputField
-              title={'Full Name'}
-              placeholderText={'Enter Full Name'}
-              placeholderImage={IMAGES.userPlaceholder}
-              getText={text => setFullName(text)}
-              value={fullName}
-            />
-            <InputField
-              title={'Email'}
-              placeholderText={'Enter Email'}
-              placeholderImage={IMAGES.Message}
-              getText={text => setEmail(text)}
-              value={email}
-            />
-            <InputField
-              title={'Password'}
-              placeholderText={'Enter Password'}
-              placeholderImage={IMAGES.lock}
-              getText={text => setPassword(text)}
-              value={password}
-              secureTextEntry={true}
-            />
-            <InputField
-              title={'Confirm Password'}
-              placeholderText={'Confirm Password'}
-              placeholderImage={IMAGES.lock}
-              getText={text => setConfirmPassword(text)}
-              value={confirm_password}
-              secureTextEntry={true}
-            />
-          </View>
-        </ScrollView>
+        <View style={styles.fieldsContainer}>
+          <InputField
+            title={'Full Name'}
+            placeholderText={'Enter Full Name'}
+            placeholderImage={IMAGES.userPlaceholder}
+            getText={text => setFullName(text)}
+            value={fullName}
+            errorMessage={nameErrorMessage}
+          />
+          <InputField
+            title={'Email'}
+            placeholderText={'Enter Email'}
+            placeholderImage={IMAGES.Message}
+            getText={text => setEmail(text)}
+            value={email}
+            errorMessage={emailErrorMessage}
+          />
+          <InputField
+            title={'Password'}
+            placeholderText={'Enter Password'}
+            placeholderImage={IMAGES.lock}
+            getText={text => setPassword(text)}
+            value={password}
+            secureTextEntry={true}
+            errorMessage={passwordErrorMessage}
+          />
+          <InputField
+            title={'Confirm Password'}
+            placeholderText={'Confirm Password'}
+            placeholderImage={IMAGES.lock}
+            getText={text => setConfirmPassword(text)}
+            value={confirm_password}
+            secureTextEntry={true}
+            errorMessage={confirm_passwordErrorMessage}
+          />
+        </View>
+      {error && <Text style={styles.errorText}>{error}</Text>}
       </View>
-      <View style={{backgroundColor: 'white'}}>
+
+      <View style={{ backgroundColor: 'white' }}>
         <View style={styles.authImageContainer}>
           <Image
             source={IMAGES.authImage}
@@ -111,13 +174,15 @@ const SignUpScreen = () => {
         <ImageBackground
           resizeMode="stretch"
           source={IMAGES.AuthRectangle}
-          style={styles.backImage}>
+          style={styles.backImage}
+        >
           <View style={styles.buttonContainer}>
             <Button
-              title={'Sign Up'}
-              performAction={() => LogIn()}
+              title={loading ? <ActivityIndicator color={'black'} size={18} /> : 'Sign Up'}
+              performAction={() => registerUser(data)}
               innerStyle={styles.buttonStyles}
               styleText={styles.buttonText}
+              disabled={loading}
             />
           </View>
           <View style={styles.noAccountContainer}>
@@ -128,7 +193,7 @@ const SignUpScreen = () => {
           </View>
         </ImageBackground>
       </View>
-    </>
+    </KeyboardAwareScrollView>
   );
 };
 
@@ -136,15 +201,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.white,
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
   },
   scrollContent: {
     flexGrow: 1,
     justifyContent: 'center',
   },
   headerImageContainer: {
-    // width: 200,
-    // height: 240,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -164,7 +227,6 @@ const styles = StyleSheet.create({
   },
   fieldsContainer: {
     paddingHorizontal: COMMOM.paddingHorizantal,
-    // paddingBottom: COMMOM.paddingHorizantal,
     marginTop: 20,
   },
   backImage: {
@@ -192,7 +254,6 @@ const styles = StyleSheet.create({
   },
   noAccountContainer: {
     flexDirection: 'row',
-    // alignItems: 'center',
     justifyContent: 'center',
     marginTop: 10,
   },
@@ -230,5 +291,16 @@ const styles = StyleSheet.create({
     color: COLORS.lightTextColor,
     fontFamily: FONTS.poppinsRegular,
   },
+  errorText: {
+  color: 'red',
+  fontSize: 14,
+  // marginTop: 5,
+  paddingHorizontal: COMMOM.paddingHorizantal,
+  backgroundColor: 'white',
+  paddingTop: 15,
+  textAlign: 'center',
+  fontFamily: FONTS.poppinsRegular
+}
 });
+
 export default SignUpScreen;

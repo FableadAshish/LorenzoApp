@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, View, StyleSheet, TextInput} from 'react-native';
-import {COLORS} from '../../constants';
-import InputField from '../InputField';
+import {COLORS} from '../../../constantsnts';
+import InputField from '../../InputFieldeld';
 
 const AuthComp = ({headerTitle, headerSubTitle}) => {
   return (
