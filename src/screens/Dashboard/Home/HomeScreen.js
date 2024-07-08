@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
+  ActivityIndicator,
   FlatList,
   Image,
   ScrollView,
@@ -8,51 +9,88 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {COLORS, COMMOM, FONTS, IMAGES} from '../../../constants';
+import { COLORS, COMMOM, FONTS, IMAGES } from '../../../constants';
 import SearchContainer from '../../../components/SearchContainer/SearchContainer';
-import {ROUTES} from '../../../constants/routes';
-import {locationData} from '../../../constants/data';
-import { useSelector } from 'react-redux';
+import { ROUTES } from '../../../constants/routes';
+import { locationData } from '../../../constants/data';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { BASE_URL, TOKEN } from '../../../config';
+import { useNavigation } from '@react-navigation/native';
+import { fetchUserProfile } from '../../../redux/slice/profileSlice';
 
-const HomeScreen = ({navigation}) => {
-  const [searchQuery, setSearchQuery] = useState(locationData);
-  // const userProfile = useSelector(state => state.auth.loginData)
-  // console.log('userProfile', userProfile)
+const HomeScreen = () => {
+  const [propertyListings, setPropertyListings] = useState([]);
+  const dispatch = useDispatch();
+  const [searchQuery, setSearchQuery] = useState([]);
+  const userProfile = useSelector(state => state.auth.loginData)
+  let userProfileData  = useSelector((state) => state.profile.userProfileData);
+  // console.log('userProfileData', userProfileData.user.profile)
+  const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
 
   const searchData = text => {
-    const filteredList = locationData.filter(
+    // console.log('search data,', text)
+    const filteredList = propertyListings.filter(
       item =>
-        item.name.toLowerCase().includes(text.toLowerCase()) ||
-        item.roomsAvailable.toString().includes(text),
+        item?.property_name.toLowerCase().includes(text.toLowerCase())
+      // ||    item.roomsAvailable.toString().includes(text),
+
     );
+    // console.log('filteredList', filteredList)
     setSearchQuery(filteredList);
   };
+
+  const getPropertyDetails = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`${BASE_URL}/propertyList`, {
+        headers: {
+          Authorization: TOKEN
+        }
+      })
+      // console.log('response', response.data.result)
+      setPropertyListings(response.data.result)
+      setSearchQuery(response.data.result);
+      setLoading(false);
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
+  useEffect(() => {
+    getPropertyDetails()
+    const subscribe = navigation.addListener('focus', () => {
+      dispatch(fetchUserProfile(userProfile.id))
+    })
+    return subscribe;
+  }, []);
 
   const getDetails = item => {
     navigation.navigate(ROUTES.PROPERTY_LISTING_DETAILS, {
       propertyDetails: item,
     });
   };
-  const renderList = ({item}) => {
+  const renderList = ({ item }) => {
     return (
       <TouchableOpacity
         style={styles.locationContainer}
         activeOpacity={0.8}
         onPress={() => getDetails(item)}>
-        <Image source={item.locationImage} style={styles.locationImage} />
+        <Image source={{uri: item?.image}} style={styles.locationImage}/>
         <View style={styles.locationInfo}>
           <View style={styles.upperLocationInfo}>
             <View style={styles.leftLocation}>
-              <Text style={styles.locationName}>{item.name}</Text>
+              <Text style={styles.locationName}>{item?.property_name}</Text>
             </View>
-            <View style={styles.ratingsContainer}>
+            {/* <View style={styles.ratingsContainer}>
               <Image source={IMAGES.star} style={styles.starIcon} />
-              <Text style={styles.locationRatings}>{item.ratings}</Text>
-            </View>
+              <Text style={styles.locationRatings}>{item?.ratings}</Text>
+            </View> */}
           </View>
           <View style={styles.lowerContainer}>
             <Image style={styles.locationIcon} source={IMAGES.Location} />
-            <Text style={styles.locationLocation}>{item.location}</Text>
+            <Text style={styles.locationLocation}>{item?.details?.address}</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -62,11 +100,13 @@ const HomeScreen = ({navigation}) => {
     navigation.navigate(ROUTES.PROPERTY_LISTING, {
       locationListing: locationData,
     });
-    // console.log(locationData);
   };
+  useEffect(() => {
+
+  },[]);
   return (
     <>
-      <ScrollView style={{backgroundColor: 'white'}}>
+      <ScrollView style={{ backgroundColor: 'white' }}>
         <View style={styles.container}>
           <View style={styles.headerContainer}>
             <View style={styles.leftContainer}>
@@ -74,16 +114,20 @@ const HomeScreen = ({navigation}) => {
                 <Image source={IMAGES.menu} style={styles.menuIcon} />
               </TouchableOpacity>
               <View>
-                <Text style={styles.centerNameStyle}>John Doe</Text>
+                <Text style={styles.centerNameStyle}>{'Welcome,' + ' ' + userProfile.username}</Text>
               </View>
             </View>
 
-            <Image
-              source={{
-                uri: 'https://images.pexels.com/photos/1674752/pexels-photo-1674752.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-              }}
+            {/* <Image
+              source={!userProfileData ? {
+                uri: IMAGES.ProfileIcon,
+              } : {uri: userProfileData.user.profile}}
               style={styles.homeProfileImage}
-            />
+            /> */}
+             <Image
+            source={userProfileData && userProfileData.user.profile ? { uri: userProfileData.user.profile } : IMAGES.ProfilePicture}
+            style={styles.homeProfileImage}
+          />
           </View>
 
           <View style={styles.welcomeHeader}>
@@ -107,36 +151,43 @@ const HomeScreen = ({navigation}) => {
           />
 
           <View style={styles.listContainer}>
-            {searchQuery.length === 0 ? (
-              <View style={styles.locationNotFoundContainer}>
-                <Image source={IMAGES.NoSearch} style={styles.noSearchImage} />
-                <Text style={styles.locationNotFoundText}>
-                  No Such Property is Listed
-                </Text>
-                <Text style={styles.locationNotFoundSubText}>
-                  Please add relevant value
-                </Text>
-              </View>
-            ) : (
-              <>
-                <View style={styles.labelContainer}>
-                  <Text style={styles.labelText}>Latest Properties</Text>
-                  <TouchableOpacity
-                    onPress={() => RouteToPropertyListing(locationData)}>
-                    <Text style={styles.viewAllText}>View all</Text>
-                  </TouchableOpacity>
+            {
+              loading ? 
+              <View style={styles.loaderContainer}>
+                <ActivityIndicator color={'black'} size={30} /> 
                 </View>
-                <View style={{marginLeft: -30}}>
-                  <FlatList
-                    data={searchQuery}
-                    keyExtractor={item => item.id.toString()}
-                    renderItem={renderList}
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                  />
-                </View>
-              </>
-            )}
+              :
+                searchQuery.length === 0 ? (
+                  <View style={styles.locationNotFoundContainer}>
+                    <Image source={IMAGES.NoSearch} style={styles.noSearchImage} />
+                    <Text style={styles.locationNotFoundText}>
+                      No Such Property is Listed
+                    </Text>
+                    <Text style={styles.locationNotFoundSubText}>
+                      Please add relevant value
+                    </Text>
+                  </View>
+                ) : (
+                  <>
+                    <View style={styles.labelContainer}>
+                      <Text style={styles.labelText}>Latest Properties</Text>
+                      <TouchableOpacity
+                        onPress={() => RouteToPropertyListing(propertyListings)}>
+                        <Text style={styles.viewAllText}>View all</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <View style={{ marginLeft: -30 }}>
+                      <FlatList
+                        data={searchQuery}
+                        keyExtractor={item => item.id.toString()}
+                        renderItem={renderList}
+                        horizontal={true}
+                        showsHorizontalScrollIndicator={false}
+                      />
+                    </View>
+                  </>
+                )
+            }
           </View>
         </View>
       </ScrollView>
@@ -220,6 +271,12 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 20,
   },
+  loaderContainer: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 200
+  },
   labelText: {
     fontSize: 28,
     color: COLORS.black,
@@ -231,7 +288,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   locationImage: {
-    height: 300,
+    height: 250,
     width: '100%',
     borderRadius: 20,
     borderBottomLeftRadius: 0,
@@ -251,15 +308,17 @@ const styles = StyleSheet.create({
     elevation: 4,
     backgroundColor: COLORS.white,
     borderRadius: 20,
+    width: 200
   },
   locationInfo: {
-    marginTop: 20,
-    paddingHorizontal: 8,
+    marginTop: 10,
+    paddingHorizontal: 10,
   },
   upperLocationInfo: {
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     gap: 50,
   },
   ratingsContainer: {
@@ -283,6 +342,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 5,
     alignItems: 'center',
+    paddingBottom: 10,
+    // paddingHorizontal: 10,
   },
   locationLocation: {
     fontSize: 15,

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   Text,
   View,
@@ -7,21 +7,23 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import {COLORS, COMMOM, FONTS, IMAGES} from '../../constants';
-import {useRoute, useNavigation} from '@react-navigation/native';
+import { COLORS, COMMOM, FONTS, IMAGES } from '../../constants';
+import { useRoute, useNavigation } from '@react-navigation/native';
 import SearchContainer from '../../components/SearchContainer/SearchContainer';
-import {Header} from '../../components/Header';
+import { Header } from '../../components/Header';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Foundation from 'react-native-vector-icons/Foundation';
-import {ROUTES} from '../../constants/routes';
+import { ROUTES } from '../../constants/routes';
 
 const PropertyListingScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
-  const {locationListing} = route.params;
+  const { locationListing } = route.params;
+  console.log('locationListing', locationListing)
   const [searchingList, setSearchingList] = useState(locationListing);
 
-  const renderLocationList = ({item}) => {
+  const renderLocationList = ({ item }) => {
+    // console.log('item?.image', item?.image)
     const propertyDetailsPage = () => {
       navigation.navigate(ROUTES.PROPERTY_LISTING_DETAILS, {
         propertyDetails: item,
@@ -34,29 +36,29 @@ const PropertyListingScreen = () => {
           activeOpacity={0.8}
           onPress={() => propertyDetailsPage()}>
           <View style={styles.imageContainer}>
-            <Image source={item.locationImage} style={styles.propertyImage} />
+            <Image source={{ uri: item?.image }} style={styles.propertyImage} />
           </View>
           <View style={styles.dataContainer}>
             <View>
-              <Text style={styles.listItemText}>{item.name}</Text>
+              <Text style={styles.listItemText}>{item?.property_name}</Text>
               <Text style={styles.roomsAvailable}>
                 {item.roomsAvailable} rooms Available
               </Text>
               <View style={styles.locationContainer}>
                 <Image source={IMAGES.Location} style={styles.locationIcon} />
-                <Text style={styles.location}>{item.location}</Text>
+                <Text style={styles.location}>{item.details.address}</Text>
               </View>
             </View>
             <View style={styles.lowerContainer}>
               <View style={styles.pricingContainer}>
                 <Foundation name="pound" size={25} color="black" />
-                <Text style={styles.price}>{item.price}</Text>
+                <Text style={styles.price}>{item.area}</Text>
                 <Text style={styles.pricePerMonth}>/mo</Text>
               </View>
-              <View style={styles.ratingContainer}>
+              {/* <View style={styles.ratingContainer}>
                 <Icon name="star" size={18} color={COLORS.lightOrange} />
                 <Text style={styles.ratings}>{item.ratings}</Text>
-              </View>
+              </View> */}
             </View>
           </View>
         </TouchableOpacity>
@@ -65,7 +67,7 @@ const PropertyListingScreen = () => {
   };
   const searchData = text => {
     const filteredList = locationListing.filter(item =>
-      item.name.toLowerCase().includes(text.toLowerCase()),
+      item?.property_name.toLowerCase().includes(text.toLowerCase()),
     );
     setSearchingList(filteredList);
   };

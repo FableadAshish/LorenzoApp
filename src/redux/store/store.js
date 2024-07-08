@@ -1,13 +1,13 @@
-import {configureStore} from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import authReducer from '../slice/authSlice';
 import userProfileReducer from '../slice/profileSlice';
-import {persistReducer, persistStore} from 'redux-persist';
+import { persistReducer, persistStore } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const persistConfig = {
-  key: 'LOGIN_USER',
+  key: 'auth',
   storage: AsyncStorage,
-  // whiteList: ['auth']
+  // whitelist: ['auth']
 };
 
 const persistedAuthReducer = persistReducer(persistConfig, authReducer);
@@ -18,3 +18,5 @@ export const store = configureStore({
     profile: userProfileReducer,
   },
 });
+
+export const persistor = persistStore(store);

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Text,
   View,
@@ -7,24 +7,30 @@ import {
   Modal,
   TouchableOpacity,
 } from 'react-native';
-import {COLORS, COMMOM, FONTS, IMAGES} from '../../../constants';
+import { COLORS, COMMOM, FONTS, IMAGES } from '../../../constants';
 import ProfileList from '../../../components/Profile';
-import {useNavigation} from '@react-navigation/native';
-import {ROUTES} from '../../../constants/routes';
+import { useNavigation } from '@react-navigation/native';
+import { ROUTES } from '../../../constants/routes';
 import Button from '../../../components/Button';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { Header } from '../../../components/Header';
+import { fetchUserProfile } from '../../../redux/slice/profileSlice';
+import { logout } from '../../../redux/slice/authSlice';
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const [logoutModal, setLogoutModal] = useState(false);
   const userProfile = useSelector(state => state.auth.loginData)
-  console.log('userProfilessss', userProfile)
+  let userProfileData = useSelector((state) => state.profile.userProfileData.user);
   const logoutPermission = () => {
     setLogoutModal(!logoutModal);
+    dispatch(logout())
+    navigation.navigate(ROUTES.HOME)
   };
 
-  const logout = () => {
+  const logoutUser = () => {
     setModalVisible(!modalVisible);
   };
 
@@ -34,19 +40,31 @@ const ProfileScreen = () => {
     setModalVisible(!modalVisible);
   };
 
+  useEffect(() => {
+    const subscribe = navigation.addListener('focus', () => {
+      dispatch(fetchUserProfile(userProfile.id))
+    })
+    return subscribe;
+  }, []);
+
+
   return (
     <>
       <View style={styles.container}>
+        <Header style={styles.headerStyles} title={'Profile'} openDrawer={() => navigation.goBack()} iconName={'chevron-small-left'} />
         <View style={styles.userDataContainer}>
-          <Image source={IMAGES.ProfilePicture} style={styles.profilePicture} />
+          <Image
+            source={userProfileData && userProfileData.profile ? { uri: userProfileData.profile } : IMAGES.ProfilePicture}
+            style={styles.profilePicture}
+          />
           <View style={styles.dataContainer}>
-            <Text style={styles.name}>{userProfile.username}</Text>
-            <Text style={styles.email}>{userProfile.email}</Text>
+            <Text style={styles.name}>{userProfileData ? userProfileData.username : userProfile.username}</Text>
+            <Text style={styles.email}>{userProfileData ? userProfileData.email : userProfile.email}</Text>
           </View>
         </View>
         <View style={styles.profileList}>
           <Text style={styles.preferencesText}>General</Text>
-          <View style={{marginTop: -30}}>
+          <View style={{ marginTop: -30 }}>
             <ProfileList
               leftIcon={IMAGES.userPlaceholder}
               title={'Edit Profile'}
@@ -60,9 +78,9 @@ const ProfileScreen = () => {
             /> */}
           </View>
         </View>
-        <View style={{marginTop: 20}}>
+        <View style={{ marginTop: 20 }}>
           <Text style={styles.preferencesText}>Preferences</Text>
-          <View style={{marginTop: -30}}>
+          <View style={{ marginTop: -30 }}>
             <ProfileList
               leftIcon={IMAGES.shield}
               title={'Legal & Policies'}
@@ -77,7 +95,7 @@ const ProfileScreen = () => {
               leftIcon={IMAGES.logout}
               title={'Logout'}
               rightIcon={IMAGES.rightArrow}
-              navigateTo={() => logout()}
+              navigateTo={() => logoutUser()}
             />
           </View>
         </View>
@@ -95,7 +113,7 @@ const ProfileScreen = () => {
                 />
               </TouchableOpacity>
             </View>
-            <View style={{paddingHorizontal: 20}}>
+            <View style={{ paddingHorizontal: 20 }}>
               <Text style={styles.titleDescriptionText}>
                 Your profile information will be saved to make things easier
                 when you return. See you again!
@@ -114,7 +132,7 @@ const ProfileScreen = () => {
       <Modal transparent={true} visible={logoutModal} animationType="slide">
         <View style={styles.logoutModalContainer}>
           <View style={styles.logoutPermissionContainer}>
-            <Image source={IMAGES.logoutPopup} style={styles.logoutIcon}/>
+            <Image source={IMAGES.logoutPopup} style={styles.logoutIcon} />
             <Text style={styles.logoutTitle}>
               Are you sure, you want to logout.
             </Text>
@@ -150,6 +168,7 @@ const styles = StyleSheet.create({
     width: 80,
     marginTop: 20,
     alignSelf: 'center',
+    borderRadius: 100,
   },
   dataContainer: {
     marginTop: 10,
@@ -270,6 +289,9 @@ const styles = StyleSheet.create({
     height: 150,
     width: 150,
   },
+  headerStyles: {
+    paddingHorizontal: 20
+  }
 });
 
 export default ProfileScreen;

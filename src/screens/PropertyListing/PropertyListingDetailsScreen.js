@@ -13,6 +13,7 @@ import {COLORS, COMMOM, FONTS, IMAGES} from '../../constants';
 import {Header} from '../../components/Header';
 import Button from '../../components/Button';
 import {ROUTES} from '../../constants/routes';
+import colors from '../../constants/colors';
 
 const PropertyListingDetailsScreen = () => {
   const navigation = useNavigation();
@@ -20,18 +21,17 @@ const PropertyListingDetailsScreen = () => {
 
   const {propertyDetails} = route.params;
 
-  console.log('propertyDetails', propertyDetails);
 
-  const getTour = () => {
+  const getTour = (URL) => {
     navigation.navigate(ROUTES.VIRTUAL_TOUR, {
-      get360View: propertyDetails.videoUrl,
+      get360View: URL,
     });
   };
 
   return (
     <>
       <ImageBackground
-        source={propertyDetails.locationImage}
+        source={{uri: propertyDetails.image}}
         resizeMode="stretch"
         style={styles.backgroundImage}>
         <Header
@@ -49,8 +49,8 @@ const PropertyListingDetailsScreen = () => {
         edgesForExtendedLayout={[]}>
         <View style={styles.locationDetailsContainer}>
           <View style={styles.locationTitleContainer}>
-            <Text style={styles.propertyName}>{propertyDetails.name}</Text>
-            <TouchableOpacity onPress={() => getTour()}>
+            <Text style={styles.propertyName}>{propertyDetails?.property_name}</Text>
+            <TouchableOpacity onPress={() => getTour(propertyDetails?.video_url)}>
               <Image
                 source={IMAGES.VirtualTour}
                 style={styles.virtualTourImage}
@@ -63,7 +63,7 @@ const PropertyListingDetailsScreen = () => {
               resizeMode="contain"
               style={styles.locationImage}
             />
-            <Text style={styles.locationName}>{propertyDetails.location}</Text>
+            <Text style={styles.locationName}>{propertyDetails?.details?.address}</Text>
           </View>
           {/* pointsContainer */}
           <View style={styles.pointsContainer}>
@@ -76,8 +76,8 @@ const PropertyListingDetailsScreen = () => {
                 />
               </View>
               <View>
-                <Text>{propertyDetails.ratings}</Text>
-                <Text>Ratings</Text>
+                <Text style={{color: colors.lightTextColor}}>{propertyDetails.average_rating}</Text>
+                <Text style={{color: colors.lightTextColor}}>Ratings</Text>
               </View>
             </View>
 
@@ -90,8 +90,8 @@ const PropertyListingDetailsScreen = () => {
                 />
               </View>
               <View>
-                <Text>{propertyDetails.price}</Text>
-                <Text>Price Level</Text>
+                <Text style={{color: colors.lightTextColor}}>{propertyDetails.price}</Text>
+                <Text style={{color: colors.lightTextColor}}>Price Level</Text>
               </View>
             </View>
 
@@ -104,22 +104,15 @@ const PropertyListingDetailsScreen = () => {
                 />
               </View>
               <View>
-                <Text>{propertyDetails.ratings}</Text>
-                <Text>Ratings</Text>
+                <Text style={{color: colors.lightTextColor}}>{propertyDetails.beds}</Text>
+                <Text style={{color: colors.lightTextColor}}>Beds</Text>
               </View>
             </View>
           </View>
           <View style={styles.descriptionContainer}>
             <Text style={styles.locationDetails}>
-              {propertyDetails.locationDetails}
+              {propertyDetails?.description}
             </Text>
-          </View>
-          <View style={[styles.locationPointsContainer, {flexWrap: 'wrap'}]}>
-            {propertyDetails.propertyDetailsPoints.map((point, index) => (
-              <View key={index} style={styles.pointContainer}>
-                <Text style={{fontSize: 14, color: 'black'}}>{point}</Text>
-              </View>
-            ))}
           </View>
           <View style={styles.contactDetailsContainer}>
             <View style={styles.contactDetails}>
@@ -129,7 +122,7 @@ const PropertyListingDetailsScreen = () => {
                 resizeMode="contain"
               />
               <Text style={styles.phoneText}>
-                +{propertyDetails.phoneNumber}
+                +{propertyDetails?.details?.phone}
               </Text>
             </View>
             <View style={styles.contactDetails}>
@@ -138,7 +131,7 @@ const PropertyListingDetailsScreen = () => {
                 style={styles.emailImage}
                 resizeMode="contain"
               />
-              <Text style={styles.phoneText}>{propertyDetails.email}</Text>
+              <Text style={styles.phoneText}>{propertyDetails?.details?.email}</Text>
             </View>
             <View style={styles.contactDetails}>
               <Image
@@ -146,12 +139,15 @@ const PropertyListingDetailsScreen = () => {
                 style={styles.phoneImage}
                 resizeMode="contain"
               />
-              <Text style={styles.phoneText}>{propertyDetails.address}</Text>
+              <Text style={styles.phoneText}>{/*propertyDetails.details.state + " " + */propertyDetails.details.city + " " + propertyDetails.details.country}</Text>
             </View>
           </View>
         </View>
-        <Button title={'Book Now'} style={styles.button} />
       </ScrollView>
+      <View style={{backgroundColor:'white', paddingHorizontal: 20}}> 
+        <Button title={'Book Now'} style={styles.button} />
+
+      </View>
     </>
   );
 };
@@ -186,6 +182,7 @@ const styles = StyleSheet.create({
   },
   locationDetailsContainer: {
     marginTop: 20,
+    justifyContent: 'space-between',
   },
   locationTitleContainer: {
     flexDirection: 'row',
@@ -273,8 +270,8 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   emailImage: {
-    height: 30,
-    width: 30,
+    height: 20,
+    width: 20,
     resizeMode: 'contain',
   },
   contactDetails: {

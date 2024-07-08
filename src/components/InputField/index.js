@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontFamily: FONTS.poppinsRegular,
     width: '100%',
+    color: COLORS.black
   },
   errorText: {
     color: 'red',

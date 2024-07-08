@@ -19,7 +19,7 @@ export default {
   dollar: require('../../src/assets/Images/App/dollar.png'),
   bed: require('../../src/assets/Images/App/bed.png'),
   phone: require('../../src/assets/Images/App/phone.png'),
-  email: require('../../src/assets/Images/App/email.jpeg'),
+  email: require('../../src/assets/Images/App/email.png'),
   chatBot: require('../../src/assets/Images/App/chatBot.png'),
   plus: require('../../src/assets/Images/App/plus.png'),
   paperPin: require('../../src/assets/Images/App/paperPin.png'),

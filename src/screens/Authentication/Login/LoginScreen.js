@@ -6,6 +6,7 @@ import {
   View,
   Image,
   ImageBackground,
+  ActivityIndicator,
 } from 'react-native';
 import { COLORS, COMMOM, FONTS, IMAGES } from '../../../constants';
 import InputField from '../../../components/InputField';
@@ -24,6 +25,7 @@ const LoginScreen = () => {
   const [alredyLoggedIn, setAlreadyLoggedIn] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [loading, setLoading] = useState(false)
   const dispatch = useDispatch();
 
   const navigateToSignUp = () => {
@@ -58,6 +60,7 @@ const LoginScreen = () => {
       loginForm.append('email', data.email);
       loginForm.append('password', data.password);
       try {
+        setLoading(true)
         const response = await axios.post(`${BASE_URL}/login`, loginForm, {
           headers: {
             Authorization: TOKEN,
@@ -65,9 +68,11 @@ const LoginScreen = () => {
           }
         });
         // console.log(response.data)
+
         if (response.data.message === 'Login successful') {
           dispatch(loginData(response.data.user))
           navigation.navigate(ROUTES.HOME);
+          setLoading(false)
         } else if (response.data.message === 'User not registered') {
           setAlreadyLoggedIn('No such user found, please register');
         } else if (response.data.message === 'Login unsuccessful') {
@@ -146,7 +151,7 @@ const LoginScreen = () => {
             resizeMode="stretch">
             <View style={styles.buttonContainer}>
               <Button
-                title={'Sign In'}
+                title={loading ? <ActivityIndicator size={20} color={'black'}/> : 'Sign In'}
                 performAction={() => LogIn(formData)}
                 innerStyle={styles.buttonStyles}
                 styleText={styles.buttonText}

@@ -12,7 +12,7 @@ export const locationData = [
     locationDetails:
       'Enjoy the beauty of summer with various attractions available here, as well as various complete facilities, avaoilable at affordable prices, for all tourists from all accross the world',
     videoUrl:
-      'https://my.matterport.com/show/?m=2DB21iorcrM&play=1',
+      'https://www.facebook.com/',
     propertyDetailsPoints: [
       'Panoramic Views',
       'Outdoor Activities',
@@ -34,7 +34,7 @@ export const locationData = [
     price: 120,
     locationDetails:
       'Experience the tranquility of nature at this serene reservoir, offering stunning views and peaceful surroundings for a rejuvenating getaway.',
-    videoUrl: 'https://my.matterport.com/show/?m=2DB21iorcrM&play=1',
+    videoUrl: 'https://www.facebook.com/',
     propertyDetailsPoints: [
       'Vegeterian Family',
       'Vegan',
@@ -79,7 +79,7 @@ export const locationData = [
     locationDetails:
       'Immerse yourself in the rich cultural heritage and natural beauty of Darma, where this reservoir offers a unique blend of adventure and relaxation.Immerse yourself in the rich cultural heritage and natural beauty of Darma, where this reservoir offers a unique blend of adventure and relaxation',
     videoUrl:
-      'https://my.matterport.com/show/?m=2DB21iorcrM&play=1',
+      'https://www.facebook.com/',
     propertyDetailsPoints: [
       'Panoramic Views',
       'Outdoor Activities',
@@ -102,7 +102,7 @@ export const locationData = [
     locationDetails:
       'Immerse yourself in the rich cultural heritage and natural beauty of Darma, where this reservoir offers a unique blend of adventure and relaxation.Immerse yourself in the rich cultural heritage and natural beauty of Darma, where this reservoir offers a unique blend of adventure and relaxation',
     videoUrl:
-      'https://my.matterport.com/show/?m=2DB21iorcrM&play=1',
+      'https://www.facebook.com/',
     propertyDetailsPoints: [
       'Panoramic Views',
       'Outdoor Activities',
@@ -125,7 +125,7 @@ export const locationData = [
     locationDetails:
       'Immerse yourself in the rich cultural heritage and natural beauty of Darma, where this reservoir offers a unique blend of adventure and relaxation.Immerse yourself in the rich cultural heritage and natural beauty of Darma, where this reservoir offers a unique blend of adventure and relaxation',
     videoUrl:
-      'https://my.matterport.com/show/?m=2DB21iorcrM&play=1',
+      'https://www.facebook.com/',
     propertyDetailsPoints: [
       'Panoramic Views',
       'Outdoor Activities',
@@ -148,7 +148,7 @@ export const locationData = [
     locationDetails:
       'Immerse yourself in the rich cultural heritage and natural beauty of Darma, where this reservoir offers a unique blend of adventure and relaxation.Immerse yourself in the rich cultural heritage and natural beauty of Darma, where this reservoir offers a unique blend of adventure and relaxation',
     videoUrl:
-      'https://my.matterport.com/show/?m=2DB21iorcrM&play=1',
+      'https://www.facebook.com/',
     propertyDetailsPoints: [
       'Panoramic Views',
       'Outdoor Activities',

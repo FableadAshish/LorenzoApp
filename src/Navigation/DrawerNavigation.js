@@ -18,6 +18,8 @@ import {
   getFocusedRouteNameFromRoute,
 } from '@react-navigation/native';
 import Button from '../components/Button';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../redux/slice/authSlice';
 
 const SideMenuList = [
   {
@@ -66,7 +68,13 @@ const SideMenuList = [
 
 const CustomDrawerContent = props => {
   const navigation = useNavigation();
-
+const dispatch = useDispatch();
+  const userProfile = useSelector(state => state.auth.loginData)
+  const Logout = () => {
+    dispatch(logout());
+    navigation.navigate(ROUTES.HOME)
+  }
+  // console.log('userProfile', userProfile)
   return (
     <SafeAreaView style={styles.container}>
       <View>
@@ -78,8 +86,8 @@ const CustomDrawerContent = props => {
             style={styles.homeProfileImage}
           />
           <View style={styles.profileLeftContainer}>
-            <Text style={styles.title}>John Doe</Text>
-            <Text style={styles.subTitle}>johndoe@gmail.com</Text>
+            <Text style={styles.title}>{userProfile?.username}</Text>
+            <Text style={styles.subTitle}>{userProfile?.email}</Text>
           </View>
         </View>
         <View style={styles.listContainer}>
@@ -161,6 +169,7 @@ const CustomDrawerContent = props => {
           title={'Sign Out'}
           style={styles.drawerButton}
           innerStyle={styles.drawerButtonInnerStyle}
+          performAction={Logout}
         />
       </View>
     </SafeAreaView>

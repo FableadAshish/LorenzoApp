@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Text,
   View,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Modal,
   StatusBar,
+  ActivityIndicator,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -16,20 +17,31 @@ import EditModal from '../../../components/EditModal';
 import { Header } from '../../../components/Header';
 import EditProfileComp from '../../../components/EditProfile';
 import { ROUTES } from '../../../constants/routes';
-import { BASE_URL } from '../../../config';
-import { useSelector } from 'react-redux';
+import { BASE_URL, TOKEN } from '../../../config';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchUserProfile } from '../../../redux/slice/profileSlice';
+import colors from '../../../constants/colors';
 
 const EditProfileScreen = () => {
   const navigation = useNavigation();
   const [imagePath, setImagePath] = useState('');
+  const userProfile = useSelector(state => state.auth.loginData)
+  const dispatch = useDispatch();
+  let userProfileData = useSelector((state) => state.profile.userProfileData.user);
+  // console.log('userProfileData', userProfileData)
+  const [loading, setLoading] = useState(false);
   const [profileData, setProfileData] = useState({
-    name: 'John Doe',
-    email: 'johndoe@gmail.com',
-    password: '***',
+    name: userProfile.username,
+    email: userProfile.email,
     number: '+91-1234567890',
   });
 
-  const userProfile = useSelector(state => state.auth.loginData)
+  useEffect(() => {
+    const subscribe = navigation.addListener('focus', () => {
+      dispatch(fetchUserProfile(userProfile.id))
+    })
+    return subscribe;
+  }, []);
 
   const pickImages = () => {
     ImagePicker.openPicker({
@@ -57,10 +69,22 @@ const EditProfileScreen = () => {
       type: 'image/jpeg',
       name: 'profile_image.jpg',
     });
+    // console.log(formData);
+    setLoading(true);
     try {
-      const response = await fetch(`${BASE_URL}/updateUsers/${profileData.user.id}`)
+      const response = await fetch(`${BASE_URL}/updateUsers/${userProfile.id}`, {
+        method: 'POST',
+        headers: {
+          'Authorization': TOKEN,
+          'Content-Type': 'multipart/form-data'
+        },
+        body: formData
+      })
+      console.log('response', response)
+      setLoading(false);
     } catch (error) {
-      
+      console.log('error', error);
+      setLoading(false);
     }
   };
 
@@ -70,10 +94,15 @@ const EditProfileScreen = () => {
         iconName={'chevron-small-left'}
         openDrawer={() => navigation.goBack()}
         title={'Edit Profile'}
+        style={styles.header}
       />
 
       <View style={styles.editPhotoContainer}>
-        <Image source={imagePath ? { uri: imagePath } : IMAGES.ProfilePicture} style={styles.profilePicture} />
+        <Image
+          source={imagePath ? { uri: imagePath } : (userProfileData && userProfileData.profile ? { uri: userProfileData.profile } : IMAGES.ProfilePicture)}
+          style={styles.profilePicture}
+        />
+
         <View style={styles.editContainer}>
           <TouchableOpacity style={styles.editProfileContainer} onPress={pickImages}>
             <Text style={styles.editProfileText}>Edit Photo</Text>
@@ -104,7 +133,7 @@ const EditProfileScreen = () => {
         />
       </View>
       <View style={styles.forgotPasswordContainer}>
-        <Text>Forgot Password</Text>
+        <Text style={{ color: COLORS.lightTextColor }}>Forgot Password</Text>
         <TouchableOpacity
           onPress={() => navigation.navigate(ROUTES.FORGOT_PASSWORD)}>
           <Image
@@ -114,7 +143,7 @@ const EditProfileScreen = () => {
           />
         </TouchableOpacity>
       </View>
-      <Button title={'Submit'} style={styles.last} performAction={() => updateProfile(profileData)} />
+      <Button title={loading ? <ActivityIndicator size={20} color={COLORS.white} /> : 'Submit'} style={styles.last} performAction={() => updateProfile(profileData)} />
     </View>
   );
 };
@@ -128,10 +157,10 @@ const styles = StyleSheet.create({
 
   },
   profilePicture: {
-    height: 120,
-    width: 120,
-    // borderRadius: 40,
-    marginTop: 20,
+    height: 80,
+    width: 80,
+    borderRadius: 100,
+    // marginTop: 20,
     alignSelf: 'center',
   },
   editContainer: {
@@ -147,6 +176,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: COLORS.lightTextColor,
     borderWidth: 1,
+    marginTop: 10,
   },
   editProfileText: {
     fontFamily: FONTS.lightText,
@@ -171,6 +201,9 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     // marginTop: 40,
     paddingBottom: 20
+  },
+  header: {
+    paddingHorizontal: 20
   }
 });
 

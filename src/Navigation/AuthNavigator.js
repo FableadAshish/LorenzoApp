@@ -36,6 +36,10 @@ const AuthNavigator = () => {
             component={PropertyListingDetailsScreen}
           />
           <Stack.Screen name={ROUTES.VIRTUAL_TOUR} component={VirtualTourScreen} />
+          <Stack.Screen
+            name={ROUTES.FORGOT_PASSWORD}
+            component={ForgetPasswordScreen}
+          />
         </>
         :
         <>
@@ -46,10 +50,6 @@ const AuthNavigator = () => {
           <Stack.Screen
             name={ROUTES.CREATE_NEW_PASSWORD}
             component={CreateNewPasswordScreen}
-          />
-          <Stack.Screen
-            name={ROUTES.FORGOT_PASSWORD}
-            component={ForgetPasswordScreen}
           />
         </>
 
