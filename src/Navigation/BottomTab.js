@@ -115,7 +115,7 @@ const BottomTab = () => {
         // tabBarLabelStyle: {fontSize: 15},
       })}>
       <Tab.Screen name={ROUTES.HOME} component={HomeScreen} />
-      <Tab.Screen name={ROUTES.CHAT} component={ChatScreen} />
+      {/* <Tab.Screen name={ROUTES.CHAT} component={ChatScreen} /> */}
       {/* <Tab.Screen
         name={ROUTES.PROPERTY_LISTING}
         component={PropertyListingScreen}

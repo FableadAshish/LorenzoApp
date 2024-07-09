@@ -28,8 +28,10 @@ const EditProfileScreen = () => {
   const userProfile = useSelector(state => state.auth.loginData)
   const dispatch = useDispatch();
   let userProfileData = useSelector((state) => state.profile.userProfileData.user);
-  // console.log('userProfileData', userProfileData)
+  console.log('userProfileData', userProfileData)
   const [loading, setLoading] = useState(false);
+  const [nameValue, setNameValue] = useState('');
+  const [emailValue, setEmailValue] = useState('');
   const [profileData, setProfileData] = useState({
     name: userProfile.username,
     email: userProfile.email,
@@ -41,7 +43,15 @@ const EditProfileScreen = () => {
       dispatch(fetchUserProfile(userProfile.id))
     })
     return subscribe;
+    
   }, []);
+
+  useEffect(() => {
+    if(userProfileData){
+      setNameValue(userProfileData.username)
+      setEmailValue(userProfileData.email)
+    }
+  },[userProfileData]);
 
   const pickImages = () => {
     ImagePicker.openPicker({
@@ -115,6 +125,7 @@ const EditProfileScreen = () => {
           title={'Name'}
           titleText={profileData.name}
           onChangeText={(text) => handleChange('name', text)}
+          defaultValue={profileData.name}
         />
         <EditProfileComp
           title={'Email'}

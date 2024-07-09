@@ -12,32 +12,28 @@ import {
 import { COLORS, COMMOM, FONTS, IMAGES } from '../../../constants';
 import SearchContainer from '../../../components/SearchContainer/SearchContainer';
 import { ROUTES } from '../../../constants/routes';
-import { locationData } from '../../../constants/data';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { BASE_URL, TOKEN } from '../../../config';
 import { useNavigation } from '@react-navigation/native';
 import { fetchUserProfile } from '../../../redux/slice/profileSlice';
+import ShimmerCardItem from '../../../components/molecules/Card/ShimmerCard';
 
 const HomeScreen = () => {
   const [propertyListings, setPropertyListings] = useState([]);
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState([]);
   const userProfile = useSelector(state => state.auth.loginData)
-  let userProfileData  = useSelector((state) => state.profile.userProfileData);
-  // console.log('userProfileData', userProfileData.user.profile)
+  let userProfileData = useSelector((state) => state.profile.userProfileData);
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
 
   const searchData = text => {
-    // console.log('search data,', text)
     const filteredList = propertyListings.filter(
       item =>
         item?.property_name.toLowerCase().includes(text.toLowerCase())
-      // ||    item.roomsAvailable.toString().includes(text),
-
+        || item?.details?.address.toLowerCase().includes(text.toLowerCase())
     );
-    // console.log('filteredList', filteredList)
     setSearchQuery(filteredList);
   };
 
@@ -49,7 +45,6 @@ const HomeScreen = () => {
           Authorization: TOKEN
         }
       })
-      // console.log('response', response.data.result)
       setPropertyListings(response.data.result)
       setSearchQuery(response.data.result);
       setLoading(false);
@@ -77,16 +72,18 @@ const HomeScreen = () => {
         style={styles.locationContainer}
         activeOpacity={0.8}
         onPress={() => getDetails(item)}>
-        <Image source={{uri: item?.image}} style={styles.locationImage}/>
+        {
+          loading ? <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {renderShimmerList()}
+          </ScrollView> :
+
+            <Image source={{ uri: item?.image }} style={styles.locationImage} />
+        }
         <View style={styles.locationInfo}>
           <View style={styles.upperLocationInfo}>
             <View style={styles.leftLocation}>
               <Text style={styles.locationName}>{item?.property_name}</Text>
             </View>
-            {/* <View style={styles.ratingsContainer}>
-              <Image source={IMAGES.star} style={styles.starIcon} />
-              <Text style={styles.locationRatings}>{item?.ratings}</Text>
-            </View> */}
           </View>
           <View style={styles.lowerContainer}>
             <Image style={styles.locationIcon} source={IMAGES.Location} />
@@ -101,9 +98,13 @@ const HomeScreen = () => {
       locationListing: locationData,
     });
   };
-  useEffect(() => {
 
-  },[]);
+  const renderShimmerList = () => {
+    return Array(10).fill().map((_, index) => (
+      <ShimmerCardItem key={index} />
+    ));
+  };
+
   return (
     <>
       <ScrollView style={{ backgroundColor: 'white' }}>
@@ -118,16 +119,10 @@ const HomeScreen = () => {
               </View>
             </View>
 
-            {/* <Image
-              source={!userProfileData ? {
-                uri: IMAGES.ProfileIcon,
-              } : {uri: userProfileData.user.profile}}
+            <Image
+              source={userProfileData && userProfileData.user.profile ? { uri: userProfileData.user.profile } : IMAGES.ProfilePicture}
               style={styles.homeProfileImage}
-            /> */}
-             <Image
-            source={userProfileData && userProfileData.user.profile ? { uri: userProfileData.user.profile } : IMAGES.ProfilePicture}
-            style={styles.homeProfileImage}
-          />
+            />
           </View>
 
           <View style={styles.welcomeHeader}>
@@ -150,13 +145,22 @@ const HomeScreen = () => {
             onChangeText={text => searchData(text)}
           />
 
+          <View style={styles.labelContainer}>
+            <Text style={styles.labelText}>Latest Properties</Text>
+            <TouchableOpacity
+              onPress={() => RouteToPropertyListing(propertyListings)}>
+              <Text style={styles.viewAllText}>View all</Text>
+            </TouchableOpacity>
+          </View>
           <View style={styles.listContainer}>
             {
-              loading ? 
-              <View style={styles.loaderContainer}>
-                <ActivityIndicator color={'black'} size={30} /> 
+              loading ?
+                <View style={{ marginLeft: -30 }}>
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                    {renderShimmerList()}
+                  </ScrollView>
                 </View>
-              :
+                :
                 searchQuery.length === 0 ? (
                   <View style={styles.locationNotFoundContainer}>
                     <Image source={IMAGES.NoSearch} style={styles.noSearchImage} />
@@ -169,13 +173,7 @@ const HomeScreen = () => {
                   </View>
                 ) : (
                   <>
-                    <View style={styles.labelContainer}>
-                      <Text style={styles.labelText}>Latest Properties</Text>
-                      <TouchableOpacity
-                        onPress={() => RouteToPropertyListing(propertyListings)}>
-                        <Text style={styles.viewAllText}>View all</Text>
-                      </TouchableOpacity>
-                    </View>
+
                     <View style={{ marginLeft: -30 }}>
                       <FlatList
                         data={searchQuery}
@@ -191,12 +189,6 @@ const HomeScreen = () => {
           </View>
         </View>
       </ScrollView>
-      <TouchableOpacity
-        onPress={() => navigation.navigate(ROUTES.CHAT)}
-        style={styles.contactButtonContainer}
-        activeOpacity={0.8}>
-        <Image source={IMAGES.chatBot} style={styles.chatBotImage} />
-      </TouchableOpacity>
     </>
   );
 };

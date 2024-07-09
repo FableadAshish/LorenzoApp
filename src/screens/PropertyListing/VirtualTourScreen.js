@@ -1,9 +1,6 @@
 import React from 'react';
-import {Image, ImageBackground, Text, View} from 'react-native';
-import Video from 'react-native-video';
-import {IMAGES} from '../../constants';
+import {View} from 'react-native';
 import WebView from 'react-native-webview';
-import {Header} from '../../components/Header';
 import {useRoute} from '@react-navigation/native';
 
 const VirtualTourScreen = () => {

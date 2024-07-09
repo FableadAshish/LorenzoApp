@@ -13,4 +13,8 @@ export default {
   buttonAuthCommon: '#FFCC3E',
   buttonAuthCommonText: '#030047',
   transparent: 'transparent',
+  lightGrey: "#cccccc",
+  xLightGrey: "#e6e6e6",
+  xxLightGrey: "#f2f2f2",
+
 };

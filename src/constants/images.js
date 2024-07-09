@@ -32,6 +32,9 @@ export default {
   heart: require('../../src/assets/Images/App/heart.png'),
   search: require('../../src/assets/Images/App/search.png'),
   LorenzoIcon: require('../../src/assets/Images/App/LorenzoIcon.png'),
+  bathroom: require('../../src/assets/Images/App/bathroom.png'),
+  rooms: require('../../src/assets/Images/App/rooms.png'),
+  zipCode: require('../../src/assets/Images/App/zipCode.png'),
   
   // Bottom Tab
   CalendarIcon: require('../../src/assets/Images/BottomTab/CalendarIcon.png'),

@@ -13,7 +13,7 @@ import EditModal from '../EditModal';
 import InputField from '../InputField';
 import Button from '../Button';
 
-const EditProfileComp = ({ title, titleText, onChangeText }) => {
+const EditProfileComp = ({ title, titleText, onChangeText, defaultValue }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [inputValue, setInputValue] = useState(titleText);
 
@@ -50,6 +50,7 @@ const EditProfileComp = ({ title, titleText, onChangeText }) => {
                       placeholderText={'Enter New Name'}
                       placeholderImage={IMAGES.userPlaceholder}
                       getText={(text) => setInputValue(text)}
+                      value={defaultValue}
                     />
                   }
                   button={
