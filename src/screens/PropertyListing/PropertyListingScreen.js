@@ -11,7 +11,6 @@ import { COLORS, COMMOM, FONTS, IMAGES } from '../../constants';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import SearchContainer from '../../components/SearchContainer/SearchContainer';
 import { Header } from '../../components/Header';
-import Icon from 'react-native-vector-icons/Ionicons';
 import Foundation from 'react-native-vector-icons/Foundation';
 import { ROUTES } from '../../constants/routes';
 
@@ -19,7 +18,7 @@ const PropertyListingScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
   const { locationListing } = route.params;
-  console.log('locationListing', locationListing)
+  // console.log('locationListing', locationListing)
   const [searchingList, setSearchingList] = useState(locationListing);
 
   const renderLocationList = ({ item }) => {
@@ -36,7 +35,7 @@ const PropertyListingScreen = () => {
           activeOpacity={0.8}
           onPress={() => propertyDetailsPage()}>
           <View style={styles.imageContainer}>
-            <Image source={{ uri: item?.image }} style={styles.propertyImage} />
+            <Image source={{ uri: item?.images[0] }} style={styles.propertyImage} />
           </View>
           <View style={styles.dataContainer}>
             <View>
@@ -46,7 +45,7 @@ const PropertyListingScreen = () => {
               </Text>
               <View style={styles.locationContainer}>
                 <Image source={IMAGES.Location} style={styles.locationIcon} />
-                <Text style={styles.location}>{item.details.address}</Text>
+                <Text numberOfLines={1} style={styles.location}>{item.details.address}</Text>
               </View>
             </View>
             <View style={styles.lowerContainer}>
@@ -138,7 +137,8 @@ const styles = StyleSheet.create({
   },
   listItemChildContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
+    gap: 30,
     marginTop: 10,
     borderColor: COLORS.placeholderBackgroundColor,
     borderWidth: 1,
@@ -148,14 +148,15 @@ const styles = StyleSheet.create({
     width: '30%',
   },
   dataContainer: {
-    width: '60%',
+    // width: '65%',
     justifyContent: 'space-between',
     padding: 5,
   },
   propertyImage: {
     height: 150,
     width: 120,
-    borderRadius: 10,
+    borderTopLeftRadius: 10,
+    borderBottomLeftRadius: 10,
   },
   locationContainer: {
     flexDirection: 'row',

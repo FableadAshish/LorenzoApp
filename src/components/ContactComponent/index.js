@@ -19,48 +19,6 @@ const ContactCard = ({ contactTitle, value, icon }) => {
         </View>
       </View>
       <View style={styles.separator} />
-      {/* <View style={styles.contactDetail}>
-        <View style={styles.iconContainer}>
-          <Image
-            source={IMAGES.email}
-            style={styles.icon}
-            resizeMode="contain"
-          />
-        </View>
-        <View style={styles.textContainer}>
-          <Text style={styles.label}>Email</Text>
-          <Text style={styles.value}>{propertyDetails?.details?.email}</Text>
-        </View>
-      </View>
-      <View style={styles.separator} />
-      <View style={styles.contactDetail}>
-        <View style={styles.iconContainer}>
-          <Image
-            source={IMAGES.Location}
-            style={styles.icon}
-            resizeMode="contain"
-          />
-        </View>
-        <View style={styles.textContainer}>
-          <Text style={styles.label}>Address</Text>
-          <Text style={styles.value}>{`${propertyDetails.details.state}, ${propertyDetails.details.city}, ${propertyDetails.details.country}`}</Text>
-        </View>
-      </View>
-      <View style={styles.separator} />
-
-      <View style={styles.contactDetail}>
-        <View style={styles.iconContainer}>
-          <Image
-            source={IMAGES.email}
-            style={styles.icon}
-            resizeMode="contain"
-          />
-        </View>
-        <View style={styles.textContainer}>
-          <Text style={styles.label}>Zip-code</Text>
-          <Text style={styles.value}>{`${propertyDetails.details.zip_code}`}</Text>
-        </View>
-      </View> */}
     </View>
   )
 }

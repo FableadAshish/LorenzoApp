@@ -76,7 +76,7 @@ const ForgetPasswordScreen = () => {
           <InputField
             placeholderText={'Enter registered email-Id'}
             placeholderImage={IMAGES.AtTheRate}
-            value={email}
+            // value={email}
             getText={(text) => setEmail(text)}
           />
         </View>

@@ -75,8 +75,10 @@ const LoginScreen = () => {
           setLoading(false)
         } else if (response.data.message === 'User not registered') {
           setAlreadyLoggedIn('No such user found, please register');
+          setLoading(false)
         } else if (response.data.message === 'Login unsuccessful') {
           setAlreadyLoggedIn('You have entered wrong email or password');
+          setLoading(false)
         }
       } catch (error) {
         console.log(error);

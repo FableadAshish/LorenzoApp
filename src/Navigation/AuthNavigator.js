@@ -51,8 +51,11 @@ const AuthNavigator = () => {
             name={ROUTES.CREATE_NEW_PASSWORD}
             component={CreateNewPasswordScreen}
           />
+          <Stack.Screen
+            name={ROUTES.FORGOT_PASSWORD}
+            component={ForgetPasswordScreen}
+          />
         </>
-
       }
 
 

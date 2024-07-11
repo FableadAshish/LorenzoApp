@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     // paddingLeft:-10
+    color: COLORS.black
   },
   leftNavigation: {
     height: 25,
@@ -102,6 +103,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginLeft: 10
+    marginLeft: 10,
+    color: COLORS.black
   }
 });

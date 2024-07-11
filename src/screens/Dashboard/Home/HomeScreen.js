@@ -74,10 +74,10 @@ const HomeScreen = () => {
         onPress={() => getDetails(item)}>
         {
           loading ? <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {renderShimmerList()}
+            {renderShimmerList()};
           </ScrollView> :
 
-            <Image source={{ uri: item?.image }} style={styles.locationImage} />
+            <Image source={{ uri: item?.images[0] }} style={styles.locationImage} />
         }
         <View style={styles.locationInfo}>
           <View style={styles.upperLocationInfo}>
@@ -87,7 +87,7 @@ const HomeScreen = () => {
           </View>
           <View style={styles.lowerContainer}>
             <Image style={styles.locationIcon} source={IMAGES.Location} />
-            <Text style={styles.locationLocation}>{item?.details?.address}</Text>
+            <Text numberOfLines={1} style={styles.locationLocation}>{item?.details?.address}</Text>
           </View>
         </View>
       </TouchableOpacity>

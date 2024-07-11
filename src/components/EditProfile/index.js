@@ -50,7 +50,7 @@ const EditProfileComp = ({ title, titleText, onChangeText, defaultValue }) => {
                       placeholderText={'Enter New Name'}
                       placeholderImage={IMAGES.userPlaceholder}
                       getText={(text) => setInputValue(text)}
-                      value={defaultValue}
+                      // value={defaultValue}
                     />
                   }
                   button={

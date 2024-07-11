@@ -35,6 +35,10 @@ export default {
   bathroom: require('../../src/assets/Images/App/bathroom.png'),
   rooms: require('../../src/assets/Images/App/rooms.png'),
   zipCode: require('../../src/assets/Images/App/zipCode.png'),
+  imageGallery: require('../../src/assets/Images/App/imageGallery.png'),
+  blueprint: require('../../src/assets/Images/App/blueprint.png'),
+  call: require('../../src/assets/Images/App/call.png'),
+  facility: require('../../src/assets/Images/App/facility.png'),
   
   // Bottom Tab
   CalendarIcon: require('../../src/assets/Images/BottomTab/CalendarIcon.png'),

@@ -21,6 +21,8 @@ import { BASE_URL, TOKEN } from '../../config';
 import WebView from 'react-native-webview';
 import ContactCard from '../../components/ContactComponent';
 import ImageView from "react-native-image-viewing";
+import { ActivityIndicator } from 'react-native';
+import Toast from 'react-native-simple-toast';
 
 const PropertyListingDetailsScreen = () => {
   const navigation = useNavigation();
@@ -28,11 +30,22 @@ const PropertyListingDetailsScreen = () => {
   const userProfile = useSelector(state => state.auth.loginData)
   const [openInquiry, setOpenInquiry] = useState(false);
   const [inquiryDetails, setInquiryDetails] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState({});
   const { propertyDetails } = route.params;
 
   const addInquiry = () => {
     setOpenInquiry(!openInquiry)
+  }
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const [flooerImages, setFloorImagesVisible] = useState(0);
+  const [floorIsVisible, setFloorisVisible] = useState(false);
+
+  const handleSetIsVisible = (index) => {
+    setCurrentImageIndex(index);
+    setIsVisible(true);
   }
 
   const handleChange = (name, value) => {
@@ -66,43 +79,33 @@ const PropertyListingDetailsScreen = () => {
     },
     {
       id: 4,
-      title: "Max Room's",
+      title: "Max. room's",
       icon: IMAGES.rooms,
       count: propertyDetails?.max_room
     }
   ]
 
-  const facilityImages = [
-    {
-      id: 1,
-      image: IMAGES.Trek1
-    },
-    {
-      id: 2,
-      image: IMAGES.Trek2
-    },
-    {
-      id: 3,
-      image: IMAGES.Trek3
-    },
-    {
-      id: 4,
-      image: IMAGES.Trek4
-    }
-  ]
   const validateForm = () => {
     let isValid = true;
     const newErrors = {};
-    if (!inquiryDetails.subject) {
+    if (inquiryDetails.subject == '') {
       newErrors.subject = 'Subject cannot be empty';
       isValid = false;
     }
-    if (!inquiryDetails.message) {
-      newErrors.message = 'Message cannot be empty';
+    if (inquiryDetails.subject == undefined) {
+      newErrors.subject = 'Subject cannot be empty';
       isValid = false;
     }
-    if (inquiryDetails.message.length < 10) {
-      newErrors.message = 'Your message is too short. Please provide a more detailed message so we can thoroughly address your inquiry.';
+    if (inquiryDetails.inquiry === '') {
+      newErrors.inquiry = 'Message cannot be empty';
+      isValid = false;
+    }
+    if (inquiryDetails.inquiry == undefined) {
+      newErrors.inquiry = 'Message cannot be empty';
+      isValid = false;
+    }
+    if (inquiryDetails.inquiry && inquiryDetails.inquiry.length < 10) {
+      newErrors.inquiry = 'Your message is too short. Please provide a more detailed message so we can thoroughly address your inquiry.';
       isValid = false;
     }
     setError(newErrors);
@@ -115,9 +118,11 @@ const PropertyListingDetailsScreen = () => {
       const inquiryForm = new FormData();
       inquiryForm.append('user_id', userID);
       inquiryForm.append('property_id', propertyID);
-      inquiryForm.append('inquiry', inquiryDetails.message)
+      inquiryForm.append('inquiry', inquiryDetails.inquiry)
       inquiryForm.append('subject', inquiryDetails.subject)
+      // console.log('inquiryForm', inquiryForm)
       try {
+        setIsLoading(true)
         const response = await axios.post(`${BASE_URL}/addInquiry`, inquiryForm, {
           headers: {
             Authorization: TOKEN,
@@ -127,21 +132,14 @@ const PropertyListingDetailsScreen = () => {
         console.log(response.data);
         setInquiryDetails('')
         setError('')
+        setIsLoading(false)
+        closeModal()
+        Toast.show('We have received your inquiry and will review it shortly. Thank you for reaching out to us.')
       } catch (error) {
         console.log(error);
+        setIsLoading(false);
       }
     }
-  }
-
-  const renderImagesList = ({ item }) => {
-    return (
-      <View>
-        <Image
-          source={item.image}
-          style={styles.facilityImage}
-        />
-      </View>
-    )
   }
 
   const closeModal = () => {
@@ -182,13 +180,35 @@ const PropertyListingDetailsScreen = () => {
         <Text style={styles.locationDetails}>
           {isReadMore ? `${text.slice(0, 150)}...` : text}
         </Text>
-        <Text style={[styles.locationReadMoreDetails, { color: COLORS.black, }]}>
-          {isReadMore ? 'Read more...' : 'Show less...'}
+        <Text style={[styles.locationReadMoreDetails, { color: COLORS.lightTextColor, }]}>
+          {isReadMore ? 'read more...' : 'show less'}
         </Text>
       </TouchableOpacity>
     );
   };
 
+  const renderImages = ({ item, index }) => (
+    <TouchableOpacity onPress={() => handleSetIsVisible(index)}>
+      <Image
+        source={{ uri: item }}
+        style={styles.thumbnailImage}
+      />
+    </TouchableOpacity>
+  );
+
+  const renderFloorImages = ({ item, index }) => (
+    <TouchableOpacity onPress={() => handleFloorImagesVisible(index)}>
+      <Image
+        source={{ uri: item }}
+        style={styles.thumbnailImage}
+      />
+    </TouchableOpacity>
+  );
+
+  const handleFloorImagesVisible = (index) => {
+    setFloorImagesVisible(index);
+    setFloorisVisible(true);
+  };
 
   return (
     <>
@@ -215,9 +235,15 @@ const PropertyListingDetailsScreen = () => {
             />
             <Text style={styles.locationName}>{propertyDetails?.details?.address}</Text>
           </View>
+
+          <View style={styles.separator} />
+
           <View style={styles.facilityContainer}>
-            <Text style={styles.propertyName}>Facility</Text>
-            <View style={{ marginTop: 10 }}></View>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10,}}>
+              <Text style={styles.propertyContactName}>Facility</Text>
+              <Image source={IMAGES.facility} style={{ height: 25, width: 25 }} />
+            </View>
+            <View style={{ marginTop: 20 }}></View>
             <FlatList
               data={facilityData}
               renderItem={renderFacilityData}
@@ -227,6 +253,7 @@ const PropertyListingDetailsScreen = () => {
               contentContainerStyle={styles.listContainer}
             />
           </View>
+          <View style={styles.separator} />
 
           <View style={styles.descriptionContainer}>
             <Text style={styles.descriptionContainerTitle}>Overview</Text>
@@ -243,17 +270,70 @@ const PropertyListingDetailsScreen = () => {
           </View>
         </View>
 
-        <View style={styles.facilityDescription}>
-          <Text style={styles.propertyContactName}>Gallery Images</Text>
+        <View style={styles.separator} />
+        {/* <View style={styles.container}> */}
+        <View style={styles.floorPlanContainer}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 25 }}>
+            <Text style={styles.propertyContactName}>Gallery Images -</Text>
+            <Image source={IMAGES.imageGallery} style={{ height: 25, width: 25 }} />
+          </View>
           <FlatList
-            data={facilityImages}
-            renderItem={renderImagesList}
-            keyExtractor={item => item.id.toString()}
+            data={propertyDetails.images}
+            renderItem={renderImages}
             horizontal
-            contentContainerStyle={styles.imagesContianer}
+            contentContainerStyle={styles.galleryImagesContainer}
+            keyExtractor={(item, index) => index.toString()}
           />
+
+          <ImageView
+            images={propertyDetails.images.map(uri => ({ uri }))}
+            imageIndex={currentImageIndex}
+            presentationStyle="overFullScreen"
+            visible={isVisible}
+            onRequestClose={() => setIsVisible(false)}
+            onImageIndexChange={setCurrentImageIndex}
+            FooterComponent={() => (
+              <View style={styles.root}>
+                <Text style={styles.text}>{`${currentImageIndex + 1}/${propertyDetails.images.length}`}</Text>
+              </View>
+            )}
+          />
+          <View style={styles.separator} />
         </View>
-        <Text style={styles.propertyContactName}>Contact and Location</Text>
+
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 25 }}>
+          <Text style={styles.propertyContactName}>Floor Plan -</Text>
+          <Image source={IMAGES.blueprint} style={{ height: 25, width: 25 }} />
+        </View>
+
+        <FlatList
+          data={propertyDetails.floor_plans}
+          renderItem={renderFloorImages}
+          horizontal
+          contentContainerStyle={styles.galleryImagesContainer}
+          keyExtractor={(item, index) => index.toString()}
+        />
+
+        <ImageView
+          images={propertyDetails.floor_plans.map(uri => ({ uri }))}
+          imageIndex={flooerImages}
+          presentationStyle="overFullScreen"
+          visible={floorIsVisible}
+          onRequestClose={() => setFloorisVisible(false)}
+          onImageIndexChange={setFloorImagesVisible}
+          FooterComponent={() => (
+            <View style={styles.root}>
+              <Text style={styles.text}>{`${flooerImages + 1}/${propertyDetails.floor_plans.length}`}</Text>
+            </View>
+          )}
+        />
+        <View style={styles.separator} />
+
+        {/* </View> */}
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 25 }}>
+          <Text style={styles.propertyContactName}>Contact and Location -</Text>
+          <Image source={IMAGES.call} style={{ height: 25, width: 25 }} />
+        </View>
         <ContactCard
           contactTitle={'Phone'}
           value={propertyDetails?.details?.phone}
@@ -280,31 +360,48 @@ const PropertyListingDetailsScreen = () => {
       </View>
       <Modal animationType='fade' transparent={true} visible={openInquiry}>
         <View style={styles.inquiryContainer}>
-          <Pressable onPress={closeModal}>
-            <ScrollView contentContainerStyle={styles.scrollViewContent} showsVerticalScrollIndicator={false}>
-              <View >
-                <View style={styles.formContainer}>
-                  <Pressable style={styles.headerContainer} onPress={() => setOpenInquiry(!openInquiry)}>
-                    <Image source={IMAGES.close} style={{ height: 24, width: 24 }} />
-                  </Pressable>
-                  <Text style={styles.inquiryText}>Please fill the form to send an inquiry.</Text>
-                  <View style={{ marginTop: 20 }}>
-                    <View style={styles.inputContainer}>
-                      <Text style={styles.inputLabel}>Subject:</Text>
-                      <TextInput style={styles.subjectMessage} placeholderTextColor={COLORS.lightTextColor} placeholder='Add Subject' onChangeText={text => handleChange('subject', text)} />
-                      {error.subject && <Text style={styles.errorText}>{error.subject}</Text>}
-                    </View>
-                    <View style={styles.inputContainer}>
-                      <Text style={styles.inputLabel}>Message:</Text>
-                      <TextInput style={styles.inputMessage} placeholderTextColor={COLORS.lightTextColor} numberOfLines={4} multiline={true} placeholder='Add Message' onChangeText={text => handleChange('message', text)} />
-                      {error.message && <Text style={styles.errorText}>{error.message}</Text>}
-                    </View>
-                    <Button title={'Submit'} style={styles.button} performAction={() => submitForm(userProfile.id, propertyDetails.id)} />
-                  </View>
+          <ScrollView contentContainerStyle={styles.scrollViewContent} showsVerticalScrollIndicator={false}>
+            <View style={styles.formContainer}>
+              <Pressable style={styles.headerContainer} onPress={closeModal}>
+                <Image source={IMAGES.close} style={{ height: 24, width: 24 }} />
+              </Pressable>
+              <Text style={styles.inquiryText}>Please fill the form to send an inquiry.</Text>
+              <View style={{ marginTop: 20 }}>
+                <View style={styles.inputContainer}>
+                  <Text style={styles.inputLabel}>Subject:</Text>
+                  <TextInput
+                    style={styles.subjectMessage}
+                    placeholderTextColor={COLORS.lightTextColor}
+                    placeholder='Add Subject'
+                    onChangeText={text => handleChange('subject', text)}
+                    value={inquiryDetails.subject}
+                  />
+                  {error.subject && <Text style={styles.errorText}>{error.subject}</Text>}
                 </View>
+                <View style={styles.inputContainer}>
+                  <Text style={styles.inputLabel}>Message:</Text>
+                  <TextInput
+                    style={styles.inputMessage}
+                    placeholderTextColor={COLORS.lightTextColor}
+                    numberOfLines={4}
+                    multiline={true}
+                    placeholder='Add Message'
+                    onChangeText={text => handleChange('inquiry', text)}
+                    value={inquiryDetails.inquiry}
+                  />
+                  {error.inquiry && <Text style={styles.errorText}>{error.inquiry}</Text>}
+                </View>
+                <Button
+                  title={isLoading ? <ActivityIndicator color={'white'} size={22} /> : 'Submit'}
+                  style={styles.button}
+                  performAction={() => {
+                    console.log('Submit button pressed');
+                    submitForm(userProfile.id, propertyDetails.id);
+                  }}
+                />
               </View>
-            </ScrollView>
-          </Pressable>
+            </View>
+          </ScrollView>
         </View>
       </Modal>
 
@@ -362,7 +459,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
-    marginTop: 5,
+    // marginTop: 5,
     // justifyContent: 'space-between',
 
   },
@@ -408,12 +505,12 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     // overflow: 'hidden',
   },
-  pointsContainer: {
-    marginTop: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
+  // pointsContainer: {
+  //   // marginTop: 20,
+  //   flexDirection: 'row',
+  //   alignItems: 'center',
+  //   justifyContent: 'space-between',
+  // },
   singlePointContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -434,13 +531,15 @@ const styles = StyleSheet.create({
   locationDetails: {
     fontSize: 16,
     fontFamily: FONTS.poppinsRegular,
-    marginTop: 20,
+    marginTop: 10,
     textAlign: 'justify',
+    color: COLORS.mediumTextColor
   },
   locationReadMoreDetails: {
     fontSize: 16,
     fontFamily: FONTS.poppinsRegular,
     textAlign: 'justify',
+    color: COLORS.lightGrey
   },
   locationPointsContainer: {
     gap: 10,
@@ -518,6 +617,7 @@ const styles = StyleSheet.create({
   separator: {
     height: 1,
     backgroundColor: '#E0E0E0',
+    marginTop: 30
   },
 
   phoneText: {
@@ -630,16 +730,29 @@ const styles = StyleSheet.create({
     color: '#2D3715',
     fontSize: 20,
     fontWeight: 'bold',
-    marginTop: 20,
+    // marginTop: 20,
   },
   facilityImage: {
     height: 100,
     width: 100,
     borderRadius: 10,
   },
-  imagesContianer:{
+  imagesContianer: {
     marginTop: 10,
     gap: 10
+  },
+  galleryImagesContainer: {
+    // gap: 1,
+    marginTop: 20
+  },
+  thumbnailImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 10,
+    marginRight: 10,
+  },
+  floorPlanContainer: {
+
   }
 });
 
