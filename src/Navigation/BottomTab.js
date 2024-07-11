@@ -6,7 +6,7 @@ import ChatScreen from '../screens/Dashboard/Chat/ChatScreen';
 import ProfileScreen from '../screens/Dashboard/Profile/ProfileScreen';
 import {COLORS, IMAGES} from '../constants';
 import {Image} from 'react-native';
-import PropertyListingScreen from '../screens/PropertyListing/PropertyListingScreen';
+// import PropertyListingScreen from '../screens/PropertyListing/PropertyListingScreen';
 import {View, StyleSheet} from 'react-native';
 
 const BottomTab = () => {

@@ -1,6 +1,5 @@
 import React from 'react';
 import {Text, TouchableOpacity, View, StyleSheet, Image} from 'react-native';
-import Entypo from 'react-native-vector-icons/Entypo';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {COLORS, COMMOM, IMAGES} from '../../constants';
 

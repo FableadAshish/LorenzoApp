@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import ImagePicker from 'react-native-image-crop-picker';
+ import ImagePicker from 'react-native-image-crop-picker';
 import { COLORS, COMMOM, FONTS, IMAGES } from '../../../constants';
 import Button from '../../../components/Button';
 import EditModal from '../../../components/EditModal';
