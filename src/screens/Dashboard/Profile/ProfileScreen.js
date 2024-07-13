@@ -81,22 +81,6 @@ const ProfileScreen = () => {
         <View style={{ marginTop: 20 }}>
           <Text style={styles.preferencesText}>Preferences</Text>
           <View style={{ marginTop: -30 }}>
-            <ProfileList
-              leftIcon={IMAGES.shield}
-              title={'Legal & Policies'}
-              rightIcon={IMAGES.rightArrow}
-            />
-            <ProfileList
-              leftIcon={IMAGES.HelpandSupport}
-              title={'Help & Support'}
-              rightIcon={IMAGES.rightArrow}
-            />
-            <ProfileList
-              leftIcon={IMAGES.logout}
-              title={'Logout'}
-              rightIcon={IMAGES.rightArrow}
-              navigateTo={() => logoutUser()}
-            />
           </View>
         </View>
       </View>

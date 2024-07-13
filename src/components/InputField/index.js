@@ -1,6 +1,6 @@
 import React from 'react';
-import {TextInput, StyleSheet, View, Text, Image} from 'react-native';
-import {COLORS, FONTS, IMAGES} from '../../constants';
+import { TextInput, StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
+import { COLORS, FONTS, IMAGES } from '../../constants';
 
 const InputField = ({
   placeholderText,
@@ -11,6 +11,8 @@ const InputField = ({
   secureTextEntry,
   style,
   errorMessage,
+  rightIcon,
+  showHide,
 }) => {
   return (
     <View style={styles.fieldContainer}>
@@ -30,6 +32,14 @@ const InputField = ({
           value={value}
           secureTextEntry={secureTextEntry}
         />
+        <TouchableOpacity onPress={showHide}>
+          <Image
+            resizeMode="contain"
+            source={rightIcon}
+            style={styles.rightIcon}
+            tintColor={COLORS.placeholderIconColor}
+          />
+        </TouchableOpacity>
       </View>
       {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
     </View>
@@ -41,13 +51,12 @@ const styles = StyleSheet.create({
     height: 50,
     borderColor: COLORS.lightTextColor,
     borderRadius: 50,
-    color: 'black',
     backgroundColor: COLORS.placeholderBackgroundColor,
-    justifyContent: 'flex-start',
     paddingLeft: 20,
+    paddingRight: 20,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    // position: 'relative', // Required for absolute positioning of rightIcon
   },
   fieldContainer: {
     marginTop: 20,
@@ -61,18 +70,27 @@ const styles = StyleSheet.create({
   iconStyle: {
     height: 20,
     width: 20,
+    marginRight: 10,
   },
   inputFieldText: {
     fontSize: 17,
     fontFamily: FONTS.poppinsRegular,
-    width: '100%',
-    color: COLORS.black
+    flex: 1,
+    color: COLORS.black,
+  },
+  rightIcon: {
+    height: 20,
+    width: 20,
+    // position: 'absolute',
+    // right: 20, // Adjust as needed for proper spacing
   },
   errorText: {
     color: 'red',
     fontSize: 12,
-    marginTop: 5,
+    marginTop: 10,
+    marginLeft: 10,
+    // textAlign: 'center'
   },
-
 });
+
 export default InputField;

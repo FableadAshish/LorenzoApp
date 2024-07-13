@@ -20,6 +20,9 @@ import {
 import Button from '../components/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../redux/slice/authSlice';
+import HomeScreen from '../screens/Dashboard/Home/HomeScreen';
+import ProfileScreen from '../screens/Dashboard/Profile/ProfileScreen';
+import PropertyListingScreen from '../screens/PropertyListing/PropertyListingScreen';
 
 const SideMenuList = [
   {
@@ -29,27 +32,28 @@ const SideMenuList = [
     route: ROUTES.HOME,
     iconColor: '#7888F1',
   },
-  // {
-  //   id: 1,
-  //   option: 'Chat',
-  //   icon: IMAGES.chatPlain,
-  //   route: ROUTES.CHAT,
-  //   iconColor: '#f5bd7f',
-  // },
   {
     id: 2,
     option: 'Profile',
     icon: IMAGES.userPlaceholder,
-    route: ROUTES.PROFILE,
+    route: ROUTES.EDIT_PROFILE,
     iconColor: '#A18FF4',
   },
-  // {
-  //   id: 3,
-  //   option: 'Calendar',
-  //   icon: IMAGES.CalendarIcon,
-  //   route: ROUTES.CHAT,
-  //   iconColor: '#f5bd7f',
-  // },
+  {
+    id: 3,
+    option: 'Legal & Policies',
+    icon: IMAGES.shield,
+    route: ROUTES.CHAT,
+    iconColor: '#f5bd7f',
+  },
+  {
+    id: 3,
+    option: 'Help & Support',
+    icon: IMAGES.Help,
+    route: ROUTES.CHAT,
+    iconColor: '#5991eb',
+    tintColor: COLORS.white
+  },
   // {
   //   id: 4,
   //   option: 'Location',
@@ -116,7 +120,8 @@ const dispatch = useDispatch();
                     style={[
                       styles.listView,
                       isActiveScreen && {
-                        backgroundColor: '#6759FF',
+                        backgroundColor: COLORS.lightBlueText,
+                        borderRadius: 15,
                       },
                     ]}
                     onPress={() => navigation.navigate(item.route)}>
@@ -155,6 +160,7 @@ const dispatch = useDispatch();
                       <Image
                         source={IMAGES.rightArrow}
                         style={styles.rightIcon}
+                        tintColor={COLORS.black}
                       />
                     </View>
                   </TouchableOpacity>
@@ -168,7 +174,7 @@ const dispatch = useDispatch();
         <Button
           title={'Sign Out'}
           style={styles.drawerButton}
-          innerStyle={styles.drawerButtonInnerStyle}
+          // innerStyle={styles.drawerButtonInnerStyle}
           performAction={Logout}
         />
       </View>
@@ -293,8 +299,8 @@ export const DrawerNavigation = () => {
         drawerStyle: {width: '80%'},
         // drawerStatusBarAnimation: COLORS.placeholderColor,
       }}>
-      <Drawer.Screen name={ROUTES.HOME} component={BottomTab} />
-      <Drawer.Screen name={ROUTES.CHAT} component={ChatScreen} />
+      <Drawer.Screen name={ROUTES.HOME} component={HomeScreen} />
+      <Drawer.Screen name={ROUTES.PROFILE} component={ProfileScreen} />
     </Drawer.Navigator>
   );
 };

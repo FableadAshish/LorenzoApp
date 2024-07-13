@@ -163,7 +163,7 @@ const HomeScreen = () => {
                 :
                 searchQuery.length === 0 ? (
                   <View style={styles.locationNotFoundContainer}>
-                    <Image source={IMAGES.NoSearch} style={styles.noSearchImage} />
+                    {/* <Image source={IMAGES.NoSearch} style={styles.noSearchImage} /> */}
                     <Text style={styles.locationNotFoundText}>
                       No Such Property is Listed
                     </Text>
@@ -343,8 +343,9 @@ const styles = StyleSheet.create({
   },
   locationNotFoundContainer: {
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     height: '100%',
+    marginTop: 50
   },
   locationNotFoundText: {
     fontFamily: FONTS.poppinsRegular,

@@ -67,7 +67,7 @@ const LoginScreen = () => {
             'Content-Type': 'multipart/form-data'
           }
         });
-        // console.log(response.data)
+        console.log(response.data)
 
         if (response.data.message === 'Login successful') {
           dispatch(loginData(response.data.user))
@@ -77,6 +77,9 @@ const LoginScreen = () => {
           setAlreadyLoggedIn('No such user found, please register');
           setLoading(false)
         } else if (response.data.message === 'Login unsuccessful') {
+          setAlreadyLoggedIn('You have entered wrong email or password');
+          setLoading(false)
+        }else if(response.data.message === 'Invalid email or password'){
           setAlreadyLoggedIn('You have entered wrong email or password');
           setLoading(false)
         }

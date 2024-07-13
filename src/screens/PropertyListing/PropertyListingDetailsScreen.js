@@ -68,7 +68,7 @@ const PropertyListingDetailsScreen = () => {
     {
       id: 2,
       title: "Price",
-      icon: IMAGES.dollar,
+      icon: IMAGES.pound,
       count: propertyDetails?.price
     },
     {
@@ -356,7 +356,7 @@ const PropertyListingDetailsScreen = () => {
         />
       </ScrollView>
       <View style={{ backgroundColor: 'white', paddingHorizontal: 20 }}>
-        <Button title={'Inquire'} style={styles.button} performAction={addInquiry} />
+        <Button title={'Submit Inquiry'} style={styles.button} performAction={addInquiry} />
       </View>
       <Modal animationType='fade' transparent={true} visible={openInquiry}>
         <View style={styles.inquiryContainer}>
@@ -392,10 +392,9 @@ const PropertyListingDetailsScreen = () => {
                   {error.inquiry && <Text style={styles.errorText}>{error.inquiry}</Text>}
                 </View>
                 <Button
-                  title={isLoading ? <ActivityIndicator color={'white'} size={22} /> : 'Submit'}
-                  style={styles.button}
+                  title={isLoading ? <ActivityIndicator color={COLORS.white} size={22} /> : 'Submit'}
+                  style={styles.submitInquiryButton}
                   performAction={() => {
-                    console.log('Submit button pressed');
                     submitForm(userProfile.id, propertyDetails.id);
                   }}
                 />
@@ -706,7 +705,7 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'flex-end',
     flexDirection: 'row',
-    paddingBottom: 10,
+    // paddingBottom: 10,
   },
   row: {
     justifyContent: 'space-between',
@@ -753,7 +752,7 @@ const styles = StyleSheet.create({
   },
   floorPlanContainer: {
 
-  }
+  },
 });
 
 export default PropertyListingDetailsScreen;

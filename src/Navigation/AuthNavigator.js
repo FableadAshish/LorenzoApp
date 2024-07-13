@@ -40,16 +40,16 @@ const AuthNavigator = () => {
             name={ROUTES.FORGOT_PASSWORD}
             component={ForgetPasswordScreen}
           />
+           <Stack.Screen
+            name={ROUTES.CREATE_NEW_PASSWORD}
+            component={CreateNewPasswordScreen}
+          />
         </>
         :
         <>
           <Stack.Screen name={ROUTES.SPLASH} component={SplashScreen} />
           <Stack.Screen name={ROUTES.LOGIN} component={LoginScreen} />
           <Stack.Screen name={ROUTES.SIGNUP} component={SignUpScreen} />
-          <Stack.Screen
-            name={ROUTES.CREATE_NEW_PASSWORD}
-            component={CreateNewPasswordScreen}
-          />
           <Stack.Screen
             name={ROUTES.FORGOT_PASSWORD}
             component={ForgetPasswordScreen}

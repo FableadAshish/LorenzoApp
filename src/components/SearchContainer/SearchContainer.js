@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     color: COLORS.black,
     fontSize: 16,
+    width: '100%'
   },
   searchContainer: {
     height: 60,

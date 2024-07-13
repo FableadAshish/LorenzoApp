@@ -11,18 +11,15 @@ import { COLORS, COMMOM, FONTS, IMAGES } from '../../constants';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import SearchContainer from '../../components/SearchContainer/SearchContainer';
 import { Header } from '../../components/Header';
-import Foundation from 'react-native-vector-icons/Foundation';
 import { ROUTES } from '../../constants/routes';
 
 const PropertyListingScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
   const { locationListing } = route.params;
-  // console.log('locationListing', locationListing)
   const [searchingList, setSearchingList] = useState(locationListing);
 
   const renderLocationList = ({ item }) => {
-    // console.log('item?.image', item?.image)
     const propertyDetailsPage = () => {
       navigation.navigate(ROUTES.PROPERTY_LISTING_DETAILS, {
         propertyDetails: item,
@@ -40,8 +37,9 @@ const PropertyListingScreen = () => {
           <View style={styles.dataContainer}>
             <View>
               <Text style={styles.listItemText}>{item?.property_name}</Text>
+              <Text style={styles.propertyType}>{item?.property_type}</Text>
               <Text style={styles.roomsAvailable}>
-                {item.roomsAvailable} rooms Available
+                {item?.max_room > 1 ? (item?.max_room + ' ' + `room's available`) : (item?.max_room + ' ' + `room available`)}
               </Text>
               <View style={styles.locationContainer}>
                 <Image source={IMAGES.Location} style={styles.locationIcon} />
@@ -50,14 +48,9 @@ const PropertyListingScreen = () => {
             </View>
             <View style={styles.lowerContainer}>
               <View style={styles.pricingContainer}>
-                <Foundation name="pound" size={25} color="black" />
-                <Text style={styles.price}>{item.area}</Text>
-                <Text style={styles.pricePerMonth}>/mo</Text>
+                <Image source={IMAGES.pound} style={styles.poundIcon} />
+                <Text style={styles.price}>{item.price}</Text>
               </View>
-              {/* <View style={styles.ratingContainer}>
-                <Icon name="star" size={18} color={COLORS.lightOrange} />
-                <Text style={styles.ratings}>{item.ratings}</Text>
-              </View> */}
             </View>
           </View>
         </TouchableOpacity>
@@ -66,7 +59,11 @@ const PropertyListingScreen = () => {
   };
   const searchData = text => {
     const filteredList = locationListing.filter(item =>
-      item?.property_name.toLowerCase().includes(text.toLowerCase()),
+      item?.property_name.toLowerCase().includes(text.toLowerCase()) || 
+      item?.price.toLowerCase().includes(text.toLowerCase()) ||
+      item?.details?.address.toLowerCase().includes(text.toLowerCase()) ||
+      item?.max_room.toLowerCase().includes(text.toLowerCase())
+
     );
     setSearchingList(filteredList);
   };
@@ -86,12 +83,11 @@ const PropertyListingScreen = () => {
         />
         {searchingList.length === 0 ? (
           <View style={styles.locationNotFoundContainer}>
-            <Image source={IMAGES.NoSearch} style={styles.noSearchImage} />
             <Text style={styles.locationNotFoundText}>
               No Such Property is Listed
             </Text>
             <Text style={styles.locationNotFoundSubText}>
-              Please add relevant data
+              Please add relevant value
             </Text>
           </View>
         ) : (
@@ -124,6 +120,11 @@ const styles = StyleSheet.create({
     color: COLORS.black,
     fontSize: 20,
   },
+  propertyType:{
+    fontSize: 15,
+    color: COLORS.mediumTextColor,
+    marginTop: 5,
+  },
   location: {
     fontSize: 15,
     color: COLORS.lightTextColor,
@@ -153,7 +154,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   propertyImage: {
-    height: 150,
+    height: 140,
     width: 120,
     borderTopLeftRadius: 10,
     borderBottomLeftRadius: 10,
@@ -172,11 +173,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-  },
   lowerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -185,20 +181,13 @@ const styles = StyleSheet.create({
   price: {
     color: COLORS.black,
     fontSize: 20,
-  },
-  pricePerMonth: {
-    color: COLORS.lightTextColor,
-    fontSize: 20,
-  },
-  ratings: {
-    color: COLORS.lightTextColor,
-    fontSize: 15,
+    marginLeft: -3,
   },
   locationNotFoundContainer: {
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     height: '100%',
-    marginTop: -100,
+    marginTop: 50,
   },
   locationNotFoundText: {
     fontFamily: FONTS.poppinsRegular,
@@ -215,6 +204,11 @@ const styles = StyleSheet.create({
     width: 200,
     resizeMode: 'contain',
   },
+  poundIcon: {
+    height: 20,
+    width: 20,
+    resizeMode: 'contain',
+  }
 });
 
 export default PropertyListingScreen;

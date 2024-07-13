@@ -39,7 +39,9 @@ export default {
   blueprint: require('../../src/assets/Images/App/blueprint.png'),
   call: require('../../src/assets/Images/App/call.png'),
   facility: require('../../src/assets/Images/App/facility.png'),
-  
+  pound: require('../../src/assets/Images/App/pound.png'),
+  Help: require('../../src/assets/Images/App/Help.png'),
+
   // Bottom Tab
   CalendarIcon: require('../../src/assets/Images/BottomTab/CalendarIcon.png'),
   ChatIcon: require('../../src/assets/Images/BottomTab/Chat.png'),
@@ -58,7 +60,10 @@ export default {
   ForgotPassword: require('../../src/assets/Images/Auth/ForgotPassword.png'),
   AtTheRate: require('../../src/assets/Images/Auth/AtTheRate.png'),
   logoutPopup: require('../../src/assets/Images/Auth/logoutPopup.png'),
-
+  visible: require('../../src/assets/Images/Auth/visible.png'),
+  hide: require('../../src/assets/Images/Auth/hide.png'),
+  resetPassword: require('../../src/assets/Images/Auth/resetPassword.png'),
+  
   // Profile
   logout: require('../../src/assets/Images/Profile/logout.png'),
   HelpandSupport: require('../../src/assets/Images/Profile/HelpandSupport.png'),
