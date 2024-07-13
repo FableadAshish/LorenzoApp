@@ -115,14 +115,20 @@ const HomeScreen = () => {
                 <Image source={IMAGES.menu} style={styles.menuIcon} />
               </TouchableOpacity>
               <View>
-                <Text style={styles.centerNameStyle}>{'Welcome,' + ' ' + userProfile.username}</Text>
+                {
+                  userProfileData ?
+                    <Text style={styles.centerNameStyle}>{'Welcome,' + ' ' + userProfileData.user.username}</Text>
+                    :
+                    <Text style={styles.centerNameStyle}>{'Welcome,' + ' ' + userProfile.email}</Text>
+                }
               </View>
             </View>
-
-            <Image
-              source={userProfileData && userProfileData.user.profile ? { uri: userProfileData.user.profile } : IMAGES.ProfilePicture}
-              style={styles.homeProfileImage}
-            />
+            <TouchableOpacity onPress={() => navigation.navigate(ROUTES.EDIT_PROFILE)}>
+              <Image
+                source={userProfileData && userProfileData.user.profile ? { uri: userProfileData.user.profile } : IMAGES.ProfilePicture}
+                style={styles.homeProfileImage}
+              />
+            </TouchableOpacity>
           </View>
 
           <View style={styles.welcomeHeader}>
@@ -276,7 +282,7 @@ const styles = StyleSheet.create({
   },
   viewAllText: {
     color: COLORS.lightBlueText,
-    fontWeight: '400',
+    fontWeight: '700',
     letterSpacing: 0.5,
   },
   locationImage: {

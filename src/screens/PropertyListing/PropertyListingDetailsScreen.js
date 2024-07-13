@@ -23,6 +23,7 @@ import ContactCard from '../../components/ContactComponent';
 import ImageView from "react-native-image-viewing";
 import { ActivityIndicator } from 'react-native';
 import Toast from 'react-native-simple-toast';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const PropertyListingDetailsScreen = () => {
   const navigation = useNavigation();
@@ -33,6 +34,8 @@ const PropertyListingDetailsScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState({});
   const { propertyDetails } = route.params;
+  const hasFloorPlans = propertyDetails.floor_plans && propertyDetails.floor_plans.length > 0;
+
 
   const addInquiry = () => {
     setOpenInquiry(!openInquiry)
@@ -42,7 +45,7 @@ const PropertyListingDetailsScreen = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [flooerImages, setFloorImagesVisible] = useState(0);
   const [floorIsVisible, setFloorisVisible] = useState(false);
-
+  const [isWebViewLoading, setIsWebViewLoading] = useState(true);
   const handleSetIsVisible = (index) => {
     setCurrentImageIndex(index);
     setIsVisible(true);
@@ -96,6 +99,10 @@ const PropertyListingDetailsScreen = () => {
       newErrors.subject = 'Subject cannot be empty';
       isValid = false;
     }
+    if (inquiryDetails.phone == undefined || inquiryDetails.phone.length < 10 == undefined) {
+      newErrors.subject = 'Phone number must be atleast 10 digits';
+      isValid = false;
+    }
     if (inquiryDetails.inquiry === '') {
       newErrors.inquiry = 'Message cannot be empty';
       isValid = false;
@@ -119,8 +126,9 @@ const PropertyListingDetailsScreen = () => {
       inquiryForm.append('user_id', userID);
       inquiryForm.append('property_id', propertyID);
       inquiryForm.append('inquiry', inquiryDetails.inquiry)
+      inquiryForm.append('phone', inquiryDetails.phone)
       inquiryForm.append('subject', inquiryDetails.subject)
-      // console.log('inquiryForm', inquiryForm)
+
       try {
         setIsLoading(true)
         const response = await axios.post(`${BASE_URL}/addInquiry`, inquiryForm, {
@@ -211,8 +219,23 @@ const PropertyListingDetailsScreen = () => {
   };
 
   return (
-    <>
-      <WebView source={{ uri: propertyDetails?.video_url }} />
+    <KeyboardAwareScrollView
+      style={{ flex: 1 }}
+      contentContainerStyle={{ flexGrow: 1 }}
+      keyboardShouldPersistTaps="handled"
+    >
+      <View style={styles.webViewContainer}>
+        <WebView
+          source={{ uri: propertyDetails?.video_url }}
+          onLoadStart={() => setIsWebViewLoading(true)}
+          onLoadEnd={() => setIsWebViewLoading(false)}
+        />
+        {isWebViewLoading && (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={COLORS.primary} />
+          </View>
+        )}
+      </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={styles.container}
@@ -239,7 +262,7 @@ const PropertyListingDetailsScreen = () => {
           <View style={styles.separator} />
 
           <View style={styles.facilityContainer}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10,}}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, }}>
               <Text style={styles.propertyContactName}>Facility</Text>
               <Image source={IMAGES.facility} style={{ height: 25, width: 25 }} />
             </View>
@@ -378,6 +401,19 @@ const PropertyListingDetailsScreen = () => {
                   />
                   {error.subject && <Text style={styles.errorText}>{error.subject}</Text>}
                 </View>
+
+                <View style={styles.inputContainer}>
+                  <Text style={styles.inputLabel}>Mobile number:</Text>
+                  <TextInput
+                    style={styles.subjectMessage}
+                    placeholderTextColor={COLORS.lightTextColor}
+                    placeholder='Add Number'
+                    onChangeText={text => handleChange('phone', text)}
+                    value={inquiryDetails.phone}
+                    keyboardType='numeric'
+                  />
+                  {error.subject && <Text style={styles.errorText}>{error.subject}</Text>}
+                </View>
                 <View style={styles.inputContainer}>
                   <Text style={styles.inputLabel}>Message:</Text>
                   <TextInput
@@ -404,7 +440,7 @@ const PropertyListingDetailsScreen = () => {
         </View>
       </Modal>
 
-    </>
+    </KeyboardAwareScrollView>
   );
 };
 
@@ -753,6 +789,22 @@ const styles = StyleSheet.create({
   floorPlanContainer: {
 
   },
+  webViewContainer: {
+    height: 300, // Adjust this height as needed
+    width: '100%',
+    position: 'relative',
+  },
+  loadingContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+  },
+
 });
 
 export default PropertyListingDetailsScreen;

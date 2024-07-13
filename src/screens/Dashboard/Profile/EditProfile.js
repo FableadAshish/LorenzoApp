@@ -24,6 +24,7 @@ import { fetchUserProfile } from '../../../redux/slice/profileSlice';
 const EditProfileScreen = () => {
   const navigation = useNavigation();
   const [imagePath, setImagePath] = useState('');
+  const [error, setErrors] = useState({});
   const userProfile = useSelector(state => state.auth.loginData)
   const dispatch = useDispatch();
   let userProfileData = useSelector((state) => state.profile.userProfileData.user);
@@ -32,9 +33,9 @@ const EditProfileScreen = () => {
   const [nameValue, setNameValue] = useState('');
   const [emailValue, setEmailValue] = useState('');
   const [profileData, setProfileData] = useState({
-    name: userProfile.username,
-    email: userProfile.email,
-    number: '+91-1234567890',
+    name: userProfileData ? userProfileData.username : userProfile.email,
+    email: userProfileData ? userProfileData.email : userProfile.email,
+    number: userProfileData ? userProfileData.details.phone : '+91-1234567890',
   });
 
   useEffect(() => {
@@ -66,34 +67,72 @@ const EditProfileScreen = () => {
 
   const handleChange = (name, value) => {
     setProfileData(prevValue => ({ ...prevValue, [name]: value }));
+    setErrors(prevErrors => ({ ...prevErrors, [name]: '' }));
+
+  };
+
+  const isValidate = () => {
+    let isValid = true;
+    const errors = {};
+
+    if (!profileData.name.trim()) {
+      errors.name = 'Name is required';
+      isValid = false;
+    }
+
+    if (!profileData.email.trim()) {
+      errors.email = 'Email is required';
+      isValid = false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profileData.email)) {
+      errors.email = 'Invalid email address';
+      isValid = false;
+    }
+
+    if (!profileData.number.trim()) {
+      errors.number = 'Phone number is required';
+      isValid = false;
+    } else if (!/^\+?\d{1,15}$/.test(profileData.number)) {
+      errors.number = 'Invalid phone number';
+      isValid = false;
+    }
+
+    setErrors(errors);
+    return isValid;
   };
 
   const updateProfile = async (profileData) => {
-    const formData = new FormData();
-    formData.append('username', profileData.name);
-    formData.append('email', profileData.email);
-    formData.append('phone', profileData.phone)
-    formData.append('profile', {
-      uri: imagePath,
-      type: 'image/jpeg',
-      name: 'profile_image.jpg',
-    });
-    // console.log(formData);
-    setLoading(true);
-    try {
-      const response = await fetch(`${BASE_URL}/updateUsers/${userProfile.id}`, {
-        method: 'POST',
-        headers: {
-          'Authorization': TOKEN,
-          'Content-Type': 'multipart/form-data'
-        },
-        body: formData
-      })
-      console.log('response', response)
-      setLoading(false);
-    } catch (error) {
-      console.log('error', error);
-      setLoading(false);
+    if (isValidate()) {
+      const formData = new FormData();
+      formData.append('username', profileData.name);
+      formData.append('email', profileData.email);
+      formData.append('phone', profileData.number)
+      if (imagePath) {
+        formData.append('profile', {
+          uri: imagePath,
+          type: 'image/jpeg',
+          name: 'profile_image.jpg',
+        });
+      }
+      
+      // console.log(formData);
+      try {
+        setLoading(true);
+        const response = await fetch(`${BASE_URL}/updateUsers/${userProfile.id}`, {
+          method: 'POST',
+          headers: {
+            Authorization: TOKEN,
+          },
+          body: formData
+        })
+        console.log('response', response)
+        const result = await response.json();
+        console.log('Update successful:', result);
+        navigation.goBack();
+        setLoading(false);
+      } catch (error) {
+        console.log('error', error);
+        setLoading(false);
+      }
     }
   };
 
@@ -126,33 +165,33 @@ const EditProfileScreen = () => {
             titleText={profileData.name}
             onChangeText={(text) => handleChange('name', text)}
             defaultValue={profileData.name}
+            error={error.name}
           />
           <EditProfileComp
             title={'Email'}
             titleText={profileData.email}
             onChangeText={(text) => handleChange('email', text)}
+            error={error.email}
           />
-          {/* <EditProfileComp
-          title={'Password'}
-          titleText={profileData.password}
-          onChangeText={(text) => handleChange('password', text)}
-        /> */}
           <EditProfileComp
             title={'Number'}
             titleText={profileData.number}
             onChangeText={(text) => handleChange('number', text)}
+            error={error.number}
           />
         </View>
         <View style={styles.separator} />
-        <View style={styles.forgotPasswordContainer}>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          style={styles.forgotPasswordContainer}
+          onPress={() => navigation.navigate(ROUTES.CREATE_NEW_PASSWORD)}>
           <View style={styles.leftContainer}>
             <View style={styles.imageContainer}>
               <Image source={IMAGES.resetPassword} style={styles.resetPassword} />
             </View>
             <Text style={{ color: COLORS.black, fontSize: 18 }}>Change Password</Text>
           </View>
-          <TouchableOpacity
-            onPress={() => navigation.navigate(ROUTES.CREATE_NEW_PASSWORD)}>
+          <TouchableOpacity>
             <Image
               source={IMAGES.rightArrow}
               resizeMode="contain"
@@ -160,7 +199,7 @@ const EditProfileScreen = () => {
               tintColor={COLORS.black}
             />
           </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
       </View>
       <View style={{ backgroundColor: COLORS.white, paddingHorizontal: 20 }}>
         <Button title={loading ? <ActivityIndicator size={20} color={COLORS.white} /> : 'Submit'} style={styles.last} performAction={() => updateProfile(profileData)} />
@@ -244,7 +283,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 20
   },
-  imageContainer:{
+  imageContainer: {
     backgroundColor: '#f5bd7f',
     height: 45,
     width: 45,

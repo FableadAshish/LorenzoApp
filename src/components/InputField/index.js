@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: 'red',
-    fontSize: 12,
+    fontSize: 14,
     marginTop: 10,
     marginLeft: 10,
     // textAlign: 'center'

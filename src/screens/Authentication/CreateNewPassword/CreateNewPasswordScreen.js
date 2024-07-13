@@ -9,6 +9,7 @@ import axios from 'axios';
 import { BASE_URL, TOKEN } from '../../../config';
 import { useSelector } from 'react-redux';
 import Toast from 'react-native-simple-toast';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const CreateNewPasswordScreen = () => {
   const navigation = useNavigation();
@@ -48,7 +49,7 @@ const CreateNewPasswordScreen = () => {
     if (!passwordData.new_password) {
       newErrors.new_password = 'New password is required';
       isValid = false;
-    } else if (passwordData.new_password.length < 8) {
+    } else if (passwordData.new_password.length <= 8) {
       newErrors.new_password = 'Password must be at least 8 characters long';
       isValid = false;
     }
@@ -95,7 +96,11 @@ const CreateNewPasswordScreen = () => {
   };
 
   return (
-    <>
+    <KeyboardAwareScrollView
+      style={{ flex: 1 }}
+      contentContainerStyle={{ flexGrow: 1 }}
+      keyboardShouldPersistTaps="handled"
+    >
       <View style={styles.container}>
         <Header iconName={'chevron-small-left'} openDrawer={() => navigation.goBack()} />
         <View style={styles.titleContainer}>
@@ -111,7 +116,7 @@ const CreateNewPasswordScreen = () => {
             placeholderImage={IMAGES.lock}
             secureTextEntry={!showPassword.old_password}
             getText={text => handleChange('old_password', text)}
-            rightIcon={showPassword.old_password ? IMAGES.hide : IMAGES.visible}
+            rightIcon={showPassword.old_password ? IMAGES.visible : IMAGES.hide}
             showHide={() => togglePasswordVisibility('old_password')}
             errorMessage={errors.old_password}
           />
@@ -121,7 +126,7 @@ const CreateNewPasswordScreen = () => {
             placeholderImage={IMAGES.lock}
             secureTextEntry={!showPassword.new_password}
             getText={text => handleChange('new_password', text)}
-            rightIcon={showPassword.new_password ? IMAGES.hide : IMAGES.visible}
+            rightIcon={showPassword.new_password ? IMAGES.visible : IMAGES.hide}
             showHide={() => togglePasswordVisibility('new_password')}
             errorMessage={errors.new_password}
           />
@@ -131,13 +136,12 @@ const CreateNewPasswordScreen = () => {
             placeholderImage={IMAGES.lock}
             secureTextEntry={!showPassword.confirm_password}
             getText={text => handleChange('confirm_password', text)}
-            rightIcon={showPassword.confirm_password ? IMAGES.hide : IMAGES.visible}
+            rightIcon={showPassword.confirm_password ? IMAGES.visible : IMAGES.hide}
             showHide={() => togglePasswordVisibility('confirm_password')}
             errorMessage={errors.confirm_password}
           />
         </View>
         <Text style={styles.error}>{errorMessage}</Text>
-      </View>
       <View style={styles.buttonContainer}>
         <Button
           title={ loading ? <ActivityIndicator color={COLORS.white}  size={20} /> : 'Change Password'}
@@ -145,7 +149,8 @@ const CreateNewPasswordScreen = () => {
           performAction={changePassword}
         />
       </View>
-    </>
+      </View>
+    </KeyboardAwareScrollView>
   );
 };
 
@@ -175,8 +180,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     backgroundColor: COLORS.white,
-    paddingHorizontal: COMMOM.paddingHorizantal,
-    paddingBottom: COMMOM.paddingHorizantal,
+    marginTop: -20
   },
   fieldsContainer: {
     marginTop: 30,

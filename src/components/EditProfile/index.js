@@ -13,7 +13,7 @@ import EditModal from '../EditModal';
 import InputField from '../InputField';
 import Button from '../Button';
 
-const EditProfileComp = ({ title, titleText, onChangeText, defaultValue }) => {
+const EditProfileComp = ({ title, titleText, onChangeText, error }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [inputValue, setInputValue] = useState(titleText);
 
@@ -26,8 +26,9 @@ const EditProfileComp = ({ title, titleText, onChangeText, defaultValue }) => {
     <>
       <View style={styles.container}>
         <View>
-          <Text style={styles.nameTextTitle}>{title}</Text>
+        <Text style={styles.nameTextTitle}>{title}</Text>
           <Text style={styles.nameText}>{titleText}</Text>
+          {error && <Text style={styles.errorText}>{error}</Text>}
         </View>
         <TouchableOpacity
           activeOpacity={0.8}
@@ -74,42 +75,6 @@ const EditProfileComp = ({ title, titleText, onChangeText, defaultValue }) => {
                   }
                 />
               )}
-              {/* {title === 'Password' && (
-                <EditModal
-                  title={'Change Password'}
-                  closeModal={() => setModalVisible(false)}
-                  inputField={
-                    <>
-                      <InputField
-                        title={'Old Password'}
-                        placeholderText={'Enter current password'}
-                        placeholderImage={IMAGES.lock}
-                        secureTextEntry={true}
-                      />
-                      <InputField
-                        title={'New Password'}
-                        placeholderText={'Enter new password'}
-                        placeholderImage={IMAGES.lock}
-                        secureTextEntry={true}
-                      />
-                      <InputField
-                        title={'Confirm New Password'}
-                        placeholderText={'Confirm new password'}
-                        placeholderImage={IMAGES.lock}
-                        secureTextEntry={true}
-                      />
-                    </>
-                  }
-                  button={
-                    <Button
-                      title={'Save'}
-                      innerStyle={styles.buttonStyle}
-                      performAction={handleSave}
-                    />
-                  }
-                  forgetPassword={'Forgot Password'}
-                />
-              )} */}
               {title === 'Number' && (
                 <EditModal
                   title={'Change Phone Number'}
@@ -180,4 +145,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 55,
   },
+  errorText: {
+    color: COLORS.red,
+    fontSize: 12,
+    marginTop: 5,
+  },
+
 });

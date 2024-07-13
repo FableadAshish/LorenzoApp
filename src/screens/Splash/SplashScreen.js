@@ -8,7 +8,7 @@ const SplashScreen = () => {
   const navigation = useNavigation();
   useEffect(() => {
     setTimeout(() => {
-      navigation.navigate(ROUTES.SIGNUP);
+      navigation.navigate(ROUTES.LOGIN);
     }, 2000);
   }, []);
   return (

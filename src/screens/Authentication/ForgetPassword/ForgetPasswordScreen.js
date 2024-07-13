@@ -26,11 +26,8 @@ const ForgetPasswordScreen = () => {
   }, [userProfile]);
 
   const forgetPasswordButton = async (email) => {
-    // const data = { email };
-    console.log(email)
     const formData = new FormData();
     formData.append('email', email);
-    // console.log(formData);
     setLoading(true);
     try {
       const response = await axios.post(`${BASE_URL}/forgotPassword`, formData, {
@@ -39,8 +36,6 @@ const ForgetPasswordScreen = () => {
           'Content-Type': 'multipart/form-data'
         }
       });
-      // console.log(response.data);
-      // console.log('Email Success')
       setLoading(false);
       setEmailSend('A new password has been shared with your email address')
       navigation.navigate(navigation.goBack());

@@ -26,15 +26,14 @@ const LoginScreen = () => {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
-
   const navigateToSignUp = () => {
     navigation.navigate(ROUTES.SIGNUP);
   };
 
   const validation = (email, password) => {
     let isValid = true;
-
     // Email validation
     if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)) {
       setEmailError('Please enter a valid Email address');
@@ -42,16 +41,18 @@ const LoginScreen = () => {
     } else {
       setEmailError('');
     }
-
     // Password validation
-    if (password.length < 6) {
-      setPasswordError('Password must be at least 6 characters');
+    if (password.length <= 8) {
+      setPasswordError('Password must be at least 8 characters');
       isValid = false;
     } else {
       setPasswordError('');
     }
-
     return isValid;
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   const LogIn = async (data) => {
@@ -79,7 +80,7 @@ const LoginScreen = () => {
         } else if (response.data.message === 'Login unsuccessful') {
           setAlreadyLoggedIn('You have entered wrong email or password');
           setLoading(false)
-        }else if(response.data.message === 'Invalid email or password'){
+        } else if (response.data.message === 'Invalid email or password') {
           setAlreadyLoggedIn('You have entered wrong email or password');
           setLoading(false)
         }
@@ -128,6 +129,9 @@ const LoginScreen = () => {
               title={'Password'}
               placeholderImage={IMAGES.lock}
               getText={text => handleChange('password', text)}
+              secureTextEntry={!showPassword}
+              rightIcon={showPassword ? IMAGES.visible : IMAGES.hide}
+              showHide={togglePasswordVisibility}
             />
             {passwordError ? <Text style={styles.errorTexts}>{passwordError}</Text> : null}
           </View>
@@ -156,7 +160,7 @@ const LoginScreen = () => {
             resizeMode="stretch">
             <View style={styles.buttonContainer}>
               <Button
-                title={loading ? <ActivityIndicator size={20} color={'black'}/> : 'Sign In'}
+                title={loading ? <ActivityIndicator size={20} color={'black'} /> : 'Sign In'}
                 performAction={() => LogIn(formData)}
                 innerStyle={styles.buttonStyles}
                 styleText={styles.buttonText}
@@ -275,7 +279,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: FONTS.poppinsRegular
   },
-  errorTexts:{
+  errorTexts: {
     color: 'red',
     fontSize: 14,
     backgroundColor: 'white',

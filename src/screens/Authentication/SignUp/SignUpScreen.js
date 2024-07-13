@@ -30,6 +30,8 @@ const SignUpScreen = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigateToLogIn = () => {
     navigation.navigate(ROUTES.LOGIN);
   };
@@ -63,8 +65,8 @@ const SignUpScreen = () => {
       isValid = false;
     }
 
-    if (password.length < 6) {
-      setPasswordErrorMessage('Password must be at least 6 characters');
+    if (password.length <= 8) {
+      setPasswordErrorMessage('Password must be at least 8 characters');
       isValid = false;
     }
 
@@ -76,6 +78,13 @@ const SignUpScreen = () => {
     return isValid;
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
   const registerUser = async (data) => {
     const isValid = validation(data.fullName, data.email, data.password, data.confirm_password);
     if (isValid) {
@@ -141,7 +150,7 @@ const SignUpScreen = () => {
             value={email}
             errorMessage={emailErrorMessage}
           />
-          <InputField
+          {/* <InputField
             title={'Password'}
             placeholderText={'Enter Password'}
             placeholderImage={IMAGES.lock}
@@ -158,9 +167,31 @@ const SignUpScreen = () => {
             value={confirm_password}
             secureTextEntry={true}
             errorMessage={confirm_passwordErrorMessage}
+          /> */}
+          <InputField
+            title={'Password'}
+            placeholderText={'Enter Password'}
+            placeholderImage={IMAGES.lock}
+            getText={text => setPassword(text)}
+            value={password}
+            secureTextEntry={!showPassword}
+            errorMessage={passwordErrorMessage}
+            rightIcon={showPassword ? IMAGES.visible : IMAGES.hide}
+            showHide={togglePasswordVisibility}
+          />
+          <InputField
+            title={'Confirm Password'}
+            placeholderText={'Confirm Password'}
+            placeholderImage={IMAGES.lock}
+            getText={text => setConfirmPassword(text)}
+            value={confirm_password}
+            secureTextEntry={!showConfirmPassword}
+            errorMessage={confirm_passwordErrorMessage}
+            rightIcon={showConfirmPassword ? IMAGES.visible : IMAGES.hide}
+            showHide={toggleConfirmPasswordVisibility}
           />
         </View>
-      {error && <Text style={styles.errorText}>{error}</Text>}
+        {error && <Text style={styles.errorText}>{error}</Text>}
       </View>
 
       <View style={{ backgroundColor: 'white' }}>
@@ -292,15 +323,15 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.poppinsRegular,
   },
   errorText: {
-  color: 'red',
-  fontSize: 14,
-  // marginTop: 5,
-  paddingHorizontal: COMMOM.paddingHorizantal,
-  backgroundColor: 'white',
-  paddingTop: 15,
-  textAlign: 'center',
-  fontFamily: FONTS.poppinsRegular
-}
+    color: 'red',
+    fontSize: 14,
+    // marginTop: 5,
+    paddingHorizontal: COMMOM.paddingHorizantal,
+    backgroundColor: 'white',
+    paddingTop: 15,
+    textAlign: 'center',
+    fontFamily: FONTS.poppinsRegular
+  }
 });
 
 export default SignUpScreen;

@@ -8,11 +8,11 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import {createDrawerNavigator} from '@react-navigation/drawer';
-import {ROUTES} from '../constants/routes';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { ROUTES } from '../constants/routes';
 import BottomTab from './BottomTab';
 import ChatScreen from '../screens/Dashboard/Chat/ChatScreen';
-import {COLORS, COMMOM, IMAGES} from '../constants';
+import { COLORS, COMMOM, IMAGES } from '../constants';
 import {
   useNavigation,
   getFocusedRouteNameFromRoute,
@@ -22,7 +22,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../redux/slice/authSlice';
 import HomeScreen from '../screens/Dashboard/Home/HomeScreen';
 import ProfileScreen from '../screens/Dashboard/Profile/ProfileScreen';
-import PropertyListingScreen from '../screens/PropertyListing/PropertyListingScreen';
 
 const SideMenuList = [
   {
@@ -71,8 +70,9 @@ const SideMenuList = [
 ];
 
 const CustomDrawerContent = props => {
+  let userProfileData = useSelector((state) => state.profile.userProfileData);
   const navigation = useNavigation();
-const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const userProfile = useSelector(state => state.auth.loginData)
   const Logout = () => {
     dispatch(logout());
@@ -84,14 +84,12 @@ const dispatch = useDispatch();
       <View>
         <View style={styles.profileContainer}>
           <Image
-            source={{
-              uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMOrymTDNXsz8-GyS-KfKuJzZ7R5_JWbTzOPsxNM-yyA&s',
-            }}
+            source={userProfileData && userProfileData.user.profile ? { uri: userProfileData.user.profile } : IMAGES.ProfilePicture}
             style={styles.homeProfileImage}
           />
           <View style={styles.profileLeftContainer}>
-            <Text style={styles.title}>{userProfile?.username}</Text>
-            <Text style={styles.subTitle}>{userProfile?.email}</Text>
+            <Text style={styles.title}>{ userProfileData ? userProfileData.user.username : userProfile?.username}</Text>
+            <Text style={styles.subTitle}>{userProfileData ? userProfileData.user.email : userProfile?.email}</Text>
           </View>
         </View>
         <View style={styles.listContainer}>
@@ -99,10 +97,10 @@ const dispatch = useDispatch();
             bounces={false}
             data={SideMenuList}
             keyExtractor={item => item.id}
-            renderItem={({item}) => {
+            renderItem={({ item }) => {
               const currentRouteName = getFocusedRouteNameFromRoute(
                 navigation.getState().routes[
-                  navigation.getState().routes.length - 1
+                navigation.getState().routes.length - 1
                 ],
               );
               const isActiveScreen = currentRouteName === item.route;
@@ -130,7 +128,7 @@ const dispatch = useDispatch();
                         style={[
                           styles.imageContainer,
                           !isActiveScreen
-                            ? {backgroundColor: item.iconColor}
+                            ? { backgroundColor: item.iconColor }
                             : '',
                         ]}>
                         <Image
@@ -146,12 +144,12 @@ const dispatch = useDispatch();
                       <Text
                         style={[
                           styles.listTxtStyle,
-                          isActiveScreen && {color: COLORS.white},
+                          isActiveScreen && { color: COLORS.white },
                         ]}>
                         {item.option}
                       </Text>
                     </View>
-                    <View style={{marginLeft: -20}}>
+                    <View style={{ marginLeft: -20 }}>
                       {/* <Icon
                         name="chevron-thin-right"
                         size={18}
@@ -296,7 +294,7 @@ export const DrawerNavigation = () => {
       drawerContent={props => <CustomDrawerContent {...props} />}
       screenOptions={{
         headerShown: false,
-        drawerStyle: {width: '80%'},
+        drawerStyle: { width: '80%' },
         // drawerStatusBarAnimation: COLORS.placeholderColor,
       }}>
       <Drawer.Screen name={ROUTES.HOME} component={HomeScreen} />
