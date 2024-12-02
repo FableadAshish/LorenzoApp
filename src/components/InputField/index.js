@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     flexDirection: 'row',
     alignItems: 'center',
+    marginTop: 10
     // position: 'relative', // Required for absolute positioning of rightIcon
   },
   fieldContainer: {

@@ -1,49 +1,48 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   SafeAreaView,
   FlatList,
   Image,
   TouchableOpacity,
 } from 'react-native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import { ROUTES } from '../constants/routes';
-import BottomTab from './BottomTab';
-import ChatScreen from '../screens/Dashboard/Chat/ChatScreen';
-import { COLORS, COMMOM, IMAGES } from '../constants';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import {ROUTES} from '../constants/routes';
+import {COLORS, IMAGES} from '../constants';
 import {
   useNavigation,
   getFocusedRouteNameFromRoute,
 } from '@react-navigation/native';
 import Button from '../components/Button';
-import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../redux/slice/authSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {logout} from '../redux/slice/authSlice';
 import HomeScreen from '../screens/Dashboard/Home/HomeScreen';
 import ProfileScreen from '../screens/Dashboard/Profile/ProfileScreen';
+import {styles} from './Styles/DrawerNavigationStyles';
+import {getAllProperties} from '../redux/slice/propertySlice';
 
 const SideMenuList = [
   {
     id: 0,
-    option: 'Home',
+    option: 'Destinations',
     icon: IMAGES.HomeIcon,
-    route: ROUTES.HOME,
-    iconColor: '#7888F1',
+    route: ROUTES.PROPERTY_LISTING,
+    iconColor: COLORS.logoBackGroundColor,
   },
   {
     id: 2,
-    option: 'Profile',
+    option: 'My Profile',
     icon: IMAGES.userPlaceholder,
     route: ROUTES.EDIT_PROFILE,
-    iconColor: '#A18FF4',
+    iconColor: COLORS.logoBackGroundColor2,
   },
   {
     id: 3,
-    option: 'Legal & Policies',
+    option: 'User Agreement',
     icon: IMAGES.shield,
     route: ROUTES.CHAT,
-    iconColor: '#f5bd7f',
+    iconColor: '#c1b8d0',
   },
   {
     id: 3,
@@ -51,45 +50,33 @@ const SideMenuList = [
     icon: IMAGES.Help,
     route: ROUTES.CHAT,
     iconColor: '#5991eb',
-    tintColor: COLORS.white
+    tintColor: COLORS.white,
   },
-  // {
-  //   id: 4,
-  //   option: 'Location',
-  //   icon: IMAGES.chatPlain,
-  //   route: ROUTES.CHAT,
-  //   iconColor: '#FA93C5',
-  // },
-  // {
-  //   id: 5,
-  //   option: 'User',
-  //   icon: IMAGES.userPlaceholder,
-  //   route: ROUTES.CHAT,
-  //   iconColor: '#5BCFEE',
-  // },
 ];
 
 const CustomDrawerContent = props => {
-  let userProfileData = useSelector((state) => state.profile.userProfileData);
+  let userProfileData = useSelector(state => state.profile.userProfileData);
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const userProfile = useSelector(state => state.auth.loginData)
+  const getAll = useSelector(state => state.property.propertyList);
+
+  const userProfile = useSelector(state => state.auth.loginData);
   const Logout = () => {
     dispatch(logout());
-    navigation.navigate(ROUTES.HOME)
-  }
+    navigation.navigate(ROUTES.HOME);
+  };
   // console.log('userProfile', userProfile)
   return (
     <SafeAreaView style={styles.container}>
       <View>
         <View style={styles.profileContainer}>
-          <Image
-            source={userProfileData && userProfileData.user.profile ? { uri: userProfileData.user.profile } : IMAGES.ProfilePicture}
-            style={styles.homeProfileImage}
-          />
+          <Image source={IMAGES.APP_ICON} style={styles.homeProfileImage} />
           <View style={styles.profileLeftContainer}>
-            <Text style={styles.title}>{ userProfileData ? userProfileData.user.username : userProfile?.username}</Text>
-            <Text style={styles.subTitle}>{userProfileData ? userProfileData.user.email : userProfile?.email}</Text>
+            <Text style={styles.title}>
+              {userProfileData
+                ? userProfileData.user.username
+                : userProfile?.username}
+            </Text>
           </View>
         </View>
         <View style={styles.listContainer}>
@@ -97,10 +84,10 @@ const CustomDrawerContent = props => {
             bounces={false}
             data={SideMenuList}
             keyExtractor={item => item.id}
-            renderItem={({ item }) => {
+            renderItem={({item}) => {
               const currentRouteName = getFocusedRouteNameFromRoute(
                 navigation.getState().routes[
-                navigation.getState().routes.length - 1
+                  navigation.getState().routes.length - 1
                 ],
               );
               const isActiveScreen = currentRouteName === item.route;
@@ -122,13 +109,17 @@ const CustomDrawerContent = props => {
                         borderRadius: 15,
                       },
                     ]}
-                    onPress={() => navigation.navigate(item.route)}>
+                    onPress={() =>
+                      navigation.navigate(item.route, {
+                        locationListing: getAll,
+                      })
+                    }>
                     <View style={styles.drawerList}>
                       <View
                         style={[
                           styles.imageContainer,
                           !isActiveScreen
-                            ? { backgroundColor: item.iconColor }
+                            ? {backgroundColor: item.iconColor}
                             : '',
                         ]}>
                         <Image
@@ -144,12 +135,12 @@ const CustomDrawerContent = props => {
                       <Text
                         style={[
                           styles.listTxtStyle,
-                          isActiveScreen && { color: COLORS.white },
+                          isActiveScreen && {color: COLORS.white},
                         ]}>
                         {item.option}
                       </Text>
                     </View>
-                    <View style={{ marginLeft: -20 }}>
+                    <View style={{marginLeft: -20}}>
                       {/* <Icon
                         name="chevron-thin-right"
                         size={18}
@@ -158,7 +149,7 @@ const CustomDrawerContent = props => {
                       <Image
                         source={IMAGES.rightArrow}
                         style={styles.rightIcon}
-                        tintColor={COLORS.black}
+                        tintColor={COLORS.appColor}
                       />
                     </View>
                   </TouchableOpacity>
@@ -180,112 +171,6 @@ const CustomDrawerContent = props => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'space-between',
-  },
-  drawerHeader: {
-    paddingVertical: 20,
-    paddingHorizontal: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  drawerHeaderText: {
-    marginLeft: 16,
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  listContainer: {
-    marginTop: 15,
-  },
-  listView: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '90%',
-    gap: 10,
-    marginTop: 10,
-    paddingVertical: 5,
-    borderRadius: 8,
-    height: 60,
-  },
-  listImgStyle: {
-    height: 22,
-    width: 22,
-  },
-  listTxtStyle: {
-    fontSize: 16,
-    fontWeight: '400',
-    color: COLORS.black,
-    marginLeft: -2,
-    letterSpacing: 0.6,
-  },
-  homeProfileImage: {
-    height: 80,
-    width: 80,
-    borderRadius: 50,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: '400',
-    color: COLORS.mediumTextColor,
-    marginLeft: 10,
-    letterSpacing: 0.6,
-    marginTop: 20,
-  },
-  subTitle: {
-    fontSize: 18,
-    fontWeight: '400',
-    color: COLORS.lightTextColor,
-    marginLeft: 10,
-    letterSpacing: 0.6,
-  },
-  profileContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 10,
-    borderBottomWidth: 0.5,
-    borderBottomColor: 'grey',
-    padding: 20,
-    width: '100%',
-  },
-  profileLeftContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  drawerButton: {
-    paddingHorizontal: COMMOM.paddingHorizantal,
-    paddingBottom: COMMOM.paddingHorizantal,
-  },
-  drawerButtonInnerStyle: {
-    borderRadius: 50,
-    backgroundColor: COLORS.lightPrimaryColor,
-    height: 50,
-  },
-  imageContainer: {
-    height: 40,
-    width: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginLeft: 10,
-    borderRadius: 10,
-  },
-  rightIcon: {
-    height: 16,
-    width: 16,
-    tintColor: COLORS.black,
-    resizeMode: 'contain',
-  },
-  drawerList: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '90%',
-    gap: 10,
-    paddingVertical: 8,
-    borderRadius: 8,
-  },
-});
-
 export const DrawerNavigation = () => {
   const Drawer = createDrawerNavigator();
 
@@ -294,7 +179,7 @@ export const DrawerNavigation = () => {
       drawerContent={props => <CustomDrawerContent {...props} />}
       screenOptions={{
         headerShown: false,
-        drawerStyle: { width: '80%' },
+        drawerStyle: {width: '80%'},
         // drawerStatusBarAnimation: COLORS.placeholderColor,
       }}>
       <Drawer.Screen name={ROUTES.HOME} component={HomeScreen} />

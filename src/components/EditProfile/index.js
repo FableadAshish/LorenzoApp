@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   Text,
   View,
@@ -6,14 +6,13 @@ import {
   Image,
   TouchableOpacity,
   Modal,
-  StatusBar,
 } from 'react-native';
-import { COLORS, IMAGES } from '../../constants';
+import {COLORS, IMAGES} from '../../constants';
 import EditModal from '../EditModal';
 import InputField from '../InputField';
 import Button from '../Button';
 
-const EditProfileComp = ({ title, titleText, onChangeText, error }) => {
+const EditProfileComp = ({title, titleText, onChangeText, error}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [inputValue, setInputValue] = useState(titleText);
 
@@ -26,7 +25,7 @@ const EditProfileComp = ({ title, titleText, onChangeText, error }) => {
     <>
       <View style={styles.container}>
         <View>
-        <Text style={styles.nameTextTitle}>{title}</Text>
+          <Text style={styles.nameTextTitle}>{title}</Text>
           <Text style={styles.nameText}>{titleText}</Text>
           {error && <Text style={styles.errorText}>{error}</Text>}
         </View>
@@ -36,7 +35,7 @@ const EditProfileComp = ({ title, titleText, onChangeText, error }) => {
           <Image
             source={IMAGES.edit}
             style={styles.editImage}
-            tintColor={COLORS.mediumTextColor}
+            tintColor={COLORS.appColor}
           />
         </TouchableOpacity>
         <Modal transparent={true} visible={modalVisible} animationType="slide">
@@ -50,12 +49,16 @@ const EditProfileComp = ({ title, titleText, onChangeText, error }) => {
                     <InputField
                       placeholderText={'Enter New Name'}
                       placeholderImage={IMAGES.userPlaceholder}
-                      getText={(text) => setInputValue(text)}
+                      getText={text => setInputValue(text)}
                       // value={defaultValue}
                     />
                   }
                   button={
-                    <Button title={'Save'} innerStyle={styles.buttonStyle} performAction={handleSave} />
+                    <Button
+                      title={'Save'}
+                      innerStyle={styles.buttonStyle}
+                      performAction={handleSave}
+                    />
                   }
                 />
               )}
@@ -67,11 +70,15 @@ const EditProfileComp = ({ title, titleText, onChangeText, error }) => {
                     <InputField
                       placeholderText={'Enter New Email'}
                       placeholderImage={IMAGES.Message}
-                      getText={(text) => setInputValue(text)}
+                      getText={text => setInputValue(text)}
                     />
                   }
                   button={
-                    <Button title={'Save'} innerStyle={styles.buttonStyle} performAction={handleSave} />
+                    <Button
+                      title={'Save'}
+                      innerStyle={styles.buttonStyle}
+                      performAction={handleSave}
+                    />
                   }
                 />
               )}
@@ -84,11 +91,58 @@ const EditProfileComp = ({ title, titleText, onChangeText, error }) => {
                       title={'Phone Number'}
                       placeholderText={'Enter New Number'}
                       placeholderImage={IMAGES.shield}
-                      getText={(text) => setInputValue(text)}
+                      getText={text => setInputValue(text)}
                     />
                   }
                   button={
-                    <Button title={'Save'} innerStyle={styles.buttonStyle} performAction={handleSave} />
+                    <Button
+                      title={'Save'}
+                      innerStyle={styles.buttonStyle}
+                      performAction={handleSave}
+                    />
+                  }
+                />
+              )}
+              {title === 'Dream Location' && (
+                <EditModal
+                  title={'Enter Dream Location'}
+                  closeModal={() => setModalVisible(false)}
+                  inputField={
+                    <InputField
+                      title={'Location'}
+                      placeholderText={'Enter your location'}
+                      placeholderImage={IMAGES.shield}
+                      getText={text => setInputValue(text)}
+                    />
+                  }
+                  button={
+                    <Button
+                      title={'Save'}
+                      innerStyle={styles.buttonStyle}
+                      performAction={handleSave}
+                    />
+                  }
+                />
+              )}
+
+              {title === 'Require a Wedding Planner?' && (
+                <EditModal
+                  title={'Enter Dream Location'}
+                  closeModal={() => setModalVisible(false)}
+                  inputField={
+                    <InputField
+                      title={'Location'}
+                      placeholderText={'Enter your location'}
+                      placeholderImage={IMAGES.shield}
+                      getText={text => setInputValue(text)}
+                    />
+                  }
+                  button={
+                    <Button
+                      title={'Save'}
+                      innerStyle={styles.buttonStyle}
+                      performAction={handleSave}
+                    />
                   }
                 />
               )}
@@ -120,7 +174,7 @@ const styles = StyleSheet.create({
   },
   nameText: {
     fontSize: 20,
-    color: COLORS.black,
+    color: COLORS.appColor,
     fontWeight: '500',
     fontFamily: 'Poppins-Regular',
     marginTop: 10,
@@ -150,5 +204,4 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 5,
   },
-
 });

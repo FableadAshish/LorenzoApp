@@ -16,5 +16,7 @@ export default {
   lightGrey: "#cccccc",
   xLightGrey: "#e6e6e6",
   xxLightGrey: "#f2f2f2",
-
+  appColor: '#634871',
+  logoBackGroundColor: '#C4C8C3',
+  logoBackGroundColor2: '#d8c5c6'
 };

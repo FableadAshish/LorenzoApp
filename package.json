@@ -20,6 +20,8 @@
     "axios": "^1.7.2",
     "react": "18.2.0",
     "react-native": "0.74.1",
+    "react-native-extended-stylesheet": "^0.12.0",
+    "react-native-fast-image": "^8.6.3",
     "react-native-gesture-handler": "^2.17.1",
     "react-native-image-crop-picker": "^0.41.2",
     "react-native-image-viewing": "^0.2.2",

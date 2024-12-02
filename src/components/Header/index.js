@@ -17,7 +17,7 @@ export const Header = ({
       <View style={[styles.leftContainer, iconBackground]}>
         {iconName === 'chevron-small-left' ? (
           <TouchableOpacity
-            onPress={() => openDrawer()}
+            onPress={openDrawer}
             style={styles.leftIconStyles}>
             <Image source={IMAGES.leftArrow} style={styles.leftNavigation} />
           </TouchableOpacity>
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     // paddingLeft:-10
-    color: COLORS.black,
+    color: COLORS.appColor,
   },
   leftNavigation: {
     height: 25,

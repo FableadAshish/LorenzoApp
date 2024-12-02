@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 15,
-    backgroundColor: COLORS.lightBlueText,
+    backgroundColor: COLORS.appColor,
   },
   buttonText: {
     color: COLORS.white,
