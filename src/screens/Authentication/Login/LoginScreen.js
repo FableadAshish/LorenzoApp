@@ -42,7 +42,7 @@ const LoginScreen = () => {
       setEmailError('');
     }
     // Password validation
-    if (password.length <= 8) {
+    if (password.length < 8) {
       setPasswordError('Password must be at least 8 characters');
       isValid = false;
     } else {
