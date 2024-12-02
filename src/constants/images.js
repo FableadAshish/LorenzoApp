@@ -41,6 +41,7 @@ export default {
   facility: require('../../src/assets/Images/App/facility.png'),
   pound: require('../../src/assets/Images/App/pound.png'),
   Help: require('../../src/assets/Images/App/Help.png'),
+  APP_ICON: require('../../src/assets/Images/App/AppIcon.png'),
 
   // Bottom Tab
   CalendarIcon: require('../../src/assets/Images/BottomTab/CalendarIcon.png'),

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,16 +8,16 @@ import {
   ImageBackground,
   ActivityIndicator,
 } from 'react-native';
-import { COLORS, COMMOM, FONTS, IMAGES } from '../../../constants';
+import {COLORS, COMMOM, FONTS, IMAGES} from '../../../constants';
 import InputField from '../../../components/InputField';
 import Button from '../../../components/Button';
-import { ROUTES } from '../../../constants/routes';
-import { useNavigation } from '@react-navigation/native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useDispatch } from 'react-redux';
-import { loginData, userLogin } from '../../../redux/slice/authSlice';
+import {ROUTES} from '../../../constants/routes';
+import {useNavigation} from '@react-navigation/native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {useDispatch} from 'react-redux';
+import {loginData, userLogin} from '../../../redux/slice/authSlice';
 import axios from 'axios';
-import { BASE_URL, TOKEN } from '../../../config';
+import {BASE_URL, TOKEN} from '../../../config';
 
 const LoginScreen = () => {
   const navigation = useNavigation();
@@ -25,7 +25,7 @@ const LoginScreen = () => {
   const [alredyLoggedIn, setAlreadyLoggedIn] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
   const navigateToSignUp = () => {
@@ -35,7 +35,11 @@ const LoginScreen = () => {
   const validation = (email, password) => {
     let isValid = true;
     // Email validation
-    if (!/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)) {
+    if (
+      !/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+        email,
+      )
+    ) {
       setEmailError('Please enter a valid Email address');
       isValid = false;
     } else {
@@ -55,34 +59,34 @@ const LoginScreen = () => {
     setShowPassword(!showPassword);
   };
 
-  const LogIn = async (data) => {
+  const LogIn = async data => {
     if (validation(data.email, data.password)) {
       const loginForm = new FormData();
       loginForm.append('email', data.email);
       loginForm.append('password', data.password);
       try {
-        setLoading(true)
+        setLoading(true);
         const response = await axios.post(`${BASE_URL}/login`, loginForm, {
           headers: {
             Authorization: TOKEN,
-            'Content-Type': 'multipart/form-data'
-          }
+            'Content-Type': 'multipart/form-data',
+          },
         });
-        console.log(response.data)
+        console.log(response.data);
 
         if (response.data.message === 'Login successful') {
-          dispatch(loginData(response.data.user))
+          dispatch(loginData(response.data.user));
           navigation.navigate(ROUTES.HOME);
-          setLoading(false)
+          setLoading(false);
         } else if (response.data.message === 'User not registered') {
           setAlreadyLoggedIn('No such user found, please register');
-          setLoading(false)
+          setLoading(false);
         } else if (response.data.message === 'Login unsuccessful') {
           setAlreadyLoggedIn('You have entered wrong email or password');
-          setLoading(false)
+          setLoading(false);
         } else if (response.data.message === 'Invalid email or password') {
           setAlreadyLoggedIn('You have entered wrong email or password');
-          setLoading(false)
+          setLoading(false);
         }
       } catch (error) {
         console.log(error);
@@ -91,24 +95,18 @@ const LoginScreen = () => {
   };
 
   const handleChange = (name, value) => {
-    setFormData(prevValue => ({ ...prevValue, [name]: value }));
-  }
+    setFormData(prevValue => ({...prevValue, [name]: value}));
+  };
 
   return (
     <KeyboardAwareScrollView
-      style={{ flex: 1 }}
-      contentContainerStyle={{ flexGrow: 1 }}
-      keyboardShouldPersistTaps="handled"
-    >
+      style={{flex: 1}}
+      contentContainerStyle={{flexGrow: 1}}
+      keyboardShouldPersistTaps="handled">
       <View style={styles.container}>
-        <View style={{ paddingHorizontal: COMMOM.paddingHorizantal }}>
+        <View style={{paddingHorizontal: COMMOM.paddingHorizantal}}>
           <View style={styles.imageContainer}>
-            <ImageBackground
-              source={IMAGES.BackImage}
-              resizeMode="contain"
-              style={styles.vectorImage}>
-              <Image source={IMAGES.LogIn} style={styles.logInImage} />
-            </ImageBackground>
+            <Image source={IMAGES.APP_ICON} style={styles.logInImage} />
           </View>
           <View style={styles.headerContainer}>
             <Text style={styles.titleHeader}>Sign in now</Text>
@@ -123,7 +121,9 @@ const LoginScreen = () => {
               placeholderImage={IMAGES.Message}
               getText={text => handleChange('email', text)}
             />
-            {emailError ? <Text style={styles.errorTexts}>{emailError}</Text> : null}
+            {emailError ? (
+              <Text style={styles.errorTexts}>{emailError}</Text>
+            ) : null}
             <InputField
               placeholderText="Enter Password"
               title={'Password'}
@@ -133,7 +133,9 @@ const LoginScreen = () => {
               rightIcon={showPassword ? IMAGES.visible : IMAGES.hide}
               showHide={togglePasswordVisibility}
             />
-            {passwordError ? <Text style={styles.errorTexts}>{passwordError}</Text> : null}
+            {passwordError ? (
+              <Text style={styles.errorTexts}>{passwordError}</Text>
+            ) : null}
           </View>
           <TouchableOpacity
             activeOpacity={0.9}
@@ -141,26 +143,23 @@ const LoginScreen = () => {
             <Text style={styles.forgotPassword}>Forgot Password?</Text>
           </TouchableOpacity>
         </View>
-        {
-          alredyLoggedIn && (
-            <Text style={styles.errorText}>{alredyLoggedIn}</Text>
-          )
-        }
+        {alredyLoggedIn && (
+          <Text style={styles.errorText}>{alredyLoggedIn}</Text>
+        )}
         <View style={styles.backImageContainer}>
-          <View style={styles.authImageContainer}>
-            <Image
-              resizeMode="contain"
-              source={IMAGES.authImage}
-              style={styles.authImage}
-            />
-          </View>
           <ImageBackground
             source={IMAGES.AuthRectangle}
             style={styles.backImage}
             resizeMode="stretch">
             <View style={styles.buttonContainer}>
               <Button
-                title={loading ? <ActivityIndicator size={20} color={'black'} /> : 'Sign In'}
+                title={
+                  loading ? (
+                    <ActivityIndicator size={20} color={'black'} />
+                  ) : (
+                    'Sign In'
+                  )
+                }
                 performAction={() => LogIn(formData)}
                 innerStyle={styles.buttonStyles}
                 styleText={styles.buttonText}
@@ -188,6 +187,7 @@ const styles = StyleSheet.create({
   logInImage: {
     height: 165,
     width: 165,
+    borderRadius: 20,
   },
   imageContainer: {
     alignItems: 'center',
@@ -195,6 +195,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   fieldsContainer: {
+    marginTop: 10,
+  },
+  headerContainer: {
     marginTop: 10,
   },
   titleHeader: {
@@ -277,14 +280,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingTop: 15,
     textAlign: 'center',
-    fontFamily: FONTS.poppinsRegular
+    fontFamily: FONTS.poppinsRegular,
   },
   errorTexts: {
     color: 'red',
     fontSize: 14,
     backgroundColor: 'white',
     paddingTop: 10,
-  }
+  },
 });
 
 export default LoginScreen;

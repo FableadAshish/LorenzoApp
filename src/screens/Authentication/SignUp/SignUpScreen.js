@@ -131,7 +131,7 @@ const SignUpScreen = () => {
       <View style={styles.container}>
         <View style={{ marginTop: 20 }}>
           <Text style={styles.title}>Let's get Started</Text>
-          <Text style={styles.subTitle}>Create an Account for Lorenzo App</Text>
+          <Text style={styles.subTitle}>Create an Account for HubbbleVR App</Text>
         </View>
         <View style={styles.fieldsContainer}>
           <InputField
