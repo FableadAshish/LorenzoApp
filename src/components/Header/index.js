@@ -16,7 +16,9 @@ export const Header = ({
     <View style={[styles.container, style]}>
       <View style={[styles.leftContainer, iconBackground]}>
         {iconName === 'chevron-small-left' ? (
-          <TouchableOpacity onPress={() => openDrawer()}>
+          <TouchableOpacity
+            onPress={() => openDrawer()}
+            style={styles.leftIconStyles}>
             <Image source={IMAGES.leftArrow} style={styles.leftNavigation} />
           </TouchableOpacity>
         ) : (
@@ -25,17 +27,23 @@ export const Header = ({
           </TouchableOpacity>
         )}
       </View>
-      <View style={title === 'Lorenzo@Support' ? styles.chat : styles.center}>
-        {
-          title === 'Lorenzo@Support'? (
-            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent:'center'}}>
-            <Image source={IMAGES.LorenzoIcon} style={{height: 30, width: 30}}/>
+      <View style={title === 'HubbbleVR@Support' ? styles.chat : styles.center}>
+        {title === 'HubbbleVR@Support' ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Image
+              source={IMAGES.LorenzoIcon}
+              style={{height: 30, width: 30}}
+            />
             <Text style={styles.titleChatText}>{title}</Text>
-            </View>
-          ) : (
-            <Text style={styles.titleText}>{title}</Text>
-          )
-        }
+          </View>
+        ) : (
+          <Text style={styles.titleText}>{title}</Text>
+        )}
       </View>
 
       <View style={[styles.rightContainer, rightIconBackground]}>
@@ -90,7 +98,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     // paddingLeft:-10
-    color: COLORS.black
+    color: COLORS.black,
   },
   leftNavigation: {
     height: 25,
@@ -103,6 +111,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginLeft: 10,
-    color: COLORS.black
+    color: COLORS.black,
+  },
+  leftIconStyles: {
+    height: 30,
+    width: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
   }
 });

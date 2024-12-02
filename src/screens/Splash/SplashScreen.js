@@ -13,7 +13,7 @@ const SplashScreen = () => {
   }, []);
   return (
     <View style={styles.container}>
-      <Text style={styles.appName}>LORENZO</Text>
+      <Text style={styles.appName}>HubbbleVR</Text>
     </View>
   );
 };

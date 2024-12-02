@@ -148,7 +148,7 @@ const ChatScreen = () => {
         {/* <Header
           openDrawer={() => navigation.goBack()}
           iconName={'chevron-small-left'}
-          title={'Lorenzo@Support'}
+          title={'HubbbleVR@Support'}
         /> */}
       </View>
       {/* <View style={styles.container}>

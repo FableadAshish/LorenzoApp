@@ -56,13 +56,13 @@ const ForgetPasswordScreen = () => {
           iconName={'chevron-small-left'}
           openDrawer={() => navigation.goBack()}
         />
-        <View style={styles.imageContainer}>
+        {/* <View style={styles.imageContainer}>
           <Image
-            source={IMAGES.ForgotPassword}
+            source={IMAGES.APP_ICON}
             style={styles.forgetPasswordImage}
             resizeMode="contain"
           />
-        </View>
+        </View> */}
         <Text style={styles.message}>
           Don't worry it happens, please enter the address associated with your
           account
@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
   forgetPasswordImage: {
     height: 250,
     width: 250,
+    borderRadius: 10
   },
   imageContainer: {
     justifyContent: 'center',
