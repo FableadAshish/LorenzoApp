@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -9,26 +9,27 @@ import {
   StatusBar,
   ActivityIndicator,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import ImagePicker from 'react-native-image-crop-picker';
-import { COLORS, COMMOM, FONTS, IMAGES } from '../../../constants';
+import {COLORS, COMMOM, FONTS, IMAGES} from '../../../constants';
 import Button from '../../../components/Button';
 import EditModal from '../../../components/EditModal';
-import { Header } from '../../../components/Header';
+import {Header} from '../../../components/Header';
 import EditProfileComp from '../../../components/EditProfile';
-import { ROUTES } from '../../../constants/routes';
-import { BASE_URL, TOKEN } from '../../../config';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchUserProfile } from '../../../redux/slice/profileSlice';
+import {ROUTES} from '../../../constants/routes';
+import {BASE_URL, TOKEN} from '../../../config';
+import {useSelector, useDispatch} from 'react-redux';
+import {fetchUserProfile} from '../../../redux/slice/profileSlice';
 
 const EditProfileScreen = () => {
   const navigation = useNavigation();
   const [imagePath, setImagePath] = useState('');
   const [error, setErrors] = useState({});
-  const userProfile = useSelector(state => state.auth.loginData)
+  const userProfile = useSelector(state => state.auth.loginData);
   const dispatch = useDispatch();
-  let userProfileData = useSelector((state) => state.profile.userProfileData.user);
-  console.log('userProfileData', userProfileData)
+  let userProfileData = useSelector(
+    state => state.profile.userProfileData.user,
+  );
   const [loading, setLoading] = useState(false);
   const [nameValue, setNameValue] = useState('');
   const [emailValue, setEmailValue] = useState('');
@@ -40,16 +41,15 @@ const EditProfileScreen = () => {
 
   useEffect(() => {
     const subscribe = navigation.addListener('focus', () => {
-      dispatch(fetchUserProfile(userProfile.id))
-    })
+      dispatch(fetchUserProfile(userProfile.id));
+    });
     return subscribe;
-
   }, []);
 
   useEffect(() => {
     if (userProfileData) {
-      setNameValue(userProfileData.username)
-      setEmailValue(userProfileData.email)
+      setNameValue(userProfileData.username);
+      setEmailValue(userProfileData.email);
     }
   }, [userProfileData]);
 
@@ -66,9 +66,8 @@ const EditProfileScreen = () => {
   };
 
   const handleChange = (name, value) => {
-    setProfileData(prevValue => ({ ...prevValue, [name]: value }));
-    setErrors(prevErrors => ({ ...prevErrors, [name]: '' }));
-
+    setProfileData(prevValue => ({...prevValue, [name]: value}));
+    setErrors(prevErrors => ({...prevErrors, [name]: ''}));
   };
 
   const isValidate = () => {
@@ -100,12 +99,12 @@ const EditProfileScreen = () => {
     return isValid;
   };
 
-  const updateProfile = async (profileData) => {
+  const updateProfile = async profileData => {
     if (isValidate()) {
       const formData = new FormData();
       formData.append('username', profileData.name);
       formData.append('email', profileData.email);
-      formData.append('phone', profileData.number)
+      formData.append('phone', profileData.number);
       if (imagePath) {
         formData.append('profile', {
           uri: imagePath,
@@ -113,18 +112,21 @@ const EditProfileScreen = () => {
           name: 'profile_image.jpg',
         });
       }
-      
+
       // console.log(formData);
       try {
         setLoading(true);
-        const response = await fetch(`${BASE_URL}/updateUsers/${userProfile.id}`, {
-          method: 'POST',
-          headers: {
-            Authorization: TOKEN,
+        const response = await fetch(
+          `${BASE_URL}/updateUsers/${userProfile.id}`,
+          {
+            method: 'POST',
+            headers: {
+              Authorization: TOKEN,
+            },
+            body: formData,
           },
-          body: formData
-        })
-        console.log('response', response)
+        );
+        console.log('response', response);
         const result = await response.json();
         console.log('Update successful:', result);
         navigation.goBack();
@@ -148,35 +150,56 @@ const EditProfileScreen = () => {
 
         <View style={styles.editPhotoContainer}>
           <Image
-            source={imagePath ? { uri: imagePath } : (userProfileData && userProfileData.profile ? { uri: userProfileData.profile } : IMAGES.ProfilePicture)}
+            source={
+              imagePath
+                ? {uri: imagePath}
+                : userProfileData && userProfileData.profile
+                ? {uri: userProfileData.profile}
+                : IMAGES.ProfilePicture
+            }
             style={styles.profilePicture}
           />
 
           <View style={styles.editContainer}>
-            <TouchableOpacity style={styles.editProfileContainer} onPress={pickImages}>
+            <TouchableOpacity
+              style={styles.editProfileContainer}
+              onPress={pickImages}>
               <Text style={styles.editProfileText}>Edit Photo</Text>
             </TouchableOpacity>
           </View>
         </View>
 
+        {/* Yes: 1, No: 0 */}
         <View style={styles.editValueContainer}>
           <EditProfileComp
             title={'Name'}
             titleText={profileData.name}
-            onChangeText={(text) => handleChange('name', text)}
+            onChangeText={text => handleChange('name', text)}
             defaultValue={profileData.name}
             error={error.name}
           />
           <EditProfileComp
             title={'Email'}
             titleText={profileData.email}
-            onChangeText={(text) => handleChange('email', text)}
+            onChangeText={text => handleChange('email', text)}
             error={error.email}
           />
           <EditProfileComp
             title={'Number'}
             titleText={profileData.number}
-            onChangeText={(text) => handleChange('number', text)}
+            onChangeText={text => handleChange('number', text)}
+            error={error.number}
+          />
+          <EditProfileComp
+            title={'Dream Location'}
+            titleText={profileData.number}
+            onChangeText={text => handleChange('dream_location', text)}
+            error={error.number}
+          />
+          <EditProfileComp
+            title={'Require a Wedding Planner?'}
+            titleText={profileData.number}
+            onChangeText={text => handleChange('wedding_planner', text)}
             error={error.number}
           />
         </View>
@@ -187,22 +210,37 @@ const EditProfileScreen = () => {
           onPress={() => navigation.navigate(ROUTES.CREATE_NEW_PASSWORD)}>
           <View style={styles.leftContainer}>
             <View style={styles.imageContainer}>
-              <Image source={IMAGES.resetPassword} style={styles.resetPassword} />
+              <Image
+                source={IMAGES.resetPassword}
+                style={styles.resetPassword}
+              />
             </View>
-            <Text style={{ color: COLORS.black, fontSize: 18 }}>Change Password</Text>
+            <Text style={{color: COLORS.appColor, fontSize: 18}}>
+              Change Password
+            </Text>
           </View>
           <TouchableOpacity>
             <Image
               source={IMAGES.rightArrow}
               resizeMode="contain"
               style={styles.rightArrow}
-              tintColor={COLORS.black}
+              tintColor={COLORS.appColor}
             />
           </TouchableOpacity>
         </TouchableOpacity>
       </View>
-      <View style={{ backgroundColor: COLORS.white, paddingHorizontal: 20 }}>
-        <Button title={loading ? <ActivityIndicator size={20} color={COLORS.white} /> : 'Submit'} style={styles.last} performAction={() => updateProfile(profileData)} />
+      <View style={{backgroundColor: COLORS.white, paddingHorizontal: 20}}>
+        <Button
+          title={
+            loading ? (
+              <ActivityIndicator size={20} color={COLORS.white} />
+            ) : (
+              'Submit'
+            )
+          }
+          style={styles.last}
+          performAction={() => updateProfile(profileData)}
+        />
       </View>
     </>
   );
@@ -214,7 +252,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     paddingHorizontal: COMMOM.paddingHorizantal,
     // justifyContent: 'space-between'
-
   },
   profilePicture: {
     height: 80,
@@ -260,10 +297,10 @@ const styles = StyleSheet.create({
     // padding: 15,
     borderRadius: 50,
     // marginTop: 40,
-    paddingBottom: 20
+    paddingBottom: 20,
   },
   header: {
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
   },
   editPhotoContainer: {
     // marginBottom: -50
@@ -271,7 +308,7 @@ const styles = StyleSheet.create({
   separator: {
     height: 1,
     backgroundColor: '#E0E0E0',
-    marginTop: 20
+    marginTop: 20,
   },
   resetPassword: {
     height: 28,
@@ -281,16 +318,16 @@ const styles = StyleSheet.create({
   leftContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 20
+    gap: 20,
   },
   imageContainer: {
-    backgroundColor: '#f5bd7f',
+    backgroundColor: COLORS.logoBackGroundColor2,
     height: 45,
     width: 45,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
-  }
+  },
 });
 
 export default EditProfileScreen;

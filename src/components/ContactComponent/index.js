@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   icon: {
     width: 20,
     height: 20,
-    tintColor: '#4A90E2',
+    tintColor: COLORS.appColor,
   },
 
   textContainer: {

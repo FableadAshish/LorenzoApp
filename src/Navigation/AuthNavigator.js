@@ -2,13 +2,11 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { ROUTES } from '../constants/routes';
 import { DrawerNavigation } from './DrawerNavigation';
-import SplashScreen from '../screens/Splash/SplashScreen';
 import PropertyListingScreen from '../screens/PropertyListing/PropertyListingScreen';
 import LoginScreen from '../screens/Authentication/Login/LoginScreen';
 import SignUpScreen from '../screens/Authentication/SignUp/SignUpScreen';
 import ForgetPasswordScreen from '../screens/Authentication/ForgetPassword/ForgetPasswordScreen';
 import EditProfileScreen from '../screens/Dashboard/Profile/EditProfile';
-// import OTPScreen from '../screens/Authentication/OTP/OTPScreen';
 import CreateNewPasswordScreen from '../screens/Authentication/CreateNewPassword/CreateNewPasswordScreen';
 import PropertyListingDetailsScreen from '../screens/PropertyListing/PropertyListingDetailsScreen';
 import VirtualTourScreen from '../screens/PropertyListing/VirtualTourScreen';
@@ -47,7 +45,6 @@ const AuthNavigator = () => {
         </>
         :
         <>
-          <Stack.Screen name={ROUTES.SPLASH} component={SplashScreen} />
           <Stack.Screen name={ROUTES.LOGIN} component={LoginScreen} />
           <Stack.Screen name={ROUTES.SIGNUP} component={SignUpScreen} />
           <Stack.Screen
@@ -56,8 +53,6 @@ const AuthNavigator = () => {
           />
         </>
       }
-
-
     </Stack.Navigator>
   );
 };
