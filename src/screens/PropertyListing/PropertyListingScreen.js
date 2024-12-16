@@ -1,31 +1,65 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   View,
-  StyleSheet,
   FlatList,
   Image,
   TouchableOpacity,
 } from 'react-native';
-import { COLORS, COMMOM, FONTS, IMAGES } from '../../constants';
-import { useRoute, useNavigation } from '@react-navigation/native';
+import {IMAGES} from '../../constants';
+import {useRoute, useNavigation} from '@react-navigation/native';
 import SearchContainer from '../../components/SearchContainer/SearchContainer';
-import { Header } from '../../components/Header';
-import { ROUTES } from '../../constants/routes';
-import { styles } from './Styles/PropertyListingScreen';
+import {Header} from '../../components/Header';
+import {ROUTES} from '../../constants/routes';
+import {styles} from './Styles/PropertyListingScreen';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  getAllProperties,
+  getStatesBySearch,
+} from '../../redux/slice/propertySlice';
 
 const PropertyListingScreen = () => {
   const route = useRoute();
-  const navigation = useNavigation();
-  const { locationListing } = route.params;
-  const [searchingList, setSearchingList] = useState(locationListing);
+  const dispatch = useDispatch();
 
-  const renderLocationList = ({ item }) => {
+  const navigation = useNavigation();
+  const {locationListing} = route.params;
+  const loading = useSelector(state => state.property.loading);
+  const getAll = useSelector(state => state.property.propertyList);
+  const hasMore = useSelector(state => state.property.hasMore);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchValue, setSearchValue] = useState('');
+  const stateList = useSelector(state => state.property.searchedStateList);
+  const statesData = useSelector(state => state.property.state);
+
+  const loadMore = () => {
+    if (!loading) {
+      setCurrentPage(prev => prev + 1);
+    }
+  };
+
+  const getProperties = currentPage => {
+    dispatch(
+      getAllProperties({
+        page: currentPage,
+      }),
+    );
+  };
+
+  useEffect(() => {
+    getProperties(currentPage);
+    // const subscribe = navigation.addListener('focus', () => {
+    // });
+    // return subscribe;
+  }, [currentPage]);
+
+  const renderLocationList = ({item}) => {
     const propertyDetailsPage = () => {
       navigation.navigate(ROUTES.PROPERTY_LISTING_DETAILS, {
         propertyDetails: item,
       });
     };
+
     return (
       <View style={styles.listItemContainer}>
         <TouchableOpacity
@@ -33,41 +67,40 @@ const PropertyListingScreen = () => {
           activeOpacity={0.8}
           onPress={() => propertyDetailsPage()}>
           <View style={styles.imageContainer}>
-            <Image source={{ uri: item?.images[0] }} style={styles.propertyImage} />
+            <Image
+              source={{uri: item?.images[0]}}
+              style={styles.propertyImage}
+            />
           </View>
           <View style={styles.dataContainer}>
             <View>
               <Text style={styles.listItemText}>{item?.property_name}</Text>
               <Text style={styles.propertyType}>{item?.property_type}</Text>
               <Text style={styles.roomsAvailable}>
-                {item?.max_room > 1 ? (item?.max_room + ' ' + `room's available`) : (item?.max_room + ' ' + `room available`)}
+                {item?.max_room > 1
+                  ? item?.max_room + ' ' + `room's available`
+                  : item?.max_room + ' ' + `room available`}
               </Text>
               <View style={styles.locationContainer}>
                 <Image source={IMAGES.Location} style={styles.locationIcon} />
-                <Text numberOfLines={1} style={styles.location}>{item.details.address}</Text>
+                <Text numberOfLines={1} style={styles.location}>
+                  {item.details.address}
+                </Text>
               </View>
             </View>
-            {/* <View style={styles.lowerContainer}>
-              <View style={styles.pricingContainer}>
-                <Image source={IMAGES.pound} style={styles.poundIcon} />
-                <Text style={styles.price}>{item.price}</Text>
-              </View>
-            </View> */}
           </View>
         </TouchableOpacity>
       </View>
     );
   };
-  const searchData = text => {
-    const filteredList = locationListing.filter(item =>
-      item?.property_name.toLowerCase().includes(text.toLowerCase()) || 
-      item?.price.toLowerCase().includes(text.toLowerCase()) ||
-      item?.details?.address.toLowerCase().includes(text.toLowerCase()) ||
-      item?.max_room.toLowerCase().includes(text.toLowerCase())
 
-    );
-    setSearchingList(filteredList);
+  const getSearchedCountries = searchValue => {
+    dispatch(getStatesBySearch(searchValue));
   };
+
+  useEffect(() => {
+    getSearchedCountries(searchValue);
+  }, [searchValue]);
 
   return (
     <>
@@ -80,26 +113,32 @@ const PropertyListingScreen = () => {
         <SearchContainer
           placeholderTitle={'Search Properties ...'}
           style={styles.searchContainer}
-          onChangeText={text => searchData(text)}
+          onChangeText={text => setSearchValue(text)}
+          value={searchValue}
+          stateList={stateList}
         />
-        {searchingList.length === 0 ? (
-          <View style={styles.locationNotFoundContainer}>
-            <Text style={styles.locationNotFoundText}>
-              No Such Property is Listed
-            </Text>
-            <Text style={styles.locationNotFoundSubText}>
-              Please add relevant value
-            </Text>
-          </View>
-        ) : (
+        {statesData ? (
           <FlatList
-            data={searchingList}
+            data={statesData}
             renderItem={renderLocationList}
             keyExtractor={item => item.id.toString()}
             scrollEnabled={true}
             showsVerticalScrollIndicator={false}
+            onEndReached={hasMore === false && loadMore}
+            onEndReachedThreshold={0.5}
+          />
+        ) : (
+          <FlatList
+            data={locationListing ? locationListing : getAll}
+            renderItem={renderLocationList}
+            keyExtractor={item => item.id.toString()}
+            scrollEnabled={true}
+            showsVerticalScrollIndicator={false}
+            onEndReached={hasMore === false && loadMore}
+            onEndReachedThreshold={0.5}
           />
         )}
+        {/* )} */}
       </View>
     </>
   );

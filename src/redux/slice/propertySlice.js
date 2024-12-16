@@ -3,24 +3,109 @@ import axios from 'axios';
 import {BASE_URL, TOKEN} from '../../config';
 
 const initialState = {
-  propertyList: '',
   loading: false,
+  propertyList: '',
+  searchedList: '',
+  searchedStateList: '',
+  countries: '',
+  state: '',
   error: '',
+  hasMore: false,
 };
 
-export const getAllProperties = createAsyncThunk('allProperties', async () => {
-  try {
-    const response = await axios.get(`${BASE_URL}/propertyList`, {
-      headers: {
-        Authorization: TOKEN,
-      },
-    });
+export const getAllProperties = createAsyncThunk(
+  'allProperties',
+  async data => {
+    // console.log('datadatadatadata', data);
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/propertyList/?page=${data.page}`,
+        {
+          headers: {
+            Authorization: TOKEN,
+          },
+        },
+      );
+      return {
+        properties: response.data.result,
+        page: data.page,
+      };
+    } catch (error) {
+      console.log('err', error);
+    }
+  },
+);
 
-    return response.data.result;
+export const getCountriesBySearch = createAsyncThunk(
+  'getCountries',
+  async country => {
+    try {
+      const getSearchedCountries = await axios.get(
+        /*`${BASE_URL}/search?search_term=${searchValue}`*/
+        `${BASE_URL}/search?search_term=${country}`,
+        {
+          headers: {
+            Authorization: TOKEN,
+          },
+        },
+      );
+      if (country.length === 0) {
+        return [];
+      } else {
+        return getSearchedCountries.data.result[0].properties;
+      }
+    } catch (error) {
+      console.log('err', error.response.data.message);
+    }
+  },
+);
+
+export const getStatesBySearch = createAsyncThunk('getStates', async state => {
+  try {
+    const getSearchedCountries = await axios.get(
+      /*`${BASE_URL}/search?search_term=${searchValue}`*/
+      `${BASE_URL}/search?search_term=${state}`,
+      {
+        headers: {
+          Authorization: TOKEN,
+        },
+      },
+    );
+    if (state.length === 0) {
+      return [];
+    } else {
+      return getSearchedCountries.data.result[0].properties;
+    }
   } catch (error) {
-    console.log('err', error);
+    console.log('err', error.response.data.message);
   }
 });
+
+export const getCountiresData = createAsyncThunk(
+  'getCountriesData',
+  async data => {
+    const byLocationType = data.state ? data.state : data.country;
+    console.log('byLocationType', byLocationType)
+    try {
+      const getSearchedCountries = await axios.get(
+        /*`${BASE_URL}/search?search_term=${searchValue}`*/
+        `${BASE_URL}/search?search_term=${byLocationType}`,
+        {
+          headers: {
+            Authorization: TOKEN,
+          },
+        },
+      );
+      return {
+        searchedData: getSearchedCountries.data.result[0].properties,
+        type: data.type,
+        selectedCountries: data.selectedCountries
+      };
+    } catch (error) {
+      console.log('err', error.response.data.message);
+    }
+  },
+);
 
 const propertySlice = createSlice({
   name: 'propertySlice',
@@ -28,12 +113,76 @@ const propertySlice = createSlice({
   extraReducers: builder => {
     builder.addCase(getAllProperties.pending, state => {
       state.loading = true;
+      state.hasMore = true;
     });
     builder.addCase(getAllProperties.fulfilled, (state, action) => {
       state.loading = false;
-      state.propertyList = action.payload;
+      const Offset = action.payload.page;
+
+      if (Offset === 1) {
+        state.propertyList = action.payload.properties;
+        state.hasMore = false;
+      } else if (state.propertyList.length === 0) {
+        state.hasMore = true;
+      } else {
+        state.propertyList = [
+          ...state.propertyList,
+          ...action.payload.properties,
+        ];
+      }
     });
     builder.addCase(getAllProperties.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+      state.hasMore = false;
+    });
+
+    // getCountriesBySearch
+    builder.addCase(getCountriesBySearch.pending, state => {
+      state.loading = true;
+    });
+    builder.addCase(getCountriesBySearch.fulfilled, (state, action) => {
+      state.loading = false;
+      state.searchedList = action.payload;
+    });
+    builder.addCase(getCountriesBySearch.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+
+    // getStates
+    builder.addCase(getStatesBySearch.pending, state => {
+      state.loading = true;
+    });
+    builder.addCase(getStatesBySearch.fulfilled, (state, action) => {
+      state.loading = false;
+      state.searchedStateList = action.payload;
+    });
+    builder.addCase(getStatesBySearch.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    // getCountriesData
+    builder.addCase(getCountiresData.pending, state => {
+      state.loading = true;
+    });
+    builder.addCase(getCountiresData.fulfilled, (state, action) => {
+      const locationType = action.payload.type;
+      console.log('selectedCountries',action.payload.selectedCountries);
+      console.log('locationType', locationType);
+      state.loading = false;
+      switch (locationType) {
+        case 'country':
+          state.countries = action.payload.searchedData;
+          break;
+        case 'state':
+          state.state = action.payload.searchedData;
+          break;
+        default:
+          return;
+      }
+    });
+    builder.addCase(getCountiresData.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });
