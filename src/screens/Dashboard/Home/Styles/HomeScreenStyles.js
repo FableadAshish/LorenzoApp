@@ -71,6 +71,13 @@ export const styles = StyleSheet.create({
     width: '100%',
     marginTop: 20,
   },
+  labelContainer2: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+    width: '100%',
+    marginTop: 20,
+  },
   loaderContainer: {
     width: '100%',
     alignItems: 'center',

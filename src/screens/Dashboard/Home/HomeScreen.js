@@ -3,70 +3,64 @@ import {
   FlatList,
   Image,
   ScrollView,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import {COLORS, COMMOM, FONTS, IMAGES} from '../../../constants';
+import {IMAGES} from '../../../constants';
 import SearchContainer from '../../../components/SearchContainer/SearchContainer';
 import {ROUTES} from '../../../constants/routes';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {fetchUserProfile} from '../../../redux/slice/profileSlice';
-import ShimmerCardItem from '../../../components/molecules/Card/ShimmerCard';
 import FastImage from 'react-native-fast-image';
-import {getAllProperties} from '../../../redux/slice/propertySlice';
+import {
+  getAllProperties,
+  getCountriesBySearch,
+} from '../../../redux/slice/propertySlice';
 import {styles} from './Styles/HomeScreenStyles';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
-  const getAll = useSelector(state => state.property.propertyList);
   const loading = useSelector(state => state.property.loading);
+  const getAll = useSelector(state => state.property.propertyList);
+  const hasMore = useSelector(state => state.property.hasMore);
 
-  const [searchQuery, setSearchQuery] = useState([]);
+  // console.log('hasmOtessss', hasMore);
   const [searchValue, setSearchValue] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
 
+  // console.log('currentPage', currentPage)
   const userProfile = useSelector(state => state.auth.loginData);
   let userProfileData = useSelector(state => state.profile.userProfileData);
   const navigation = useNavigation();
+  // const [countriesList, setCountriesList] = useState([]);
+  const countriesList = useSelector(state => state.property.searchedList);
+  const countriesData = useSelector(state => state.property.countries);
 
-  const getProperties = () => {
-    dispatch(getAllProperties());
-    const filteredList = searchQuery.filter(
-      item =>
-        item?.property_name.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item?.details?.address
-          .toLowerCase()
-          .includes(searchValue.toLowerCase()),
+  const getProperties = currentPage => {
+    dispatch(
+      getAllProperties({
+        page: currentPage,
+      }),
     );
-    setSearchQuery(filteredList);
+  };
+
+  const getSearchedCountries = searchValue => {
+    dispatch(getCountriesBySearch(searchValue));
   };
 
   useEffect(() => {
-    if (searchValue) {
-      const filteredList = getAll.filter(
-        item =>
-          item?.property_name
-            .toLowerCase()
-            .includes(searchValue.toLowerCase()) ||
-          item?.details?.address
-            .toLowerCase()
-            .includes(searchValue.toLowerCase()),
-      );
-      setSearchQuery(filteredList);
-    } else {
-      setSearchQuery(getAll);
-    }
-  }, [searchValue, getAll]);
+    getSearchedCountries(searchValue);
+  }, [searchValue]);
 
   useEffect(() => {
-    getProperties();
-    const subscribe = navigation.addListener('focus', () => {
-      dispatch(fetchUserProfile(userProfile.id));
-    });
-    return subscribe;
-  }, []);
+    getProperties(currentPage);
+    dispatch(fetchUserProfile(userProfile.id));
+    // const subscribe = navigation.addListener('focus', () => {
+    // });
+    // return subscribe;
+  }, [currentPage]);
 
   const getDetails = item => {
     navigation.navigate(ROUTES.PROPERTY_LISTING_DETAILS, {
@@ -79,20 +73,15 @@ const HomeScreen = () => {
         style={styles.locationContainer}
         activeOpacity={0.8}
         onPress={() => getDetails(item)}>
-        {loading ? (
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {renderShimmerList()};
-          </ScrollView>
-        ) : (
-          <FastImage
-            style={styles.locationImage}
-            source={{
-              uri: item?.images[0],
-              priority: FastImage.priority.normal,
-            }}
-            resizeMode={FastImage.resizeMode.contain}
-          />
-        )}
+        <FastImage
+          style={styles.locationImage}
+          source={{
+            uri: item?.images[0],
+            priority: FastImage.priority.normal,
+          }}
+          resizeMode={FastImage.resizeMode.contain}
+        />
+        {/* )} */}
         <View style={styles.locationInfo}>
           <View style={styles.upperLocationInfo}>
             <View style={styles.leftLocation}>
@@ -109,102 +98,112 @@ const HomeScreen = () => {
       </TouchableOpacity>
     );
   };
+
+  const loadMore = () => {
+    if (!loading) {
+      setCurrentPage(prev => prev + 1);
+    }
+  };
   const RouteToPropertyListing = locationData => {
     navigation.navigate(ROUTES.PROPERTY_LISTING, {
       locationListing: locationData,
     });
   };
 
-  const renderShimmerList = () => {
-    return Array(10)
-      .fill()
-      .map((_, index) => <ShimmerCardItem key={index} />);
-  };
-
   return (
     <>
-      <ScrollView style={{backgroundColor: 'white'}}>
-        <View style={styles.container}>
-          <View style={styles.headerContainer}>
-            <View style={styles.leftContainer}>
-              <TouchableOpacity onPress={() => navigation.openDrawer()}>
-                <Image source={IMAGES.menu} style={styles.menuIcon} />
-              </TouchableOpacity>
-              <View>
-                {userProfileData && (
-                  <Text style={styles.centerNameStyle}>
-                    {'Welcome, ' +
-                      userProfileData?.user?.username.split(' ')[0]}
-                  </Text>
-                )}
-              </View>
-            </View>
-            <TouchableOpacity
-              onPress={() => navigation.navigate(ROUTES.EDIT_PROFILE)}>
-              <Image source={IMAGES.APP_ICON} style={styles.homeProfileImage} />
+      <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          <View style={styles.leftContainer}>
+            <TouchableOpacity onPress={() => navigation.openDrawer()}>
+              <Image source={IMAGES.menu} style={styles.menuIcon} />
             </TouchableOpacity>
-          </View>
-
-          <View style={styles.welcomeHeader}>
-            <Text style={styles.upperText}>Explore our</Text>
-            <View style={styles.bottomTextContainer}>
-              <Text style={styles.beautifulText}>Beautiful </Text>
-              <View style={styles.worldTextContainer}>
-                <Text style={styles.worldText}>Venues</Text>
-                <Image
-                  source={IMAGES.WelcomeBottomImage}
-                  style={styles.welcomeBottomImage}
-                  resizeMode="contain"
-                />
-              </View>
+            <View>
+              {userProfileData && (
+                <Text style={styles.centerNameStyle}>
+                  {'Welcome, ' + userProfileData?.user?.username.split(' ')[0]}
+                </Text>
+              )}
             </View>
           </View>
+          <TouchableOpacity
+            onPress={() => navigation.navigate(ROUTES.EDIT_PROFILE)}>
+            <Image source={IMAGES.APP_ICON} style={styles.homeProfileImage} />
+          </TouchableOpacity>
+        </View>
 
-          <SearchContainer
-            placeholderTitle={'Search here..'}
-            onChangeText={text => setSearchValue(text)}
-            value={searchValue}
-          />
-
-          <View style={styles.labelContainer}>
-            <Text style={styles.labelText}>Latest Properties</Text>
-            <TouchableOpacity onPress={() => RouteToPropertyListing(getAll)}>
-              <Text style={styles.viewAllText}>View all</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.listContainer}>
-            {loading ? (
-              <View style={{marginLeft: -30}}>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  {renderShimmerList()}
-                </ScrollView>
-              </View>
-            ) : searchQuery.length === 0 ? (
-              <View style={styles.locationNotFoundContainer}>
-                {/* <Image source={IMAGES.NoSearch} style={styles.noSearchImage} /> */}
-                <Text style={styles.locationNotFoundText}>
-                  No Such Property is Listed
-                </Text>
-                <Text style={styles.locationNotFoundSubText}>
-                  Please add relevant value
-                </Text>
-              </View>
-            ) : (
-              <>
-                <View style={{marginLeft: -30}}>
-                  <FlatList
-                    data={searchQuery}
-                    keyExtractor={item => item.id.toString()}
-                    renderItem={renderList}
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                  />
-                </View>
-              </>
-            )}
+        <View style={styles.welcomeHeader}>
+          <Text style={styles.upperText}>Explore our</Text>
+          <View style={styles.bottomTextContainer}>
+            <Text style={styles.beautifulText}>Beautiful </Text>
+            <View style={styles.worldTextContainer}>
+              <Text style={styles.worldText}>Venues</Text>
+              <Image
+                source={IMAGES.WelcomeBottomImage}
+                style={styles.welcomeBottomImage}
+                resizeMode="contain"
+              />
+            </View>
           </View>
         </View>
-      </ScrollView>
+
+        <SearchContainer
+          placeholderTitle={'Search here..'}
+          onChangeText={text => setSearchValue(text)}
+          value={searchValue}
+          countriesList={countriesList}
+        />
+        <View style={styles.labelContainer}>
+          <Text style={styles.labelText}>Latest Properties</Text>
+          <TouchableOpacity onPress={() => RouteToPropertyListing()}>
+            <Text style={styles.viewAllText}>View all</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.listContainer}>
+          <ScrollView
+            style={{backgroundColor: 'white'}}
+            showsVerticalScrollIndicator={false}>
+            <>
+              <View style={{marginLeft: -30}}>
+                <FlatList
+                  data={getAll /*searchQuery*/}
+                  keyExtractor={item => item.id}
+                  renderItem={renderList}
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                  onEndReached={hasMore === false && loadMore}
+                  onEndReachedThreshold={0.5}
+                />
+              </View>
+              {countriesData && countriesData.length > 0 ? (
+                <>
+                  <View style={styles.labelContainer2}>
+                    {/* <Text style={styles.labelText}>Latest Properties</Text> */}
+                    <TouchableOpacity
+                      onPress={() => RouteToPropertyListing(countriesData)}>
+                      <Text style={styles.viewAllText}>View all</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={{marginLeft: -30}}>
+                    <FlatList
+                      data={countriesData /*searchQuery*/}
+                      keyExtractor={item => item.id}
+                      renderItem={renderList}
+                      horizontal={true}
+                      showsHorizontalScrollIndicator={false}
+                      onEndReached={hasMore === false && loadMore}
+                      onEndReachedThreshold={0.5}
+                    />
+                  </View>
+                </>
+              ) : (
+                ''
+              )}
+            </>
+            {/* )} */}
+          </ScrollView>
+        </View>
+      </View>
     </>
   );
 };
