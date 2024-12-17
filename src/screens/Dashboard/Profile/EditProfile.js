@@ -30,14 +30,27 @@ const EditProfileScreen = () => {
   let userProfileData = useSelector(
     state => state.profile.userProfileData.user,
   );
+
+  // console.log('userProfile', userProfile)
+
+  // console.log('userProfileData', userProfileData.details.dream_location)
   const [loading, setLoading] = useState(false);
   const [nameValue, setNameValue] = useState('');
   const [emailValue, setEmailValue] = useState('');
   const [profileData, setProfileData] = useState({
-    name: userProfileData ? userProfileData.username : userProfile.email,
+    name: userProfileData ? userProfileData.username : userProfile.username,
     email: userProfileData ? userProfileData.email : userProfile.email,
     number: userProfileData ? userProfileData.details.phone : '+91-1234567890',
+    dreamLocation: userProfileData?.details?.dream_location
+      ? userProfileData?.details?.dream_location
+      : '----',
+    requireWeddingPlanner: userProfileData?.details?.wedding_planner
+      ? userProfileData?.details?.wedding_planner
+      : '---',
   });
+  
+
+  // console.log('profileData.dream_location', userProfileData?.details?.dream_location);
 
   useEffect(() => {
     const subscribe = navigation.addListener('focus', () => {
@@ -105,36 +118,38 @@ const EditProfileScreen = () => {
       formData.append('username', profileData.name);
       formData.append('email', profileData.email);
       formData.append('phone', profileData.number);
-      if (imagePath) {
-        formData.append('profile', {
-          uri: imagePath,
-          type: 'image/jpeg',
-          name: 'profile_image.jpg',
-        });
-      }
+      formData.append('dream_location', profileData.dream_location);
+      formData.append('wedding_planner', profileData.wedding_planner);
 
-      // console.log(formData);
-      try {
-        setLoading(true);
-        const response = await fetch(
-          `${BASE_URL}/updateUsers/${userProfile.id}`,
-          {
-            method: 'POST',
-            headers: {
-              Authorization: TOKEN,
+        if (imagePath) {
+          formData.append('profile', {
+            uri: imagePath,
+            type: 'image/jpeg',
+            name: 'profile_image.jpg',
+          });
+        }
+
+        // console.log(formData);
+        try {
+          setLoading(true);
+          const response = await fetch(
+            `${BASE_URL}/updateUsers/${userProfile.id}`,
+            {
+              method: 'POST',
+              headers: {
+                Authorization: TOKEN,
+              },
+              body: formData,
             },
-            body: formData,
-          },
-        );
-        console.log('response', response);
-        const result = await response.json();
-        console.log('Update successful:', result);
-        navigation.goBack();
-        setLoading(false);
-      } catch (error) {
-        console.log('error', error);
-        setLoading(false);
-      }
+          );
+          const result = await response.json();
+          console.log('Update successful:', result);
+          navigation.goBack();
+          setLoading(false);
+        } catch (error) {
+          console.log('error', error);
+          setLoading(false);
+        }
     }
   };
 
@@ -192,15 +207,20 @@ const EditProfileScreen = () => {
           />
           <EditProfileComp
             title={'Dream Location'}
-            titleText={profileData.number}
+            titleText={
+              profileData.dreamLocation
+                ? profileData.dreamLocation
+                : '---'
+            }
             onChangeText={text => handleChange('dream_location', text)}
             error={error.number}
           />
           <EditProfileComp
             title={'Require a Wedding Planner?'}
-            titleText={profileData.number}
+            titleText={profileData.requireWeddingPlanner == 1 ? 'Yes' : 'No'}
             onChangeText={text => handleChange('wedding_planner', text)}
             error={error.number}
+            isRequired={profileData.requireWeddingPlanner}
           />
         </View>
         <View style={styles.separator} />

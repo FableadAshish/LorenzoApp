@@ -6,17 +6,32 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  Pressable,
 } from 'react-native';
 import {COLORS, COMMOM, FONTS, IMAGES} from '../../constants';
-import InputField from '../InputField';
 import {useNavigation} from '@react-navigation/native';
 import {ROUTES} from '../../constants/routes';
+import images from '../../constants/images';
 
-const EditModal = ({title, closeModal, inputField, button, forgetPassword}) => {
+const EditModal = ({
+  title,
+  closeModal,
+  inputField,
+  button,
+  forgetPassword,
+  selectValue,
+  isSelectedValue,
+  getText
+}) => {
   const navigation = useNavigation();
   const forgetPasswords = () => {
     navigation.navigate(ROUTES.FORGOT_PASSWORD);
     closeModal();
+  };
+  const [selectedValue, setSelectedValue] = useState(isSelectedValue);
+
+  const toggleSelection = value => {
+    setSelectedValue(value);
   };
   return (
     <View style={{paddingHorizontal: 20}}>
@@ -36,6 +51,39 @@ const EditModal = ({title, closeModal, inputField, button, forgetPassword}) => {
           <TouchableOpacity onPress={() => forgetPasswords()}>
             <Text style={styles.forgetPassword}>{forgetPassword}</Text>
           </TouchableOpacity>
+        )}
+        {selectValue && (
+          <View style={styles.isSelectValue}>
+            {/* Option Yes */}
+            <Pressable
+              onPress={() => toggleSelection(1)}
+              style={styles.selectOption}>
+              <Image
+                source={
+                  selectedValue === 1
+                    ? images.CHECKED // Checked image
+                    : images.UNCHECKED // Unchecked image
+                }
+                style={styles.uncheckedImage}
+              />
+              <Text style={styles.isRequiredText}>Yes</Text>
+            </Pressable>
+
+            {/* Option No */}
+            <Pressable
+              onPress={() => toggleSelection(0)}
+              style={[styles.selectOption, {gap: 12}]}>
+              <Image
+                source={
+                  selectedValue === 0
+                    ? images.CHECKED // Checked image
+                    : images.UNCHECKED // Unchecked image
+                }
+                style={styles.uncheckedImage}
+              />
+              <Text style={styles.isRequiredText}>No</Text>
+            </Pressable>
+          </View>
         )}
         <View style={styles.buttonContainer}>{button}</View>
       </View>
@@ -71,6 +119,25 @@ const styles = StyleSheet.create({
   },
   placeholderContainer: {marginTop: 0},
   buttonContainer: {marginTop: 10},
+  uncheckedImage: {
+    height: 24,
+    width: 24,
+  },
+  selectOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  isSelectValue: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '40%',
+    marginTop: 20
+  },
+  isRequiredText: {
+    fontSize: 16,
+  }
 });
 
 export default EditModal;

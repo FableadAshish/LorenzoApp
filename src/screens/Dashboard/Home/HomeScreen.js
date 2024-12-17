@@ -55,11 +55,11 @@ const HomeScreen = () => {
   }, [searchValue]);
 
   useEffect(() => {
-    getProperties(currentPage);
-    dispatch(fetchUserProfile(userProfile.id));
-    // const subscribe = navigation.addListener('focus', () => {
-    // });
-    // return subscribe;
+    const subscribe = navigation.addListener('focus', () => {
+      getProperties(currentPage);
+      dispatch(fetchUserProfile(userProfile.id));
+    });
+    return subscribe;
   }, [currentPage]);
 
   const getDetails = item => {
@@ -104,9 +104,34 @@ const HomeScreen = () => {
       setCurrentPage(prev => prev + 1);
     }
   };
+
+  const renderCountrySection = countryData => {
+    return (
+      <View key={countryData.country}>
+        <View style={styles.labelContainer}>
+          <Text style={styles.labelText}>{countryData.country} Properties</Text>
+          <TouchableOpacity
+            onPress={() => RouteToPropertyListing(countryData.searchedData)}>
+            <Text style={styles.viewAllText}>View all</Text>
+          </TouchableOpacity>
+        </View>
+        <View>
+          <FlatList
+            data={countryData.searchedData}
+            keyExtractor={(item, index) => `${countryData.country}-${index}`}
+            renderItem={renderList}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+          />
+        </View>
+      </View>
+    );
+  };
+
   const RouteToPropertyListing = locationData => {
+    const isList = locationData ? locationData : '';
     navigation.navigate(ROUTES.PROPERTY_LISTING, {
-      locationListing: locationData,
+      locationListing: isList,
     });
   };
 
@@ -175,10 +200,12 @@ const HomeScreen = () => {
                   onEndReachedThreshold={0.5}
                 />
               </View>
-              {countriesData && countriesData.length > 0 ? (
+              {countriesData &&
+                countriesData.length > 0 &&
+                countriesData.map(renderCountrySection)}
+              {/* {countriesData && countriesData.length > 0 ? (
                 <>
                   <View style={styles.labelContainer2}>
-                    {/* <Text style={styles.labelText}>Latest Properties</Text> */}
                     <TouchableOpacity
                       onPress={() => RouteToPropertyListing(countriesData)}>
                       <Text style={styles.viewAllText}>View all</Text>
@@ -186,7 +213,7 @@ const HomeScreen = () => {
                   </View>
                   <View style={{marginLeft: -30}}>
                     <FlatList
-                      data={countriesData /*searchQuery*/}
+                      data={countriesData}
                       keyExtractor={item => item.id}
                       renderItem={renderList}
                       horizontal={true}
@@ -198,7 +225,7 @@ const HomeScreen = () => {
                 </>
               ) : (
                 ''
-              )}
+              )} */}
             </>
             {/* )} */}
           </ScrollView>
