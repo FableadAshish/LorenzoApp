@@ -1,8 +1,8 @@
 import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet, Pressable } from "react-native";
 import { COLORS, FONTS, IMAGES } from "../../constants";
 
-const ContactCard = ({ contactTitle, value, icon }) => {
+const ContactCard = ({ contactTitle, value, icon, onPress }) => {
   return (
     <View style={styles.contactDetailsContainer}>
       <View style={styles.contactDetail}>
@@ -13,10 +13,10 @@ const ContactCard = ({ contactTitle, value, icon }) => {
             resizeMode="contain"
           />
         </View>
-        <View style={styles.textContainer}>
+        <Pressable onPress={onPress} style={styles.textContainer}>
           <Text style={styles.label}>{contactTitle}</Text>
           <Text style={styles.value}>+{value}</Text>
-        </View>
+        </Pressable>
       </View>
       <View style={styles.separator} />
     </View>

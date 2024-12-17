@@ -115,7 +115,7 @@ const HomeScreen = () => {
             <Text style={styles.viewAllText}>View all</Text>
           </TouchableOpacity>
         </View>
-        <View>
+        <View style={{marginLeft: -30}}>
           <FlatList
             data={countryData.searchedData}
             keyExtractor={(item, index) => `${countryData.country}-${index}`}
@@ -203,31 +203,7 @@ const HomeScreen = () => {
               {countriesData &&
                 countriesData.length > 0 &&
                 countriesData.map(renderCountrySection)}
-              {/* {countriesData && countriesData.length > 0 ? (
-                <>
-                  <View style={styles.labelContainer2}>
-                    <TouchableOpacity
-                      onPress={() => RouteToPropertyListing(countriesData)}>
-                      <Text style={styles.viewAllText}>View all</Text>
-                    </TouchableOpacity>
-                  </View>
-                  <View style={{marginLeft: -30}}>
-                    <FlatList
-                      data={countriesData}
-                      keyExtractor={item => item.id}
-                      renderItem={renderList}
-                      horizontal={true}
-                      showsHorizontalScrollIndicator={false}
-                      onEndReached={hasMore === false && loadMore}
-                      onEndReachedThreshold={0.5}
-                    />
-                  </View>
-                </>
-              ) : (
-                ''
-              )} */}
             </>
-            {/* )} */}
           </ScrollView>
         </View>
       </View>

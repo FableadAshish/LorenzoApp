@@ -9,6 +9,8 @@ import {
   Pressable,
   TouchableOpacity,
   FlatList,
+  Platform,
+  Linking,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {COLORS, IMAGES} from '../../constants';
@@ -46,6 +48,12 @@ const PropertyListingDetailsScreen = () => {
   const [flooerImages, setFloorImagesVisible] = useState(0);
   const [floorIsVisible, setFloorisVisible] = useState(false);
   const [isWebViewLoading, setIsWebViewLoading] = useState(true);
+  const [venueDetails, setVenueDetails] = useState({
+    subject: '',
+    inquiry: '',
+  });
+  const [venueErrors, setVenueErrors] = useState({});
+
   const handleSetIsVisible = index => {
     setCurrentImageIndex(index);
     setIsVisible(true);
@@ -53,6 +61,10 @@ const PropertyListingDetailsScreen = () => {
 
   const handleChange = (name, value) => {
     setInquiryDetails(prevValue => ({...prevValue, [name]: value}));
+  };
+
+  const handleVenueChange = (name, value) => {
+    setVenueDetails(prevValue => ({...prevValue, [name]: value}));
   };
 
   const getTour = URL => {
@@ -76,7 +88,7 @@ const PropertyListingDetailsScreen = () => {
       inquiryDetails.phone == undefined ||
       inquiryDetails.phone.length < 10 == undefined
     ) {
-      newErrors.subject = 'Phone number must be atleast 10 digits';
+      newErrors.phone = 'Phone number must be atleast 10 digits';
       isValid = false;
     }
     if (inquiryDetails.inquiry === '') {
@@ -87,12 +99,28 @@ const PropertyListingDetailsScreen = () => {
       newErrors.inquiry = 'Message cannot be empty';
       isValid = false;
     }
-    if (inquiryDetails.inquiry && inquiryDetails.inquiry.length < 10) {
+    if (inquiryDetails.inquiry || inquiryDetails.inquiry.length < 10) {
       newErrors.inquiry =
         'Your message is too short. Please provide a more detailed message so we can thoroughly address your inquiry.';
       isValid = false;
     }
     setError(newErrors);
+    return isValid;
+  };
+
+  const isContactVenueValidate = () => {
+    let isValid = true;
+    const newErrors = {};
+    if (venueDetails.subject === '') {
+      newErrors.subject = 'Subject cannot be empty';
+      isValid = false;
+    }
+
+    if (venueDetails.inquiry === '' || venueDetails.inquiry.length < 10) {
+      newErrors.inquiry = 'Your message is too short.';
+      isValid = false;
+    }
+    setVenueErrors(newErrors);
     return isValid;
   };
 
@@ -130,6 +158,40 @@ const PropertyListingDetailsScreen = () => {
         setIsLoading(false);
       }
     }
+  };
+
+  const submitContactVenueForm = async (userID, propertyID) => {
+    // if (isContactVenueValidate()) {
+      const contactVenueForm = new FormData();
+      contactVenueForm.append('user_id', 22);
+      contactVenueForm.append('property_id', 99);
+      contactVenueForm.append('message', venueDetails.inquiry);
+      contactVenueForm.append('subject', venueDetails.subject);
+      console.log('contactVenueForm', contactVenueForm)
+      try {
+        // setIsLoading(true);
+        const response = await axios.post(
+          `${BASE_URL}/contactVenueMail`,
+          contactVenueForm,
+          {
+            headers: {
+              Authorization: TOKEN,
+              'Content-Type': 'multipart/form-data',
+            },
+          },
+        );
+        console.log('response.data', response.data);
+        // setVenueDetails('');
+        // setVenueErrors('');
+        // // setIsLoading(false);
+        // Toast.show(
+        //   'We have received your inquiry and will review it shortly. Thank you for reaching out to us.',
+        // );
+      } catch (error) {
+        console.log('error', error);
+        // setIsLoading(false);
+      }
+    // }
   };
 
   const closeModal = () => {
@@ -175,6 +237,26 @@ const PropertyListingDetailsScreen = () => {
   const handleFloorImagesVisible = index => {
     setFloorImagesVisible(index);
     setFloorisVisible(true);
+  };
+
+  const dialCall = phone => {
+    let phoneNumber = '';
+    phoneNumber = `tel:${phone}`;
+    Linking.openURL(phoneNumber);
+  };
+
+  const mail = email => {
+    let toEmail = '';
+    toEmail = `mailto:${email}`;
+    Linking.openURL(toEmail);
+  };
+  const openGoogleMapsSearch = query => {
+    const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+      query,
+    )}`;
+    Linking.openURL(url).catch(err =>
+      console.error('Error opening Google Maps:', err),
+    );
   };
 
   return (
@@ -292,7 +374,7 @@ const PropertyListingDetailsScreen = () => {
             marginTop: 25,
           }}>
           <Text style={styles.propertyContactName}>Floor Plan -</Text>
-          <Image source={IMAGES.blueprint} style={{height: 25, width: 25}}  />
+          <Image source={IMAGES.blueprint} style={{height: 25, width: 25}} />
         </View>
 
         <FlatList
@@ -329,29 +411,36 @@ const PropertyListingDetailsScreen = () => {
             marginTop: 25,
           }}>
           <Text style={styles.propertyContactName}>Contact and Location -</Text>
-          <Image source={IMAGES.call} style={{height: 25, width: 25}} tintColor={COLORS.appColor} />
+          <Image
+            source={IMAGES.call}
+            style={{height: 25, width: 25}}
+            tintColor={COLORS.appColor}
+          />
         </View>
         <ContactCard
           contactTitle={'Phone'}
           value={propertyDetails?.details?.phone}
           icon={IMAGES.phone}
+          onPress={() => dialCall(propertyDetails?.details?.phone)}
         />
         <ContactCard
           contactTitle={'Email Address'}
           value={propertyDetails?.details?.email}
           icon={IMAGES.email}
+          onPress={() => mail(propertyDetails?.details?.email)}
         />
         <ContactCard
           contactTitle={'Location'}
           value={`${propertyDetails.details.state}, ${propertyDetails.details.city}, ${propertyDetails.details.country}`}
           icon={IMAGES.Location}
+          onPress={() => openGoogleMapsSearch(propertyDetails.details.city)}
         />
-        <ContactCard
+        {/* <ContactCard
           contactTitle={'Zip Code'}
           value={propertyDetails.details.zip_code}
           icon={IMAGES.zipCode}
-        />
-        <View style={{backgroundColor: 'white'}}>
+        /> */}
+        <View style={{backgroundColor: 'white'}}> //TODO
           <Button
             title={'Submit Inquiry'}
             style={styles.button}
@@ -369,11 +458,11 @@ const PropertyListingDetailsScreen = () => {
                   style={styles.subjectMessage}
                   placeholderTextColor={COLORS.lightTextColor}
                   placeholder="Add Subject"
-                  onChangeText={text => handleChange('subject', text)}
+                  onChangeText={text => handleVenueChange('subject', text)}
                   value={inquiryDetails.subject}
                 />
-                {error.subject && (
-                  <Text style={styles.errorText}>{error.subject}</Text>
+                {venueErrors.subject && (
+                  <Text style={styles.errorText}>{venueErrors.subject}</Text>
                 )}
               </View>
               <View style={styles.inputContainer}>
@@ -384,11 +473,11 @@ const PropertyListingDetailsScreen = () => {
                   numberOfLines={4}
                   multiline={true}
                   placeholder="Add Message"
-                  onChangeText={text => handleChange('inquiry', text)}
+                  onChangeText={text => handleVenueChange('inquiry', text)}
                   value={inquiryDetails.inquiry}
                 />
-                {error.inquiry && (
-                  <Text style={styles.errorText}>{error.inquiry}</Text>
+                {venueErrors.inquiry && (
+                  <Text style={styles.errorText}>{venueErrors.inquiry}</Text>
                 )}
               </View>
               <Button
@@ -401,7 +490,7 @@ const PropertyListingDetailsScreen = () => {
                 }
                 style={styles.submitContactVenueButton}
                 performAction={() => {
-                  submitForm(userProfile.id, propertyDetails.id);
+                  submitContactVenueForm(userProfile.id, propertyDetails.id);
                 }}
               />
             </View>

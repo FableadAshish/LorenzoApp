@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {COLORS, IMAGES} from '../../constants';
 import {useDispatch} from 'react-redux';
-import {getCountiresData} from '../../redux/slice/propertySlice';
+import {getCountiresData, getPropertiesByStates} from '../../redux/slice/propertySlice';
 
 const SearchContainer = ({
   placeholderTitle,
@@ -76,7 +76,8 @@ const SearchContainer = ({
     const STATE_NAME = item.details.state;
 
     const getStatesList = async state => {
-      dispatch(getCountiresData({state: state, type: 'state'}));
+      // dispatch(getCountiresData({state: state, type: 'state'}));
+      dispatch(getPropertiesByStates({state: state, type: 'state'}));
       onChangeText('');
     };
     return (
@@ -244,7 +245,7 @@ const styles = StyleSheet.create({
   },
   selectedCountryText: {
     marginRight: 5,
-    color: COLORS.w,
+    color: COLORS.black,
   },
   removeCountryButton: {
     marginLeft: 5,
