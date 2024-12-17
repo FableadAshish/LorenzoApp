@@ -11,6 +11,7 @@ const initialState = {
   state: '',
   error: '',
   hasMore: false,
+  isRequired: '',
 };
 
 export const getAllProperties = createAsyncThunk(
@@ -164,6 +165,12 @@ export const getPropertiesByStates = createAsyncThunk(
 const propertySlice = createSlice({
   name: 'propertySlice',
   initialState: initialState,
+  reducers: {
+    isPlannerRequired: (state, action) => {
+      // console.log('action.payload', action.payload)
+      state.isRequired = action.payload;
+    }
+  },
   extraReducers: builder => {
     builder.addCase(getAllProperties.pending, state => {
       state.loading = true;
@@ -256,5 +263,9 @@ const propertySlice = createSlice({
     });
   },
 });
+
+export const {
+  isPlannerRequired
+} = propertySlice.actions;
 
 export default propertySlice.reducer;

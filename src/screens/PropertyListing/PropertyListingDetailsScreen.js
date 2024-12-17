@@ -440,7 +440,7 @@ const PropertyListingDetailsScreen = () => {
           value={propertyDetails.details.zip_code}
           icon={IMAGES.zipCode}
         /> */}
-        <View style={{backgroundColor: 'white'}}> //TODO
+        <View style={{backgroundColor: 'white'}}>
           <Button
             title={'Submit Inquiry'}
             style={styles.button}

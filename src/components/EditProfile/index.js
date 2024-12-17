@@ -127,11 +127,10 @@ const EditProfileComp = ({title, titleText, onChangeText, error, isRequired}) =>
 
               {title === 'Require a Wedding Planner?' && (
                 <EditModal
-                  title={'Do you require a wedding planner ?'}
+                  title={'Do you need a wedding planner ?'}
                   closeModal={() => setModalVisible(false)}
                   selectValue={true}
                   isSelectedValue={isRequired}
-                  getText={setInputValue}
                   button={
                     <Button
                       title={'Save'}
@@ -192,7 +191,7 @@ const styles = StyleSheet.create({
   buttonStyle: {
     borderRadius: 50,
     alignItems: 'center',
-    height: 55,
+    // height: 55,
   },
   errorText: {
     color: COLORS.red,

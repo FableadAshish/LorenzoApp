@@ -28,12 +28,10 @@ const EditProfileScreen = () => {
   const userProfile = useSelector(state => state.auth.loginData);
   const dispatch = useDispatch();
   let userProfileData = useSelector(
-    state => state.profile.userProfileData.user,
+    state => state.profile?.userProfileData?.user,
   );
-
-  // console.log('userProfile', userProfile)
-
-  // console.log('userProfileData', userProfileData.details.dream_location)
+  const isRequired = useSelector(state => state.property.isRequired);
+  // console.log('isRequired', isRequired);
   const [loading, setLoading] = useState(false);
   const [nameValue, setNameValue] = useState('');
   const [emailValue, setEmailValue] = useState('');
@@ -41,7 +39,7 @@ const EditProfileScreen = () => {
     name: userProfileData ? userProfileData.username : userProfile.username,
     email: userProfileData ? userProfileData.email : userProfile.email,
     number: userProfileData ? userProfileData.details.phone : '+91-1234567890',
-    dreamLocation: userProfileData?.details?.dream_location
+    dream_location: userProfileData?.details?.dream_location !== undefined
       ? userProfileData?.details?.dream_location
       : '----',
     requireWeddingPlanner: userProfileData?.details?.wedding_planner
@@ -49,9 +47,6 @@ const EditProfileScreen = () => {
       : '---',
   });
   
-
-  // console.log('profileData.dream_location', userProfileData?.details?.dream_location);
-
   useEffect(() => {
     const subscribe = navigation.addListener('focus', () => {
       dispatch(fetchUserProfile(userProfile.id));
@@ -79,6 +74,7 @@ const EditProfileScreen = () => {
   };
 
   const handleChange = (name, value) => {
+    console.log(name)
     setProfileData(prevValue => ({...prevValue, [name]: value}));
     setErrors(prevErrors => ({...prevErrors, [name]: ''}));
   };
@@ -118,9 +114,10 @@ const EditProfileScreen = () => {
       formData.append('username', profileData.name);
       formData.append('email', profileData.email);
       formData.append('phone', profileData.number);
-      formData.append('dream_location', profileData.dream_location);
-      formData.append('wedding_planner', profileData.wedding_planner);
+      formData.append('dream_location', profileData?.dream_location);
+      formData.append('wedding_planner', isRequired);
 
+      // console.log('formData', formData);
         if (imagePath) {
           formData.append('profile', {
             uri: imagePath,
@@ -208,8 +205,8 @@ const EditProfileScreen = () => {
           <EditProfileComp
             title={'Dream Location'}
             titleText={
-              profileData.dreamLocation
-                ? profileData.dreamLocation
+              profileData?.dream_location
+                ? profileData?.dream_location
                 : '---'
             }
             onChangeText={text => handleChange('dream_location', text)}
@@ -217,7 +214,7 @@ const EditProfileScreen = () => {
           />
           <EditProfileComp
             title={'Require a Wedding Planner?'}
-            titleText={profileData.requireWeddingPlanner == 1 ? 'Yes' : 'No'}
+            titleText={isRequired === 1 || profileData.requireWeddingPlanner === 1 ? 'Yes' : 'No'}
             onChangeText={text => handleChange('wedding_planner', text)}
             error={error.number}
             isRequired={profileData.requireWeddingPlanner}
