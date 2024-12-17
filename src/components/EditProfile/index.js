@@ -12,7 +12,7 @@ import EditModal from '../EditModal';
 import InputField from '../InputField';
 import Button from '../Button';
 
-const EditProfileComp = ({title, titleText, onChangeText, error}) => {
+const EditProfileComp = ({title, titleText, onChangeText, error, isRequired}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [inputValue, setInputValue] = useState(titleText);
 
@@ -127,16 +127,11 @@ const EditProfileComp = ({title, titleText, onChangeText, error}) => {
 
               {title === 'Require a Wedding Planner?' && (
                 <EditModal
-                  title={'Enter Dream Location'}
+                  title={'Do you require a wedding planner ?'}
                   closeModal={() => setModalVisible(false)}
-                  inputField={
-                    <InputField
-                      title={'Location'}
-                      placeholderText={'Enter your location'}
-                      placeholderImage={IMAGES.shield}
-                      getText={text => setInputValue(text)}
-                    />
-                  }
+                  selectValue={true}
+                  isSelectedValue={isRequired}
+                  getText={setInputValue}
                   button={
                     <Button
                       title={'Save'}

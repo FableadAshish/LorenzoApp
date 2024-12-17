@@ -83,29 +83,44 @@ export const getStatesBySearch = createAsyncThunk('getStates', async state => {
 
 export const getCountiresData = createAsyncThunk(
   'getCountriesData',
-  async data => {
-    const byLocationType = data.state ? data.state : data.country;
-    console.log('byLocationType', byLocationType)
+  async (data) => {
     try {
-      const getSearchedCountries = await axios.get(
-        /*`${BASE_URL}/search?search_term=${searchValue}`*/
-        `${BASE_URL}/search?search_term=${byLocationType}`,
-        {
-          headers: {
-            Authorization: TOKEN,
-          },
-        },
-      );
+      // Create an array to store results for all selected countries
+      const countriesData = [];
+
+      // Iterate through each selected country
+      for (const selectedCountry of data.selectedCountries) {
+        const byLocationType = /*data.state ? data.state : */selectedCountry;
+        console.log('byLocationType', byLocationType)
+        // Make API call for each country
+        const getSearchedCountries = await axios.get(
+          `${BASE_URL}/search?search_term=${byLocationType}`,
+          {
+            headers: {
+              Authorization: TOKEN,
+            },
+          }
+        );
+
+        // Store the result for this country
+        countriesData.push({
+          country: selectedCountry,
+          searchedData: getSearchedCountries.data.result[0].properties
+        });
+      }
+
       return {
-        searchedData: getSearchedCountries.data.result[0].properties,
+        searchedData: countriesData,
         type: data.type,
         selectedCountries: data.selectedCountries
       };
     } catch (error) {
-      console.log('err', error.response.data.message);
+      console.log('err', error.response?.data?.message);
+      throw error;
     }
-  },
+  }
 );
+
 
 const propertySlice = createSlice({
   name: 'propertySlice',
@@ -163,16 +178,17 @@ const propertySlice = createSlice({
       state.error = action.payload;
     });
     // getCountriesData
-    builder.addCase(getCountiresData.pending, state => {
+    builder.addCase(getCountiresData.pending, (state) => {
       state.loading = true;
     });
+    
     builder.addCase(getCountiresData.fulfilled, (state, action) => {
       const locationType = action.payload.type;
-      console.log('selectedCountries',action.payload.selectedCountries);
-      console.log('locationType', locationType);
       state.loading = false;
+    
       switch (locationType) {
         case 'country':
+          // Now stores data for multiple countries
           state.countries = action.payload.searchedData;
           break;
         case 'state':
@@ -182,10 +198,12 @@ const propertySlice = createSlice({
           return;
       }
     });
+    
     builder.addCase(getCountiresData.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });
+    
   },
 });
 

@@ -42,6 +42,8 @@ export default {
   pound: require('../../src/assets/Images/App/pound.png'),
   Help: require('../../src/assets/Images/App/Help.png'),
   APP_ICON: require('../../src/assets/Images/App/AppIcon.png'),
+  CHECKED: require('../../src/assets/Images/App/Checked.png'),
+  UNCHECKED: require('../../src/assets/Images/App/UnChecked.png'),
 
   // Bottom Tab
   CalendarIcon: require('../../src/assets/Images/BottomTab/CalendarIcon.png'),
@@ -64,7 +66,7 @@ export default {
   visible: require('../../src/assets/Images/Auth/visible.png'),
   hide: require('../../src/assets/Images/Auth/hide.png'),
   resetPassword: require('../../src/assets/Images/Auth/resetPassword.png'),
-  
+
   // Profile
   logout: require('../../src/assets/Images/Profile/logout.png'),
   HelpandSupport: require('../../src/assets/Images/Profile/HelpandSupport.png'),
