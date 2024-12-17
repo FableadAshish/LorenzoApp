@@ -1,17 +1,12 @@
-import React, {useEffect, useState} from 'react';
-import {
-  Modal,
-  Text,
-  View,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  Pressable,
-} from 'react-native';
+import React, {useState} from 'react';
+import {Text, View, Image, TouchableOpacity, Pressable} from 'react-native';
 import {COLORS, COMMOM, FONTS, IMAGES} from '../../constants';
 import {useNavigation} from '@react-navigation/native';
 import {ROUTES} from '../../constants/routes';
 import images from '../../constants/images';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import {isPlannerRequired} from '../../redux/slice/propertySlice';
+import {useDispatch} from 'react-redux';
 
 const EditModal = ({
   title,
@@ -21,20 +16,22 @@ const EditModal = ({
   forgetPassword,
   selectValue,
   isSelectedValue,
-  getText
+  getText,
 }) => {
   const navigation = useNavigation();
   const forgetPasswords = () => {
     navigation.navigate(ROUTES.FORGOT_PASSWORD);
     closeModal();
   };
+  const dispatch = useDispatch();
   const [selectedValue, setSelectedValue] = useState(isSelectedValue);
 
   const toggleSelection = value => {
+    dispatch(isPlannerRequired(value));
     setSelectedValue(value);
   };
   return (
-    <View style={{paddingHorizontal: 20}}>
+    <View /*style={{paddingHorizontal: 20}}*/>
       <View style={styles.container}>
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>{title}</Text>
@@ -91,7 +88,7 @@ const EditModal = ({
   );
 };
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
   container: {
     paddingHorizontal: COMMOM.paddingHorizantal,
   },
@@ -100,28 +97,28 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
-    marginTop: 40,
+    marginTop: '40rem',
   },
   titleText: {
-    fontSize: 18,
+    fontSize: '18rem',
     color: COLORS.mediumTextColor,
     fontFamily: FONTS.poppinsRegular,
   },
   closeImage: {
-    height: 30,
-    width: 30,
+    height: '30rem',
+    width: '30rem',
   },
   forgetPassword: {
     textAlign: 'right',
     // marginTop: 10,
     textDecorationLine: 'underline',
-    padding: 5,
+    // padding: 5,
   },
   placeholderContainer: {marginTop: 0},
-  buttonContainer: {marginTop: 10},
+  buttonContainer: {marginTop: '10rem'},
   uncheckedImage: {
-    height: 24,
-    width: 24,
+    height: '24rem',
+    width: '24rem',
   },
   selectOption: {
     flexDirection: 'row',
@@ -133,11 +130,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     width: '40%',
-    marginTop: 20
+    marginTop: '20rem',
   },
   isRequiredText: {
-    fontSize: 16,
-  }
+    fontSize: '16rem',
+  },
 });
 
 export default EditModal;

@@ -1,6 +1,7 @@
 import React from 'react';
 import {Text, TouchableOpacity, View, StyleSheet} from 'react-native';
 import {COLORS} from '../../constants';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 const Button = ({title, performAction, style, innerStyle, styleText}) => {
   return (
@@ -15,23 +16,23 @@ const Button = ({title, performAction, style, innerStyle, styleText}) => {
   );
 };
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 20,
+    marginTop: '20rem',
   },
   buttonContainer: {
-    height: 50,
+    height: '50rem',
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 15,
+    borderRadius: '15rem',
     backgroundColor: COLORS.appColor,
   },
   buttonText: {
     color: COLORS.white,
-    fontSize: 20,
+    fontSize: '20rem',
   },
 });
 export default Button;

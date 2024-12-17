@@ -1,6 +1,7 @@
 import React from 'react';
 import { TextInput, StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
 import { COLORS, FONTS, IMAGES } from '../../constants';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 const InputField = ({
   placeholderText,
@@ -46,50 +47,48 @@ const InputField = ({
   );
 };
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
   input: {
-    height: 50,
+    height: '50rem',
     borderColor: COLORS.lightTextColor,
-    borderRadius: 50,
+    borderRadius: '50rem',
     backgroundColor: COLORS.placeholderBackgroundColor,
-    paddingLeft: 20,
-    paddingRight: 20,
+    paddingLeft: '20rem',
+    paddingRight: '20rem',
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 10
-    // position: 'relative', // Required for absolute positioning of rightIcon
   },
   fieldContainer: {
-    marginTop: 20,
+    marginTop: '20rem',
   },
   title: {
-    fontSize: 18,
+    fontSize: '18rem',
     letterSpacing: 0.4,
     color: COLORS.black,
     fontFamily: FONTS.poppinsRegular,
   },
   iconStyle: {
-    height: 20,
-    width: 20,
-    marginRight: 10,
+    height: '20rem',
+    width: '20rem',
+    marginRight: '10rem',
   },
   inputFieldText: {
-    fontSize: 17,
+    fontSize: '17rem',
     fontFamily: FONTS.poppinsRegular,
     flex: 1,
     color: COLORS.black,
   },
   rightIcon: {
-    height: 20,
-    width: 20,
+    height: '20rem',
+    width: '20rem',
     // position: 'absolute',
     // right: 20, // Adjust as needed for proper spacing
   },
   errorText: {
     color: 'red',
-    fontSize: 14,
-    marginTop: 10,
-    marginLeft: 10,
+    fontSize: '14rem',
+    marginTop: '10rem',
+    marginLeft: '10rem',
     // textAlign: 'center'
   },
 });
