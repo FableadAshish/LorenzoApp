@@ -83,15 +83,15 @@ export const getStatesBySearch = createAsyncThunk('getStates', async state => {
 
 export const getCountiresData = createAsyncThunk(
   'getCountriesData',
-  async (data) => {
+  async data => {
     try {
       // Create an array to store results for all selected countries
       const countriesData = [];
 
       // Iterate through each selected country
       for (const selectedCountry of data.selectedCountries) {
-        const byLocationType = /*data.state ? data.state : */selectedCountry;
-        console.log('byLocationType', byLocationType)
+        const byLocationType = /*data.state ? data.state : */ selectedCountry;
+        console.log('byLocationType', byLocationType);
         // Make API call for each country
         const getSearchedCountries = await axios.get(
           `${BASE_URL}/search?search_term=${byLocationType}`,
@@ -99,28 +99,67 @@ export const getCountiresData = createAsyncThunk(
             headers: {
               Authorization: TOKEN,
             },
-          }
+          },
         );
 
         // Store the result for this country
         countriesData.push({
           country: selectedCountry,
-          searchedData: getSearchedCountries.data.result[0].properties
+          searchedData: getSearchedCountries.data.result[0].properties,
         });
       }
 
       return {
         searchedData: countriesData,
         type: data.type,
-        selectedCountries: data.selectedCountries
+        selectedCountries: data.selectedCountries,
       };
     } catch (error) {
       console.log('err', error.response?.data?.message);
       throw error;
     }
-  }
+  },
 );
 
+export const getPropertiesByStates = createAsyncThunk(
+  'getStatesList',
+  async data => {
+    try {
+      const getSearchedStates = await axios.get(
+        /*`${BASE_URL}/search?search_term=${searchValue}`*/
+        `${BASE_URL}/search?search_term=${data.state}`,
+        {
+          headers: {
+            Authorization: TOKEN,
+          },
+        },
+      );
+      return getSearchedStates.data.result[0].properties;
+    } catch (error) {
+      console.log('err', error.response.data.message);
+    }
+  },
+);
+
+// export const getPropertiesByStates = createAsyncThunk(
+//   'getStatesList',
+//   async data => {
+//     console.log(data.state);
+//     // try {
+//     //   const response = await axios.get(
+//     //     `${BASE_URL}/search?search_term=${data.state}`,
+//     //     {
+//     //       headers: {
+//     //         Authorization: TOKEN,
+//     //       },
+//     //     },
+//     //   );
+//     //   console.log('response.data', response.data);
+//     // } catch (error) {
+//     //   console.log('error', error);
+//     // }
+//   },
+// );
 
 const propertySlice = createSlice({
   name: 'propertySlice',
@@ -178,32 +217,43 @@ const propertySlice = createSlice({
       state.error = action.payload;
     });
     // getCountriesData
-    builder.addCase(getCountiresData.pending, (state) => {
+    builder.addCase(getCountiresData.pending, state => {
       state.loading = true;
     });
-    
+
     builder.addCase(getCountiresData.fulfilled, (state, action) => {
-      const locationType = action.payload.type;
+      // const locationType = action.payload.type;
       state.loading = false;
-    
-      switch (locationType) {
-        case 'country':
-          // Now stores data for multiple countries
-          state.countries = action.payload.searchedData;
-          break;
-        case 'state':
-          state.state = action.payload.searchedData;
-          break;
-        default:
-          return;
-      }
+
+      state.countries = action.payload.searchedData;
+      // switch (locationType) {
+      // case 'country':
+      //   // Now stores data for multiple countries
+      //   break;
+      // case 'state':
+      //   state.state = action.payload.searchedData;
+      //   break;
+      // default:
+      //   return;
+      // }
     });
-    
+
     builder.addCase(getCountiresData.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });
-    
+
+    builder.addCase(getPropertiesByStates.pending, state => {
+      state.loading = true;
+    });
+    builder.addCase(getPropertiesByStates.fulfilled, (state, action) => {
+      state.loading = false;
+      state.state = action.payload;
+    });
+    builder.addCase(getPropertiesByStates.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
   },
 });
 

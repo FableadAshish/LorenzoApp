@@ -131,7 +131,7 @@ const EditProfileScreen = () => {
 
         // console.log(formData);
         try {
-          setLoading(true);
+          setLoading(true); 
           const response = await fetch(
             `${BASE_URL}/updateUsers/${userProfile.id}`,
             {
