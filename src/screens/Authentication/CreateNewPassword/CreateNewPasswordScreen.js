@@ -142,13 +142,12 @@ const CreateNewPasswordScreen = () => {
           />
         </View>
         <Text style={styles.error}>{errorMessage}</Text>
-      <View style={styles.buttonContainer}>
         <Button
           title={ loading ? <ActivityIndicator color={COLORS.white}  size={20} /> : 'Change Password'}
-          innerStyle={styles.buttonStyles}
           performAction={changePassword}
         />
-      </View>
+      {/* <View style={styles.buttonContainer}>
+      </View> */}
       </View>
     </KeyboardAwareScrollView>
   );
@@ -157,13 +156,13 @@ const CreateNewPasswordScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.bgColor,
     paddingHorizontal: COMMOM.paddingHorizantal,
   },
   title: {
     fontSize: 25,
     fontFamily: FONTS.poppinsRegular,
-    color: COLORS.mediumTextColor,
+    color: COLORS.appColor,
     marginTop: 20,
     fontWeight: Platform.OS === 'ios' ? '400' : '600',
   },
@@ -176,7 +175,7 @@ const styles = StyleSheet.create({
     fontWeight: Platform.OS === 'ios' ? '400' : '600',
   },
   buttonStyles: {
-    borderRadius: 15,
+    // borderRadius: 15,
   },
   buttonContainer: {
     backgroundColor: COLORS.white,

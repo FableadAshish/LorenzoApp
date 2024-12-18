@@ -99,7 +99,7 @@ const PropertyListingDetailsScreen = () => {
       newErrors.inquiry = 'Message cannot be empty';
       isValid = false;
     }
-    if (inquiryDetails.inquiry || inquiryDetails.inquiry.length < 10) {
+    if (inquiryDetails.inquiry && inquiryDetails.inquiry.length < 10) {
       newErrors.inquiry =
         'Your message is too short. Please provide a more detailed message so we can thoroughly address your inquiry.';
       isValid = false;
@@ -169,7 +169,7 @@ const PropertyListingDetailsScreen = () => {
     contactVenueForm.append('subject', venueDetails.subject);
     console.log('contactVenueForm', contactVenueForm);
     try {
-      // setIsLoading(true);
+      setIsLoading(true);
       const response = await axios.post(
         `${BASE_URL}/contactVenueMail`,
         contactVenueForm,
@@ -188,8 +188,8 @@ const PropertyListingDetailsScreen = () => {
       //   'We have received your inquiry and will review it shortly. Thank you for reaching out to us.',
       // );
     } catch (error) {
-      console.log('error', error);
-      // setIsLoading(false);
+      console.log('error', error.response.data.message);
+      setIsLoading(false);
     }
     // }
   };
@@ -318,7 +318,7 @@ const PropertyListingDetailsScreen = () => {
             propertyDetails?.description.length > 50 ? (
               <ReadMore>{propertyDetails?.description}</ReadMore>
             ) : (
-              <Text>{propertyDetails?.description}</Text>
+              <Text style={styles.descriptionText}>{propertyDetails?.description}</Text>
             )}
           </View>
         </View>

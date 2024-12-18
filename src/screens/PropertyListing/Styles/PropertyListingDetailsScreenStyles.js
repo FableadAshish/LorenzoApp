@@ -367,6 +367,11 @@ export const styles = EStyleSheet.create({
     paddingBottom:'20rem'
   },
   header: {
-    height: 60
+    height: 60,
+  },
+  descriptionText: {
+    color: COLORS.black,
+    fontFamily: FONTS.poppinsRegular,
+    fontSize: 14
   }
 });

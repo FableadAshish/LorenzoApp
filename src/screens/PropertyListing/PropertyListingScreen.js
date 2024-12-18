@@ -59,7 +59,6 @@ const PropertyListingScreen = () => {
         propertyDetails: item,
       });
     };
-
     return (
       <View style={styles.listItemContainer}>
         <TouchableOpacity

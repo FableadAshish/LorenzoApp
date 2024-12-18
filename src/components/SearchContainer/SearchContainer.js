@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {COLORS, FONTS, IMAGES} from '../../constants';
 import {useDispatch} from 'react-redux';
-import {getCountiresData, getPropertiesByStates} from '../../redux/slice/propertySlice';
+import {getCountiresData, getPropertiesByStates, removeCountryData} from '../../redux/slice/propertySlice';
 
 const SearchContainer = ({
   placeholderTitle,
@@ -91,7 +91,8 @@ const SearchContainer = ({
   };
 
   const removeCountry = countries => {
-    setSelectedCountries(selectedCountries.filter(item => item !== countries));
+    setSelectedCountries(prev => prev.filter(item => item !== countries));
+    dispatch(removeCountryData(countries));
   };
 
   return (

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, TouchableOpacity, View, StyleSheet, Image} from 'react-native';
+import {Text, TouchableOpacity, View, StyleSheet, Image, Pressable} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {COLORS, COMMOM, IMAGES} from '../../constants';
 
@@ -16,11 +16,11 @@ export const Header = ({
     <View style={[styles.container, style]}>
       <View style={[styles.leftContainer, iconBackground]}>
         {iconName === 'chevron-small-left' ? (
-          <TouchableOpacity
+          <Pressable
             onPress={openDrawer}
             style={styles.leftIconStyles}>
             <Image source={IMAGES.leftArrow} style={styles.leftNavigation} />
-          </TouchableOpacity>
+          </Pressable>
         ) : (
           <TouchableOpacity>
             <Image source={IMAGES.menu} style={styles.leftNavigation} />
@@ -118,5 +118,7 @@ const styles = StyleSheet.create({
     width: 30,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingHorizontal: 10,
+    // backgroundColor: 'red'
   }
 });

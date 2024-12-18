@@ -12,6 +12,8 @@ const initialState = {
   error: '',
   hasMore: false,
   isRequired: '',
+  countries: [],
+  selectedCountries: [],
 };
 
 export const getAllProperties = createAsyncThunk(
@@ -86,13 +88,11 @@ export const getCountiresData = createAsyncThunk(
   'getCountriesData',
   async data => {
     try {
-      // Create an array to store results for all selected countries
       const countriesData = [];
 
       // Iterate through each selected country
       for (const selectedCountry of data.selectedCountries) {
         const byLocationType = /*data.state ? data.state : */ selectedCountry;
-        console.log('byLocationType', byLocationType);
         // Make API call for each country
         const getSearchedCountries = await axios.get(
           `${BASE_URL}/search?search_term=${byLocationType}`,
@@ -169,6 +169,17 @@ const propertySlice = createSlice({
     isPlannerRequired: (state, action) => {
       // console.log('action.payload', action.payload)
       state.isRequired = action.payload;
+    },
+    removeCountryData: (state, action) => {
+      // Remove the country from the countries array
+      state.countries = state.countries.filter(
+        countryData => countryData.country !== action.payload
+      );
+      
+      // Remove the country from selectedCountries
+      state.selectedCountries = state.selectedCountries.filter(
+        country => country !== action.payload
+      );
     }
   },
   extraReducers: builder => {
@@ -229,20 +240,12 @@ const propertySlice = createSlice({
     });
 
     builder.addCase(getCountiresData.fulfilled, (state, action) => {
-      // const locationType = action.payload.type;
       state.loading = false;
-
-      state.countries = action.payload.searchedData;
-      // switch (locationType) {
-      // case 'country':
-      //   // Now stores data for multiple countries
-      //   break;
-      // case 'state':
-      //   state.state = action.payload.searchedData;
-      //   break;
-      // default:
-      //   return;
-      // }
+      if (action.payload.type === 'country') {
+        // Keep only the data for the currently selected countries
+        state.countries = action.payload.searchedData;
+        state.selectedCountries = action.payload.selectedCountries;
+      }
     });
 
     builder.addCase(getCountiresData.rejected, (state, action) => {
@@ -265,7 +268,8 @@ const propertySlice = createSlice({
 });
 
 export const {
-  isPlannerRequired
+  isPlannerRequired,
+  removeCountryData
 } = propertySlice.actions;
 
 export default propertySlice.reducer;
