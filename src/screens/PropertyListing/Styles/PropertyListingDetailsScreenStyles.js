@@ -5,7 +5,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 export const styles = EStyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.bgColor,
     paddingHorizontal: COMMOM.paddingHorizantal,
   },
   headerBackground: {
@@ -241,7 +241,7 @@ export const styles = EStyleSheet.create({
     width: '90%',
   },
   contactFormContainer: {
-    backgroundColor: 'white',
+    backgroundColor: COLORS.bgColor,
     borderRadius: '10rem',
     width: '100%',
     marginTop: '20rem'
@@ -263,11 +263,12 @@ export const styles = EStyleSheet.create({
     marginTop: '10rem',
   },
   inputLabel: {
-    fontSize: 16,
-    color: COLORS.black,
+    fontSize: '16rem',
+    color: COLORS.appColor,
+    fontFamily: FONTS.poppinsRegular
   },
   inputMessage: {
-    borderColor: COLORS.lightTextColor,
+    borderColor: COLORS.black,
     borderWidth: 0.5,
     paddingHorizontal: '10rem',
     marginBottom: '10rem',
@@ -277,9 +278,10 @@ export const styles = EStyleSheet.create({
     textAlignVertical: 'top',
     fontSize: 15,
     color: COLORS.lightTextColor,
+    backgroundColor: COLORS.textFieldColor
   },
   subjectMessage: {
-    borderColor: COLORS.lightTextColor,
+    borderColor: COLORS.black,
     borderWidth: 0.5,
     paddingHorizontal: '10rem',
     marginBottom: '10rem',
@@ -288,6 +290,7 @@ export const styles = EStyleSheet.create({
     height: '50rem',
     fontSize: 15,
     color: COLORS.lightTextColor,
+    backgroundColor: COLORS.textFieldColor
   },
   errorText: {
     color: 'red',
@@ -358,12 +361,12 @@ export const styles = EStyleSheet.create({
     bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    backgroundColor: COLORS.bgColor,
   },
   submitContactVenueButton: {
     paddingBottom:'20rem'
   },
   header: {
-    height: 40
+    height: 60
   }
 });

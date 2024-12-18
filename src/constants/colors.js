@@ -3,6 +3,7 @@ export default {
   mediumTextColor: '#1B1E28',
   lightPrimaryColor: '#6759FF',
   white: '#fff',
+  bgColor: '#dae0db',
   black: 'black',
   lightOrange: '#FF7029',
   lightBlueText: '#0D6EFD',
@@ -11,12 +12,13 @@ export default {
   placeholderBackgroundColor: '#E1E5F4',
   placeholderIconColor: '#030047',
   buttonAuthCommon: '#FFCC3E',
-  buttonAuthCommonText: '#030047',
+  buttonAuthCommonText: '#ecf3ef',
   transparent: 'transparent',
   lightGrey: "#cccccc",
   xLightGrey: "#e6e6e6",
   xxLightGrey: "#f2f2f2",
-  appColor: '#634871',
+  appColor: '#563c5b',
   logoBackGroundColor: '#C4C8C3',
-  logoBackGroundColor2: '#d8c5c6'
+  logoBackGroundColor2: '#d8c5c6',
+  textFieldColor: '#ecf3ef'
 };

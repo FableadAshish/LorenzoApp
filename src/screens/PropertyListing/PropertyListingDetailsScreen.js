@@ -13,7 +13,7 @@ import {
   Linking,
 } from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import {COLORS, IMAGES} from '../../constants';
+import {COLORS, FONTS, IMAGES} from '../../constants';
 import Button from '../../components/Button';
 import {ROUTES} from '../../constants/routes';
 import {useSelector} from 'react-redux';
@@ -162,35 +162,35 @@ const PropertyListingDetailsScreen = () => {
 
   const submitContactVenueForm = async (userID, propertyID) => {
     // if (isContactVenueValidate()) {
-      const contactVenueForm = new FormData();
-      contactVenueForm.append('user_id', 22);
-      contactVenueForm.append('property_id', 99);
-      contactVenueForm.append('message', venueDetails.inquiry);
-      contactVenueForm.append('subject', venueDetails.subject);
-      console.log('contactVenueForm', contactVenueForm)
-      try {
-        // setIsLoading(true);
-        const response = await axios.post(
-          `${BASE_URL}/contactVenueMail`,
-          contactVenueForm,
-          {
-            headers: {
-              Authorization: TOKEN,
-              'Content-Type': 'multipart/form-data',
-            },
+    const contactVenueForm = new FormData();
+    contactVenueForm.append('user_id', 22);
+    contactVenueForm.append('property_id', 99);
+    contactVenueForm.append('message', venueDetails.inquiry);
+    contactVenueForm.append('subject', venueDetails.subject);
+    console.log('contactVenueForm', contactVenueForm);
+    try {
+      // setIsLoading(true);
+      const response = await axios.post(
+        `${BASE_URL}/contactVenueMail`,
+        contactVenueForm,
+        {
+          headers: {
+            Authorization: TOKEN,
+            'Content-Type': 'multipart/form-data',
           },
-        );
-        console.log('response.data', response.data);
-        // setVenueDetails('');
-        // setVenueErrors('');
-        // // setIsLoading(false);
-        // Toast.show(
-        //   'We have received your inquiry and will review it shortly. Thank you for reaching out to us.',
-        // );
-      } catch (error) {
-        console.log('error', error);
-        // setIsLoading(false);
-      }
+        },
+      );
+      console.log('response.data', response.data);
+      // setVenueDetails('');
+      // setVenueErrors('');
+      // // setIsLoading(false);
+      // Toast.show(
+      //   'We have received your inquiry and will review it shortly. Thank you for reaching out to us.',
+      // );
+    } catch (error) {
+      console.log('error', error);
+      // setIsLoading(false);
+    }
     // }
   };
 
@@ -277,7 +277,7 @@ const PropertyListingDetailsScreen = () => {
         />
         {isWebViewLoading && (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color={COLORS.primary} />
+            <ActivityIndicator size="large" color={COLORS.white} />
           </View>
         )}
       </View>
@@ -340,13 +340,31 @@ const PropertyListingDetailsScreen = () => {
               tintColor={COLORS.appColor}
             />
           </View>
+          {/* {propertyDetails.images && propertyDetails.images.length > 0 ? ( */}
           <FlatList
             data={propertyDetails.images}
             renderItem={renderImages}
             horizontal
             contentContainerStyle={styles.galleryImagesContainer}
             keyExtractor={(item, index) => index.toString()}
+            ListEmptyComponent={
+              <View>
+                <Text
+                  style={{
+                    color: COLORS.black,
+                    fontSize: 14,
+                    fontFamily: FONTS.poppinsRegular,
+                  }}>
+                  Currently, there are no Gallery Images
+                </Text>
+              </View>
+            }
           />
+          {/* // ) : (
+          //   <View style={{paddingVertical: 20}}>
+          //     <Text style={{color: COLORS.black, fontSize: 14, fontFamily: FONTS.poppinsRegular}}>Currently, there are no Images</Text>
+          //   </View>
+          // )} */}
 
           <ImageView
             images={propertyDetails.images.map(uri => ({uri}))}
@@ -383,6 +401,18 @@ const PropertyListingDetailsScreen = () => {
           horizontal
           contentContainerStyle={styles.galleryImagesContainer}
           keyExtractor={(item, index) => index.toString()}
+          ListEmptyComponent={
+            <View>
+              <Text
+                style={{
+                  color: COLORS.black,
+                  fontSize: 14,
+                  fontFamily: FONTS.poppinsRegular,
+                }}>
+                Currently, there is no floor plan
+              </Text>
+            </View>
+          }
         />
 
         <ImageView
@@ -440,13 +470,11 @@ const PropertyListingDetailsScreen = () => {
           value={propertyDetails.details.zip_code}
           icon={IMAGES.zipCode}
         /> */}
-        <View style={{backgroundColor: 'white'}}>
-          <Button
-            title={'Submit Inquiry'}
-            style={styles.button}
-            performAction={addInquiry}
-          />
-        </View>
+        <Button
+          title={'Submit Inquiry'}
+          style={styles.button}
+          performAction={addInquiry}
+        />
         <View style={styles.separator} />
         <View contentContainerStyle={styles.scrollViewContent}>
           <View style={styles.contactFormContainer}>

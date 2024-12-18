@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {IMAGES} from '../../../constants';
+import {COLORS, IMAGES} from '../../../constants';
 import SearchContainer from '../../../components/SearchContainer/SearchContainer';
 import {ROUTES} from '../../../constants/routes';
 import {useDispatch, useSelector} from 'react-redux';
@@ -19,6 +19,7 @@ import {
   getCountriesBySearch,
 } from '../../../redux/slice/propertySlice';
 import {styles} from './Styles/HomeScreenStyles';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -77,7 +78,7 @@ const HomeScreen = () => {
           style={styles.locationImage}
           source={{
             uri: item?.images[0],
-            priority: FastImage.priority.normal,
+            priority: FastImage.priority.high,
           }}
           resizeMode={FastImage.resizeMode.contain}
         />
@@ -178,31 +179,35 @@ const HomeScreen = () => {
           value={searchValue}
           countriesList={countriesList}
         />
-        <View style={styles.labelContainer}>
-          <Text style={styles.labelText}>Latest Properties</Text>
-          <TouchableOpacity onPress={() => RouteToPropertyListing()}>
-            <Text style={styles.viewAllText}>View all</Text>
-          </TouchableOpacity>
-        </View>
+
         <View style={styles.listContainer}>
           <ScrollView
-            style={{backgroundColor: 'white'}}
+            style={{backgroundColor: COLORS.bgColor}}
             showsVerticalScrollIndicator={false}>
             <>
-              <View style={{marginLeft: -30}}>
-                <FlatList
-                  data={getAll /*searchQuery*/}
-                  keyExtractor={item => item.id}
-                  renderItem={renderList}
-                  horizontal={true}
-                  showsHorizontalScrollIndicator={false}
-                  onEndReached={hasMore === false && loadMore}
-                  onEndReachedThreshold={0.5}
-                />
-              </View>
-              {countriesData &&
-                countriesData.length > 0 &&
-                countriesData.map(renderCountrySection)}
+              {countriesData && countriesData.length > 0 ? (
+                countriesData.map(renderCountrySection)
+              ) : (
+                <>
+                  <View style={styles.labelContainer}>
+                    <Text style={styles.labelText}>Latest Properties</Text>
+                    <TouchableOpacity onPress={() => RouteToPropertyListing()}>
+                      <Text style={styles.viewAllText}>View all</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={{marginLeft: -30}}>
+                    <FlatList
+                      data={getAll /*searchQuery*/}
+                      keyExtractor={item => item.id}
+                      renderItem={renderList}
+                      horizontal={true}
+                      showsHorizontalScrollIndicator={false}
+                      onEndReached={hasMore === false && loadMore}
+                      onEndReachedThreshold={0.5}
+                    />
+                  </View>
+                </>
+              )}
             </>
           </ScrollView>
         </View>
