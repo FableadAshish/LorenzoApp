@@ -40,7 +40,7 @@ const LoginScreen = () => {
         email,
       )
     ) {
-      setEmailError('Please enter a valid Email address');
+      setEmailError('Please enter a valid email address');
       isValid = false;
     } else {
       setEmailError('');
@@ -147,7 +147,7 @@ const LoginScreen = () => {
           <Text style={styles.errorText}>{alredyLoggedIn}</Text>
         )}
         <View style={styles.backImageContainer}>
-          <ImageBackground
+          <View
             source={IMAGES.AuthRectangle}
             style={styles.backImage}
             resizeMode="stretch">
@@ -155,7 +155,7 @@ const LoginScreen = () => {
               <Button
                 title={
                   loading ? (
-                    <ActivityIndicator size={20} color={'black'} />
+                    <ActivityIndicator size={20} color={COLORS.white} />
                   ) : (
                     'Sign In'
                   )
@@ -171,7 +171,7 @@ const LoginScreen = () => {
                 <Text style={styles.toSignUp}>Sign up</Text>
               </TouchableOpacity>
             </View>
-          </ImageBackground>
+          </View>
         </View>
       </View>
     </KeyboardAwareScrollView>
@@ -181,7 +181,7 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.bgColor,
     justifyContent: 'space-between',
   },
   logInImage: {
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
   titleHeader: {
     fontSize: 30,
     textAlign: 'center',
-    color: COLORS.black,
+    color: COLORS.appColor,
   },
   titleSubHeader: {
     fontSize: 16,
@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
   forgotPassword: {
     textAlign: 'right',
     marginTop: 15,
-    color: COLORS.lightPrimaryColor,
+    color: COLORS.appColor,
     fontWeight: '600',
     letterSpacing: 0.5,
   },
@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
     gap: 5,
   },
   noAccountTitle: {
-    color: COLORS.white,
+    color: COLORS.appColor,
     fontSize: 16,
     fontFamily: FONTS.lightText,
   },
@@ -237,11 +237,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     letterSpacing: 0.4,
     fontWeight: '400',
-    color: COLORS.buttonAuthCommon,
+    color: COLORS.appColor,
     textDecorationLine: 'underline',
   },
   buttonStyles: {
-    backgroundColor: COLORS.buttonAuthCommon,
+    backgroundColor: COLORS.appColor,
     borderRadius: 50,
     height: 50,
   },
@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   backImageContainer: {
-    backgroundColor: 'white',
+    backgroundColor: COLORS.bgColor,
     marginTop: 10,
   },
   authImageContainer: {
@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
     color: 'red',
     fontSize: 14,
     paddingHorizontal: COMMOM.paddingHorizantal,
-    backgroundColor: 'white',
+    backgroundColor: COLORS.bgColor,
     paddingTop: 15,
     textAlign: 'center',
     fontFamily: FONTS.poppinsRegular,
@@ -285,8 +285,9 @@ const styles = StyleSheet.create({
   errorTexts: {
     color: 'red',
     fontSize: 14,
-    backgroundColor: 'white',
+    backgroundColor: COLORS.bgColor,
     paddingTop: 10,
+    fontFamily: FONTS.poppinsRegular
   },
 });
 

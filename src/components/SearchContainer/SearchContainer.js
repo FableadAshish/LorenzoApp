@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import {COLORS, IMAGES} from '../../constants';
+import {COLORS, FONTS, IMAGES} from '../../constants';
 import {useDispatch} from 'react-redux';
 import {getCountiresData, getPropertiesByStates} from '../../redux/slice/propertySlice';
 
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: 52,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.textFieldColor,
     borderRadius: 20,
     borderWidth: 1,
     borderColor: COLORS.lightTextColor,
@@ -183,7 +183,9 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     color: COLORS.black,
     fontSize: 16,
-    width: '100%',
+    flex: 1,
+    fontFamily: FONTS.poppinsRegular,
+    backgroundColor: COLORS.textFieldColor
   },
   searchIcon: {
     height: 18,
@@ -196,7 +198,7 @@ const styles = StyleSheet.create({
     top: 52, // Height of the search input
     left: 0,
     right: 0,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.bgColor,
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
     shadowColor: '#000',
@@ -233,11 +235,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
+    backgroundColor: COLORS.textFieldColor
   },
   selectedCountryTag: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.lightGrey,
+    backgroundColor: COLORS.xLightGrey,
     borderRadius: 15,
     paddingHorizontal: 10,
     paddingVertical: 5,
@@ -259,6 +262,8 @@ const styles = StyleSheet.create({
     // flexGrow: 1,
     maxHeight: 50, // Adjust as needed
     alignItems: 'center',
+    flex: 1,
+    backgroundColor: COLORS.textFieldColor
   },
   searchResultsContainer: {
     maxHeight: 200, // Limit height of results

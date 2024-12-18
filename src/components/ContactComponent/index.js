@@ -25,7 +25,7 @@ const ContactCard = ({ contactTitle, value, icon, onPress }) => {
 
 const styles = StyleSheet.create({
   contactDetailsContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.textFieldColor,
     borderRadius: 15,
     marginTop: 10,
   },
@@ -33,9 +33,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 15,
+    paddingHorizontal: 10
   },
   iconContainer: {
-    backgroundColor: '#F0F4F8',
+    backgroundColor: COLORS.white,
     borderRadius: 50,
     padding: 10,
     marginRight: 15,

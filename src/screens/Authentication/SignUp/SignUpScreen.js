@@ -61,11 +61,11 @@ const SignUpScreen = () => {
         email,
       )
     ) {
-      setEmailErrorMessage('Please enter a valid Email address');
+      setEmailErrorMessage('Please enter a valid email address');
       isValid = false;
     }
 
-    if (password.length <= 8) {
+    if (password.length < 8) {
       setPasswordErrorMessage('Password must be at least 8 characters');
       isValid = false;
     }
@@ -150,24 +150,6 @@ const SignUpScreen = () => {
             value={email}
             errorMessage={emailErrorMessage}
           />
-          {/* <InputField
-            title={'Password'}
-            placeholderText={'Enter Password'}
-            placeholderImage={IMAGES.lock}
-            getText={text => setPassword(text)}
-            value={password}
-            secureTextEntry={true}
-            errorMessage={passwordErrorMessage}
-          />
-          <InputField
-            title={'Confirm Password'}
-            placeholderText={'Confirm Password'}
-            placeholderImage={IMAGES.lock}
-            getText={text => setConfirmPassword(text)}
-            value={confirm_password}
-            secureTextEntry={true}
-            errorMessage={confirm_passwordErrorMessage}
-          /> */}
           <InputField
             title={'Password'}
             placeholderText={'Enter Password'}
@@ -194,22 +176,22 @@ const SignUpScreen = () => {
         {error && <Text style={styles.errorText}>{error}</Text>}
       </View>
 
-      <View style={{ backgroundColor: 'white' }}>
-        <View style={styles.authImageContainer}>
+      <View style={{ backgroundColor: COLORS.bgColor }}>
+        {/* <View style={styles.authImageContainer}>
           <Image
             source={IMAGES.authImage}
             style={styles.authImage}
             resizeMode="contain"
           />
-        </View>
-        <ImageBackground
+        </View> */}
+        <View
           resizeMode="stretch"
           source={IMAGES.AuthRectangle}
           style={styles.backImage}
         >
           <View style={styles.buttonContainer}>
             <Button
-              title={loading ? <ActivityIndicator color={'black'} size={18} /> : 'Sign Up'}
+              title={loading ? <ActivityIndicator color={COLORS.white} size={18} /> : 'Sign Up'}
               performAction={() => registerUser(data)}
               innerStyle={styles.buttonStyles}
               styleText={styles.buttonText}
@@ -222,7 +204,7 @@ const SignUpScreen = () => {
               <Text style={styles.toSignUp}>Sign in</Text>
             </TouchableOpacity>
           </View>
-        </ImageBackground>
+        </View>
       </View>
     </KeyboardAwareScrollView>
   );
@@ -231,7 +213,7 @@ const SignUpScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.bgColor,
     // justifyContent: 'space-between',
   },
   scrollContent: {
@@ -269,7 +251,7 @@ const styles = StyleSheet.create({
   buttonStyles: {
     width: '100%',
     height: 50,
-    backgroundColor: COLORS.buttonAuthCommon,
+    backgroundColor: COLORS.appColor,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 50,
@@ -289,12 +271,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   noAccountTitle: {
-    color: COLORS.white,
+    color: COLORS.appColor,
     fontSize: 16,
     fontFamily: FONTS.lightText,
   },
   toSignUp: {
-    color: COLORS.buttonAuthCommon,
+    color: COLORS.appColor,
     fontSize: 16,
     fontFamily: FONTS.poppinsRegular,
     textDecorationLine: 'underline',
@@ -307,19 +289,19 @@ const styles = StyleSheet.create({
   authImageContainer: {
     width: '100%',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: COLORS.bgColor,
   },
   title: {
     textAlign: 'center',
     fontSize: 25,
-    color: COLORS.buttonAuthCommonText,
+    color: COLORS.appColor,
     fontFamily: FONTS.lightText,
     marginTop: 10,
   },
   subTitle: {
     textAlign: 'center',
     fontSize: 18,
-    color: COLORS.lightTextColor,
+    color: COLORS.appColor,
     fontFamily: FONTS.poppinsRegular,
   },
   errorText: {
@@ -327,7 +309,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     // marginTop: 5,
     paddingHorizontal: COMMOM.paddingHorizantal,
-    backgroundColor: 'white',
+    backgroundColor: COLORS.bgColor,
     paddingTop: 15,
     textAlign: 'center',
     fontFamily: FONTS.poppinsRegular

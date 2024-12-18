@@ -101,7 +101,7 @@ const styles = EStyleSheet.create({
   },
   titleText: {
     fontSize: '18rem',
-    color: COLORS.mediumTextColor,
+    color: COLORS.appColor,
     fontFamily: FONTS.poppinsRegular,
   },
   closeImage: {
@@ -134,6 +134,7 @@ const styles = EStyleSheet.create({
   },
   isRequiredText: {
     fontSize: '16rem',
+    color: COLORS.appColor
   },
 });
 

@@ -56,7 +56,7 @@ export const Header = ({
 const styles = StyleSheet.create({
   container: {
     // flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.bgColor,
     flexDirection: 'row',
     alignItems: 'center',
     // justifyContent: 'space-between',

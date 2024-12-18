@@ -52,7 +52,7 @@ const styles = EStyleSheet.create({
     height: '50rem',
     borderColor: COLORS.lightTextColor,
     borderRadius: '50rem',
-    backgroundColor: COLORS.placeholderBackgroundColor,
+    backgroundColor: COLORS.textFieldColor,
     paddingLeft: '20rem',
     paddingRight: '20rem',
     flexDirection: 'row',
@@ -64,7 +64,7 @@ const styles = EStyleSheet.create({
   title: {
     fontSize: '18rem',
     letterSpacing: 0.4,
-    color: COLORS.black,
+    color: COLORS.appColor,
     fontFamily: FONTS.poppinsRegular,
   },
   iconStyle: {
@@ -76,7 +76,7 @@ const styles = EStyleSheet.create({
     fontSize: '17rem',
     fontFamily: FONTS.poppinsRegular,
     flex: 1,
-    color: COLORS.black,
+    color: COLORS.appColor,
   },
   rightIcon: {
     height: '20rem',
@@ -89,6 +89,7 @@ const styles = EStyleSheet.create({
     fontSize: '14rem',
     marginTop: '10rem',
     marginLeft: '10rem',
+    fontFamily: FONTS.poppinsRegular
     // textAlign: 'center'
   },
 });

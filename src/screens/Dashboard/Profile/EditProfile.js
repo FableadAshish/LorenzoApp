@@ -20,6 +20,7 @@ import {ROUTES} from '../../../constants/routes';
 import {BASE_URL, TOKEN} from '../../../config';
 import {useSelector, useDispatch} from 'react-redux';
 import {fetchUserProfile} from '../../../redux/slice/profileSlice';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const EditProfileScreen = () => {
   const navigation = useNavigation();
@@ -38,7 +39,7 @@ const EditProfileScreen = () => {
   const [profileData, setProfileData] = useState({
     name: userProfileData ? userProfileData.username : userProfile.username,
     email: userProfileData ? userProfileData.email : userProfile.email,
-    number: userProfileData ? userProfileData.details.phone : '+91-1234567890',
+    number: userProfileData?.details?.phone ? userProfileData?.details?.phone : '---',
     dream_location: userProfileData?.details?.dream_location !== undefined
       ? userProfileData?.details?.dream_location
       : '----',
@@ -151,7 +152,10 @@ const EditProfileScreen = () => {
   };
 
   return (
-    <>
+    <KeyboardAwareScrollView
+    style={{flex: 1}}
+    contentContainerStyle={{flexGrow: 1}}
+    keyboardShouldPersistTaps="handled">
       <View style={styles.container}>
         <Header
           iconName={'chevron-small-left'}
@@ -214,7 +218,7 @@ const EditProfileScreen = () => {
           />
           <EditProfileComp
             title={'Require a Wedding Planner?'}
-            titleText={isRequired === 1 || profileData.requireWeddingPlanner === 1 ? 'Yes' : 'No'}
+            titleText={isRequired === 1 || profileData?.requireWeddingPlanner === 1 ? 'Yes' : 'No'}
             onChangeText={text => handleChange('wedding_planner', text)}
             error={error.number}
             isRequired={profileData.requireWeddingPlanner}
@@ -246,7 +250,7 @@ const EditProfileScreen = () => {
           </TouchableOpacity>
         </TouchableOpacity>
       </View>
-      <View style={{backgroundColor: COLORS.white, paddingHorizontal: 20}}>
+      <View style={{backgroundColor: COLORS.bgColor, paddingHorizontal: 20}}>
         <Button
           title={
             loading ? (
@@ -259,14 +263,14 @@ const EditProfileScreen = () => {
           performAction={() => updateProfile(profileData)}
         />
       </View>
-    </>
+    </KeyboardAwareScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.bgColor,
     paddingHorizontal: COMMOM.paddingHorizantal,
     // justifyContent: 'space-between'
   },

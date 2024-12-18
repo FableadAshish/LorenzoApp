@@ -92,7 +92,7 @@ const ForgetPasswordScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.bgColor,
     paddingHorizontal: COMMOM.paddingHorizantal,
   },
   forgetPasswordImage: {
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     paddingHorizontal: COMMOM.paddingHorizantal,
     paddingBottom: COMMOM.paddingHorizantal,
-    backgroundColor: COLORS.white,
+    backgroundColor:COLORS.bgColor,
   },
   buttonStyle: {
     borderRadius: 50,
