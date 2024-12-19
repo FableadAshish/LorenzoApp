@@ -65,7 +65,7 @@ export const styles = EStyleSheet.create({
     width: '100%',
   },
   locationName: {
-    color: COLORS.lightTextColor,
+    color: COLORS.appColor,
     fontSize: 16,
     // fontWeight: 'bold',
   },
@@ -118,7 +118,7 @@ export const styles = EStyleSheet.create({
   },
   descriptionContainerTitle: {
     fontSize: 20,
-    color: '#2D3715',
+    color: COLORS.appColor,
   },
   locationDetails: {
     fontSize: 16,
@@ -370,7 +370,7 @@ export const styles = EStyleSheet.create({
     height: 60,
   },
   descriptionText: {
-    color: COLORS.black,
+    color: COLORS.appColor,
     fontFamily: FONTS.poppinsRegular,
     fontSize: 14
   }

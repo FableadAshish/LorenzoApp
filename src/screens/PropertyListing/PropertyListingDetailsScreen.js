@@ -214,7 +214,7 @@ const PropertyListingDetailsScreen = () => {
         <Text
           style={[
             styles.locationReadMoreDetails,
-            {color: COLORS.lightTextColor},
+            {color: COLORS.appColor},
           ]}>
           {isReadMore ? 'read more...' : 'show less'}
         </Text>

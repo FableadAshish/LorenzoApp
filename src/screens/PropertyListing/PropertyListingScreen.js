@@ -1,11 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Text,
-  View,
-  FlatList,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
+import {Text, View, FlatList, Image, TouchableOpacity} from 'react-native';
 import {IMAGES} from '../../constants';
 import {useRoute, useNavigation} from '@react-navigation/native';
 import SearchContainer from '../../components/SearchContainer/SearchContainer';
@@ -64,25 +58,41 @@ const PropertyListingScreen = () => {
           onPress={() => propertyDetailsPage()}>
           <View style={styles.imageContainer}>
             <Image
-              source={item?.images[0] ? {uri: item?.images[0]} : {uri: 'https://thumbs.dreamstime.com/b/house-4431446.jpg'}}
+              source={
+                item?.images[0]
+                  ? {uri: item?.images[0]}
+                  : {uri: 'https://thumbs.dreamstime.com/b/house-4431446.jpg'}
+              }
               style={styles.propertyImage}
             />
           </View>
-          <View style={styles.dataContainer}>
-            <View>
-              <Text style={styles.listItemText}>{item?.property_name}</Text>
-              <Text style={styles.propertyType}>{item?.property_type}</Text>
-              <Text style={styles.roomsAvailable}>
-                {item?.max_room > 1
-                  ? item?.max_room + ' ' + `room's available`
-                  : item?.max_room + ' ' + `room available`}
-              </Text>
-              <View style={styles.locationContainer}>
-                <Image source={IMAGES.Location} style={styles.locationIcon} />
-                <Text numberOfLines={1} style={styles.location}>
-                  {item.details.address}
+          <View style={{width: "100%"}}>
+            <View style={styles.dataContainer}>
+              <View>
+                <Text style={styles.listItemText}>{item?.property_name}</Text>
+                <Text style={styles.propertyType}>{item?.property_type}</Text>
+                <Text style={styles.roomsAvailable}>
+                  {item?.max_room > 1
+                    ? item?.max_room + ' ' + `room's available`
+                    : item?.max_room + ' ' + `room available`}
                 </Text>
+                <View style={styles.locationContainer}>
+                  <Image source={IMAGES.Location} style={styles.locationIcon} />
+                  <Text numberOfLines={1} style={styles.location}>
+                    {item.details.address}
+                  </Text>
+                </View>
               </View>
+            </View>
+            <View
+              style={{
+                justifyContent: 'flex-end',
+                width: 180,
+                // backgroundColor: 'red',
+                // flex: 1,
+                alignItems:'flex-end'
+              }}>
+              <Text style={styles.viewAllText}>View Details</Text>
             </View>
           </View>
         </TouchableOpacity>

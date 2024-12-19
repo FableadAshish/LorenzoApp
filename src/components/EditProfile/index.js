@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
   },
   nameTextTitle: {
     fontSize: 18,
-    color: COLORS.lightTextColor,
+    color: COLORS.black,
   },
   nameText: {
     fontSize: 20,

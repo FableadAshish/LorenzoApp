@@ -1,7 +1,7 @@
-import { StyleSheet } from "react-native";
 import { COLORS, COMMOM, FONTS } from "../../../constants";
+import EStyleSheet from "react-native-extended-stylesheet";
 
-export const styles = StyleSheet.create({
+export const styles = EStyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.bgColor,
@@ -15,32 +15,34 @@ export const styles = StyleSheet.create({
   },
   listItemText: {
     color: COLORS.appColor,
-    fontSize: 20,
+    fontSize: '20rem',
   },
   propertyType:{
-    fontSize: 15,
+    fontSize: '15rem',
     color: COLORS.mediumTextColor,
-    marginTop: 5,
+    marginTop: '5rem',
   },
   location: {
-    fontSize: 15,
-    color: COLORS.lightTextColor,
+    fontSize: '15rem',
+    color: COLORS.black,
   },
   roomsAvailable: {
-    fontSize: 15,
-    color: COLORS.lightTextColor,
+    fontSize: '15rem',
+    color: COLORS.black,
   },
   listItemContainer: {
-    marginBottom: 10,
+    marginBottom: '10rem',
   },
   listItemChildContainer: {
     flexDirection: 'row',
     // justifyContent: 'space-between',
-    gap: 30,
-    marginTop: 10,
+    // backgroundColor: 'red',
+    gap: '30rem',
+    marginTop: '10rem',
     borderColor: COLORS.placeholderBackgroundColor,
     borderWidth: 1,
-    borderRadius: 10,
+    borderRadius: '10rem',
+    width: '100%'
   },
   imageContainer: {
     width: '30%',
@@ -51,10 +53,10 @@ export const styles = StyleSheet.create({
     padding: 5,
   },
   propertyImage: {
-    height: 140,
-    width: 120,
-    borderTopLeftRadius: 10,
-    borderBottomLeftRadius: 10,
+    height: '140rem',
+    width: '120rem',
+    borderTopLeftRadius: '10rem',
+    borderBottomLeftRadius: '10rem',
   },
   locationContainer: {
     flexDirection: 'row',
@@ -62,8 +64,8 @@ export const styles = StyleSheet.create({
     gap: 5,
   },
   locationIcon: {
-    height: 16,
-    width: 16,
+    height: '16rem',
+    width: '16rem',
   },
   pricingContainer: {
     flexDirection: 'row',
@@ -77,33 +79,37 @@ export const styles = StyleSheet.create({
   },
   price: {
     color: COLORS.black,
-    fontSize: 20,
-    marginLeft: -3,
+    fontSize: '20rem',
   },
   locationNotFoundContainer: {
     alignItems: 'center',
     justifyContent: 'flex-start',
     height: '100%',
-    marginTop: 50,
+    marginTop: '50rem',
   },
   locationNotFoundText: {
     fontFamily: FONTS.poppinsRegular,
-    fontSize: 22,
+    fontSize: '22rem',
     color: COLORS.mediumTextColor,
   },
   locationNotFoundSubText: {
     fontFamily: FONTS.poppinsRegular,
-    fontSize: 18,
+    fontSize: '18rem',
     color: COLORS.lightTextColor,
   },
   noSearchImage: {
-    height: 200,
-    width: 200,
+    height: '200rem',
+    width: '200rem',
     resizeMode: 'contain',
   },
   poundIcon: {
-    height: 20,
-    width: 20,
+    height: '20rem',
+    width: '20rem',
     resizeMode: 'contain',
-  }
+  },
+  viewAllText: {
+    color: COLORS.appColor,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },
 });
