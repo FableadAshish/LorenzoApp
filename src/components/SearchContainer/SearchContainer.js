@@ -11,7 +11,12 @@ import {
 } from 'react-native';
 import {COLORS, FONTS, IMAGES} from '../../constants';
 import {useDispatch} from 'react-redux';
-import {getCountiresData, getPropertiesByStates, removeCountryData} from '../../redux/slice/propertySlice';
+import {
+  getCountiresData,
+  getPropertiesByStates,
+  removeCountryData,
+  removeStateData,
+} from '../../redux/slice/propertySlice';
 
 const SearchContainer = ({
   placeholderTitle,
@@ -23,6 +28,7 @@ const SearchContainer = ({
 }) => {
   const dispatch = useDispatch();
   const [selectedCountries, setSelectedCountries] = useState([]);
+  const [selectedState, setSelectedStates] = useState('');
 
   const filteredCountries =
     countriesList &&
@@ -36,32 +42,32 @@ const SearchContainer = ({
       stateList.find(item => item.details.state === state),
     );
 
-    const renderCountriesList = ({item}) => {
-      const COUNTRY_NAME = item.details.country;
-      const getCountriesList = async country => {
-        setSelectedCountries(prevCountries => {
-          const countries = Array.isArray(prevCountries) ? prevCountries : [];
-          if (countries.length === 6) {
-            return countries;
-          }
-          const updatedCountries = countries.includes(country)
-            ? countries
-            : [...countries, country];
-          
-          // Use the updated countries list for dispatching
-          dispatch(
-            getCountiresData({
-              country: country,
-              type: 'country',
-              selectedCountries: updatedCountries,
-            }),
-          );
-          
-          return updatedCountries;
-        });
-      
-        onChangeText('');
-      };
+  const renderCountriesList = ({item}) => {
+    const COUNTRY_NAME = item.details.country;
+    const getCountriesList = async country => {
+      setSelectedCountries(prevCountries => {
+        const countries = Array.isArray(prevCountries) ? prevCountries : [];
+        if (countries.length === 6) {
+          return countries;
+        }
+        const updatedCountries = countries.includes(country)
+          ? countries
+          : [...countries, country];
+
+        // Use the updated countries list for dispatching
+        dispatch(
+          getCountiresData({
+            country: country,
+            type: 'country',
+            selectedCountries: updatedCountries,
+          }),
+        );
+
+        return updatedCountries;
+      });
+
+      onChangeText('');
+    };
     return (
       <TouchableOpacity
         style={styles.searchResultItem}
@@ -76,6 +82,7 @@ const SearchContainer = ({
     const STATE_NAME = item.details.state;
 
     const getStatesList = async state => {
+      setSelectedStates(state);
       // dispatch(getCountiresData({state: state, type: 'state'}));
       dispatch(getPropertiesByStates({state: state, type: 'state'}));
       onChangeText('');
@@ -91,21 +98,24 @@ const SearchContainer = ({
   };
 
   const removeCountry = countries => {
-    setSelectedCountries(prev => prev.filter(item => item !== countries));
     dispatch(removeCountryData(countries));
   };
 
+  const removeState = state => {
+    setSelectedStates('');
+    dispatch(removeStateData());
+  };
   return (
     <View style={[styles.searchContainer, style]}>
       <View style={styles.searchPlaceHolderContrainer}>
         <Image source={IMAGES.search} style={styles.searchIcon} />
         <View style={styles.selectedCountriesContainer}>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.selectedCountriesScrollView}>
-            {selectedCountries.map((country, index) => {
-              return (
+          {selectedCountries && (
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.selectedCountriesScrollView}>
+              {selectedCountries.map((country, index) => (
                 <View key={index} style={styles.selectedCountryTag}>
                   <Text style={styles.selectedCountryText}>{country}</Text>
                   <TouchableOpacity
@@ -114,22 +124,42 @@ const SearchContainer = ({
                     <Text style={styles.removeCountryText}>×</Text>
                   </TouchableOpacity>
                 </View>
-              );
-            })}
-            <TextInput
-              placeholder={selectedCountries.length > 0 ? '' : placeholderTitle}
-              style={styles.placeholderText}
-              onChangeText={text => {
-                onChangeText(text);
-                if (text.trim() === '') {
-                  onChangeText('');
+              ))}
+
+              {selectedState && (
+                <View style={styles.selectedCountryTag}>
+                  <Text style={styles.selectedCountryText}>
+                    {selectedState}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => removeState(selectedState)}
+                    style={styles.removeCountryButton}>
+                    <Text style={styles.removeCountryText}>×</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+
+              <TextInput
+                placeholder={
+                  selectedState && selectedState.length > 0
+                    ? ''
+                    : placeholderTitle && selectedCountries.length === 0
+                    ? placeholderTitle
+                    : ''
                 }
-              }}
-              value={value}
-              textAlignVertical="center"
-              placeholderTextColor={COLORS.black}
-            />
-          </ScrollView>
+                style={styles.placeholderText}
+                onChangeText={text => {
+                  onChangeText(text);
+                  if (text.trim() === '') {
+                    onChangeText(''); // This line may be redundant
+                  }
+                }}
+                value={value}
+                textAlignVertical="center"
+                placeholderTextColor={COLORS.black}
+              />
+            </ScrollView>
+          )}
         </View>
       </View>
       {filteredState
@@ -186,7 +216,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     flex: 1,
     fontFamily: FONTS.poppinsRegular,
-    backgroundColor: COLORS.textFieldColor
+    backgroundColor: COLORS.textFieldColor,
   },
   searchIcon: {
     height: 18,
@@ -236,7 +266,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: COLORS.textFieldColor
+    backgroundColor: COLORS.textFieldColor,
   },
   selectedCountryTag: {
     flexDirection: 'row',
@@ -264,7 +294,7 @@ const styles = StyleSheet.create({
     maxHeight: 50, // Adjust as needed
     alignItems: 'center',
     flex: 1,
-    backgroundColor: COLORS.textFieldColor
+    backgroundColor: COLORS.textFieldColor,
   },
   searchResultsContainer: {
     maxHeight: 200, // Limit height of results

@@ -191,7 +191,7 @@ const EditProfileScreen = () => {
             title={'Name'}
             titleText={profileData.name}
             onChangeText={text => handleChange('name', text)}
-            defaultValue={profileData.name}
+            defaultValue={userProfileData.username}
             error={error.name}
           />
           <EditProfileComp

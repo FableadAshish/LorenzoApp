@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -12,7 +12,7 @@ import EditModal from '../EditModal';
 import InputField from '../InputField';
 import Button from '../Button';
 
-const EditProfileComp = ({title, titleText, onChangeText, error, isRequired}) => {
+const EditProfileComp = ({title, titleText, onChangeText, error, isRequired, defaultValue}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [inputValue, setInputValue] = useState(titleText);
 
@@ -20,6 +20,12 @@ const EditProfileComp = ({title, titleText, onChangeText, error, isRequired}) =>
     onChangeText(inputValue);
     setModalVisible(false);
   };
+  
+  useEffect(() => {
+    if(defaultValue){
+      setInputValue(defaultValue)
+    }
+  },[]);
 
   return (
     <>
