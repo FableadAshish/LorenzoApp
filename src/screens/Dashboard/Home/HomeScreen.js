@@ -76,10 +76,12 @@ const HomeScreen = () => {
         onPress={() => getDetails(item)}>
         <FastImage
           style={styles.locationImage}
-          source={{
-            uri: item?.images[0],
-            priority: FastImage.priority.high,
-          }}
+          // source={{
+          //   uri: item?.images[0],
+          //   priority: FastImage.priority.high,
+          // }}
+          source={item?.images[0] ? {uri: item?.images[0]} : {uri: 'https://thumbs.dreamstime.com/b/house-4431446.jpg'}}
+
           resizeMode={FastImage.resizeMode.contain}
         />
         {/* )} */}
