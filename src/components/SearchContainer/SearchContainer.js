@@ -15,7 +15,6 @@ import {
   getCountiresData,
   getPropertiesByStates,
   removeCountryData,
-  removeStateData,
 } from '../../redux/slice/propertySlice';
 
 const SearchContainer = ({
@@ -98,12 +97,13 @@ const SearchContainer = ({
   };
 
   const removeCountry = countries => {
+    setSelectedCountries(prev => prev.filter(item => item !== countries));
     dispatch(removeCountryData(countries));
   };
 
   const removeState = state => {
     setSelectedStates('');
-    dispatch(removeStateData());
+    dispatch(removeStateData())
   };
   return (
     <View style={[styles.searchContainer, style]}>

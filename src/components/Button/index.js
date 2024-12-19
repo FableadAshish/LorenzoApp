@@ -27,7 +27,7 @@ const styles = EStyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: '15rem',
+    borderRadius: '50rem',
     backgroundColor: COLORS.appColor,
   },
   buttonText: {

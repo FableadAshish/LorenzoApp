@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
   titleSubHeader: {
     fontSize: 16,
     textAlign: 'center',
-    color: COLORS.lightTextColor,
+    color: COLORS.black,
     fontFamily: FONTS.poppinsRegular,
   },
   forgotPassword: {

@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    color: '#8A8A8A',
+    color: COLORS.appColor,
     fontFamily: FONTS.poppinsRegular,
     marginBottom: 3,
   },

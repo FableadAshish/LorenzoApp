@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
   detailsText: {
     fontSize: 16,
     fontFamily: FONTS.poppinsRegular,
-    color: COLORS.lightTextColor,
+    color: COLORS.appColor,
     // marginTop: 5,
     letterSpacing: 0.5,
     fontWeight: Platform.OS === 'ios' ? '400' : '600',

@@ -154,7 +154,7 @@ export const styles = StyleSheet.create({
   },
   locationLocation: {
     fontSize: 15,
-    color: COLORS.lightTextColor,
+    color: COLORS.black,
   },
   locationNotFoundContainer: {
     alignItems: 'center',
