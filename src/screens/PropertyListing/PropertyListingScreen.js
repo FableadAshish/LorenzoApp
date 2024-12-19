@@ -67,7 +67,7 @@ const PropertyListingScreen = () => {
           onPress={() => propertyDetailsPage()}>
           <View style={styles.imageContainer}>
             <Image
-              source={{uri: item?.images[0]}}
+              source={item?.images[0] ? {uri: item?.images[0]} : {uri: 'https://thumbs.dreamstime.com/b/house-4431446.jpg'}}
               style={styles.propertyImage}
             />
           </View>
