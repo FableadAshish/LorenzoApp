@@ -142,26 +142,6 @@ export const getPropertiesByStates = createAsyncThunk(
   },
 );
 
-// export const getPropertiesByStates = createAsyncThunk(
-//   'getStatesList',
-//   async data => {
-//     console.log(data.state);
-//     // try {
-//     //   const response = await axios.get(
-//     //     `${BASE_URL}/search?search_term=${data.state}`,
-//     //     {
-//     //       headers: {
-//     //         Authorization: TOKEN,
-//     //       },
-//     //     },
-//     //   );
-//     //   console.log('response.data', response.data);
-//     // } catch (error) {
-//     //   console.log('error', error);
-//     // }
-//   },
-// );
-
 const propertySlice = createSlice({
   name: 'propertySlice',
   initialState: initialState,
@@ -180,7 +160,12 @@ const propertySlice = createSlice({
       state.selectedCountries = state.selectedCountries.filter(
         country => country !== action.payload
       );
+    },
+    removeStateData: (state) => {
+      state.state = '';
+      state.searchedStateList = '';
     }
+
   },
   extraReducers: builder => {
     builder.addCase(getAllProperties.pending, state => {
@@ -269,7 +254,8 @@ const propertySlice = createSlice({
 
 export const {
   isPlannerRequired,
-  removeCountryData
+  removeCountryData,
+  removeStateData
 } = propertySlice.actions;
 
 export default propertySlice.reducer;

@@ -48,9 +48,6 @@ const PropertyListingScreen = () => {
 
   useEffect(() => {
     getProperties(currentPage);
-    // const subscribe = navigation.addListener('focus', () => {
-    // });
-    // return subscribe;
   }, [currentPage]);
 
   const renderLocationList = ({item}) => {

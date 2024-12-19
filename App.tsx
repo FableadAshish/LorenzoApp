@@ -15,7 +15,7 @@ function App() {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <StatusBar backgroundColor={COLORS.white} />
+        <StatusBar backgroundColor={COLORS.bgColor} />
         <SafeAreaView />
         <NavigationContainer>
           <AuthNavigator />

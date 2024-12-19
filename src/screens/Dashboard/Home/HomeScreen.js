@@ -56,11 +56,8 @@ const HomeScreen = () => {
   }, [searchValue]);
 
   useEffect(() => {
-    const subscribe = navigation.addListener('focus', () => {
-      getProperties(currentPage);
-      dispatch(fetchUserProfile(userProfile.id));
-    });
-    return subscribe;
+    getProperties(currentPage);
+    dispatch(fetchUserProfile(userProfile.id));
   }, [currentPage]);
 
   const getDetails = item => {
@@ -199,7 +196,7 @@ const HomeScreen = () => {
                   </View>
                   <View style={{marginLeft: -30}}>
                     <FlatList
-                      data={getAll /*searchQuery*/}
+                      data={getAll}
                       keyExtractor={item => item.id}
                       renderItem={renderList}
                       horizontal={true}
